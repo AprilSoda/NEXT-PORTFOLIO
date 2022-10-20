@@ -1,0 +1,40 @@
+.container{
+    position: absolute;
+    margin: $header-height 10vw 0 10vw;
+    max-width: 1300px;
+    .title{
+        margin: 10px 0;
+    }
+    .info{
+        margin-top: 30px;
+        display: flex;
+        .flexin{
+          width: 18vw;
+        }
+    }
+      .description{
+        margin-top: 20vh;
+        display: flex;
+        justify-content: space-between;
+        & * {
+          width: 40%;
+        }
+    }
+    .block{
+        margin: min(10vw, 150px) 0;
+    }
+}
+
+.container{
+    .b6{
+      color: $title-color;
+      margin-bottom: 0.65vh;
+    }
+    .b3{
+      color: rgb(141, 141, 141)
+    }
+    .onoffb{
+      display: block;
+    }
+}
+

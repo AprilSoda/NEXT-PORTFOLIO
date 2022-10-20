@@ -1,0 +1,86 @@
+/*=============== Hero ===============*/
+.hero-comp {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  .centering{
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%) scale(1);
+    padding: 0 10.3vw;
+    overflow: hidden;
+    z-index: 2;
+    transform-origin: right;
+    transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+    .outter{
+      float: right;
+      width: 100%;
+      transform: translateX(50%);
+      transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+      .inner{
+        display: inline-block;
+        transform: translateX(-50%);
+        transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+        h1{
+          display: inline-block;
+          margin: 0 0.3rem;
+          line-height: 1;
+          font-size: min(4vw, 46px);
+        }
+      }
+    }
+  }
+  .centering.right .outter{
+    transform: translateX(100%);
+  }
+  .centering.right .inner{
+    transform: translateX(-100%);
+  }
+  .centering.right{
+    transform: translateY(-70%) scale(0.7);
+  }
+  
+
+  .bg-area {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+    overflow: hidden;
+    &::before{
+      background: rgba(0, 0, 0, 0.5);
+      content: "";
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+    video, .bg-area img {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      height: 100%;
+      -o-object-fit: cover;
+      object-fit: cover;
+      -o-object-position: center;
+      object-position: center;
+      width: 100%;
+    }
+  }
+
+  .copy-area{
+    position: absolute;
+    z-index: 12;
+    width: 100%;
+    bottom: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: $smaller-font-size;
+    color: $white-color;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,51 @@
+// html {
+//     cursor: none !important;
+//   }
+  
+  .target_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    // border: 1px solid rgb(240, 240, 240);
+    border-radius: 1rem;
+  }
+  
+  .target_pic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    // border: 1px solid rgb(240, 240, 240);
+    border-radius: 1rem;
+  }
+
+  .main-cursor {
+    position: fixed;
+    background-color: white;
+    mix-blend-mode: difference;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    z-index: 1000;
+    pointer-events: none
+  }
+
+  .transition_div{
+    position: fixed;
+    left: 0;
+    background-color: white;
+    height: 100vh;
+    width: 100%;
+    z-index: 999;
+  }
+
+  .transition_children{
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 9;
+  }

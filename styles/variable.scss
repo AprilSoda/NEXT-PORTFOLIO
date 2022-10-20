@@ -1,0 +1,47 @@
+/*=============== VARIABLES CSS ===============*/
+  $header-height: clamp(80px, 8vw, 100px);
+
+  /*========== Colors ==========*/
+  $hue-color: 206;
+  $black-color: hsl(var($hue-color), 10%, 4%);
+  $black-color-alt: hsl(var($hue-color), 10%, 8%);
+  $title-color: hsl(var($hue-color), 10%, 95%);
+  $title-color-alt: hsl(var($hue-color), 10%, 75%);
+  $text-color: hsl(var($hue-color), 10%, 65%);
+  $text-color-alt: hsl(var($hue-color), 10%, 45%);
+  $white-color: #fff;
+  $body-color: hsl(var($hue-color), 10%, 6%);
+  $container-color: hsl(var($hue-color), 10%, 10%);
+  $container-overlay: hsla(var($hue-color), 10%, 2%, 0.7);
+  $container-overlay-alt: hsla(var($hue-color), 10%, 10%, 0.1);
+  $scroll-thumb-color: hsl(var($hue-color), 10%, 16%);
+  $scroll-thumb-color-alt: hsl(var($hue-color), 10%, 20%);
+  $secondary-color: #ee344a;
+
+  /*========== Font and typography ==========*/
+  $body-font: "Helvetica Now Display", "Noto Sans KR",
+    "Microsoft NeoGothic", "Droid sans", sans-serif;
+  $biggest-font-size: 5rem;
+  $bigger-font-size: 3.5rem;
+  $big-font-size: 2.5rem;
+  $h1-font-size: 2rem;
+  $h2-font-size: 1.25rem;
+  $h3-font-size: 1.125rem;
+  $normal-font-size: 1rem;
+  $small-font-size: 0.813rem;
+  $smaller-font-size: 0.75rem;
+  $text-line-height: 2rem;
+
+/*=============== RESPONSIVE TYPOGRAPHY ===============*/
+@media screen and (min-width: 968px) {
+    $biggest-font-size: 7.5rem;
+    $bigger-font-size: 5.875rem;
+    $big-font-size: 4rem;
+    $h1-font-size: 2.5rem;
+    $h2-font-size: 1.5rem;
+    $h3-font-size: 1.25rem;
+    $normal-font-size: 1rem;
+    $small-font-size: 0.875rem;
+    $smaller-font-size: 0.813rem;
+  }
+
