@@ -1,30 +1,30 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
-body{
-  font-family: "Custom_font";
+body {
+    font-family: "Custom_font";
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 ol,
 ul {
-  list-style: none;
+    list-style: none;
 }
 
 [role="button"],
@@ -36,38 +36,38 @@ label,
 select,
 summary,
 textarea {
-  touch-action: manipulation;
+    touch-action: manipulation;
 }
 
 button,
 input,
 textarea {
-  border: none;
-  outline: none;
-  font-family: "Custom_font";
-  text-transform: uppercase;
-  background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: "Custom_font";
+    text-transform: uppercase;
+    background-color: transparent;
 }
 
 button {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 img {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 *,
 :after,
 :before {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 article,
@@ -82,26 +82,27 @@ menu,
 nav,
 section,
 summary {
-  display: block;
+    display: block;
 }
 
 ::selection {
-  background: var(--secondary-color);
+    background: var(--secondary-color);
 }
 
-h1,h2,h3,p,div{
-  transition: font-size 0.5s;
+h1,
+h2,
+h3,
+p,
+div {
+    transition: font-size 0.5s;
 }
-
-
-
 
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+    html {
+        color-scheme: dark;
+    }
+    body {
+        color: white;
+        background: black;
+    }
 }

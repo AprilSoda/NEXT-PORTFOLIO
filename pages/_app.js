@@ -4,6 +4,7 @@ import Head from 'next/head';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
 import CustomCursor from '../components/CustomCursor'
+import MouseContextProvider from "../components/MouseContext";
 if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
 }
@@ -11,10 +12,11 @@ if (typeof window !== 'undefined') {
 function MyApp({ Component, pageProps, router }) {
   return (
   <>
+    <MouseContextProvider>
     <CustomCursor />
     <Layout router={router} >
       <AnimatePresence
-        exitBeforeEnter
+        exitBeforeEnter={true}
         initial={true}
         onExitComplete={() => {
           if (typeof window !== 'undefined') {
@@ -25,6 +27,7 @@ function MyApp({ Component, pageProps, router }) {
         <Component {...pageProps} key={router.route} />
       </AnimatePresence>
     </Layout>
+    </MouseContextProvider>
   </>
     
     );

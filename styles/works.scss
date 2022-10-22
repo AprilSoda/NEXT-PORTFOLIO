@@ -1,139 +1,143 @@
 .works {
-  overflow: hidden;
-  width: 100%;
-  text-transform: none;
-  padding: 0 3vw;
-    .work-container {
-      margin-top: $header-height;
-    .heading{
-      display: flex;
-      text-align: center;
-      justify-content: center;
-      flex-direction: column;
-      width: 100%;
-      gap: 20px;
-      .heading-h1{
-        margin: 0 auto;
-        display: flex;
-        flex-direction: row;
-        gap: clamp(0.5rem, 1vw, 2rem);
-        h1 {
-          font-size: 96px;
-          line-height: 1;
-          }
-        h1:nth-child(2){
-          font-family: 'Times New Roman', Times, serif;
-        }
-      }
-        p{
-        font-size: 18px;
-        }
-    }
-  }
-}
-
-.cards{
-  margin-top: 10vh;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: auto;
-  grid-gap:10px;
-  .card__item{
-    position: relative;
-    border-radius: 4vw;
-    height: 400px;
     overflow: hidden;
-    transition-property: transform, border-radius height;
-    transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
-    .card__inner{
-      position: relative;
-      .card-img{
-        height: 100%;
-      }
-      .thumb_title{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
+    width: 100%;
+    text-transform: none;
+    padding: 0 3vw;
+    .work-container {
+        margin-top: $header-height;
+        .heading {
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            gap: 20px;
+            .heading-h1 {
+                margin: 0 auto;
+                display: flex;
+                flex-direction: row;
+                gap: clamp(0.5rem, 1vw, 2rem);
+                h1 {
+                    font-size: 96px;
+                    line-height: 1;
+                }
+                h1:nth-child(2) {
+                    font-family: "Times New Roman", Times, serif;
+                }
+            }
+            p {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+.cards {
+    margin-top: 10vh;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 10px;
+    .card__item {
+        position: relative;
+        border-radius: 4vw;
+        height: 400px;
+        overflow: hidden;
+        transition-property: transform, border-radius height;
+        transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+        .card__inner {
+            position: relative;
+            .card-img {
+                position: relative;
+                width: 1280px;
+                height: 500px;
+            }
+            .thumb_title {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                z-index: 3;
+                color: white;
+                .text {
+                    font-family: "Exo", sans-serif;
+                    text-transform: uppercase;
+                    font-size: 18px;
+                    font-weight: 500;
+                }
+                .sort {
+                    font-family: "Exo", sans-serif;
+                    color: rgba(255, 255, 255, 0.616);
+                    font-weight: 400;
+                    font-size: 8px;
+                }
+            }
+        }
+        &:hover {
+            transform: scale(0.93) !important;
+            border-radius: 3vw;
+        }
+    }
+}
+
+.card-img::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.25);
+    transition: opacity 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
+    opacity: 0;
+}
+
+.card__item:hover .card-img::before {
+    opacity: 1;
+}
+
+.card__item .thumb_title {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.card__item:hover .thumb_title {
+    opacity: 1;
+}
+
+@media screen and (max-width: 1024px) {
+    .works .work-container .heading p {
+        font-size: 12px;
+    }
+    .works .work-container .heading .heading-h1 h1 {
+        font-size: 64px;
+    }
+    .cards .card__item {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .works .work-container .heading {
+        text-align: left;
+        height: 300px;
+        p {
+            visibility: hidden;
+        }
+    }
+    .works .work-container .heading .heading-h1 {
+        margin: 0 0;
         flex-direction: column;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
-        filter: drop-shadow(0 0 1rem black);
-        color: white;
-        .text{
-          font-size: 24px;
-          text-transform: uppercase;
+        h1 {
+            font-size: 48px;
         }
-        .sort{
-          font-size: 11px;
-        }
-      }
     }
-    &:hover{
-      transform: scale(0.93) !important;
-      border-radius: 3vw;
+    .cards {
+        grid-template-columns: 1fr;
     }
-  }
 }
-
-.card-img::before{
-  content: "";
-  position: absolute;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.25);
-  transition: opacity 0.9s cubic-bezier(0.075, 0.82, 0.165, 1);
-  opacity: 1;
-}
-
-.card__item:hover .card-img::before{
-  opacity: 0;
-}
-
-.card__item .thumb_title{
-  opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.card__item:hover .thumb_title{
-  opacity: 1;
-}
-
-
-
-  @media screen and (max-width: 1024px) {
-    .works .work-container .heading p{
-      font-size: 12px;
-    }
-    .works .work-container .heading .heading-h1 h1{
-      font-size: 64px;
-    }
-    .cards .card__item{
-      height: 200px;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .works .work-container .heading{
-      text-align: left;
-      height: 300px;
-      p{
-        visibility: hidden;
-      }
-    }
-    .works .work-container .heading .heading-h1{
-      margin: 0 0;
-      flex-direction: column;
-      h1{
-        font-size: 48px;
-      }
-    }
-    .cards{
-      grid-template-columns: 1fr;
-    }
-  }

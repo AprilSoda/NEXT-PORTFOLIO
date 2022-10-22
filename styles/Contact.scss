@@ -4,6 +4,7 @@
   align-items: center;
   height: 100vh;
   padding: 0 7vw;
+  font-family: Helvetica;
   .about-wrapper {
     position: relative;
     display: grid;
@@ -39,6 +40,8 @@
       .contact__form-inner-text {
         position: relative;
         input {
+          font-family: Helvetica;
+          text-transform: none;
           font-size: 14px;
           outline: none;
           width: 100%;
@@ -61,6 +64,8 @@
           opacity: 1;
         }
         textarea {
+          font-family: Helvetica;
+          text-transform: none;
           padding: 1rem 0;
           font-size: 14px;
           width: 100%;
@@ -87,6 +92,8 @@
         }
       }
       .send_button{
+        font-family: Helvetica;
+        text-transform: none;
         background: transparent;
         color: var(--title-color);
         text-align: left;
@@ -130,6 +137,8 @@
 .errorMsg.contact__error{
   position: relative;
 }
+
+
 
 
 @media screen and (max-width: 768px) {

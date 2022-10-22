@@ -25,12 +25,31 @@
   .main-cursor {
     position: fixed;
     background-color: white;
-    mix-blend-mode: difference;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     z-index: 1000;
-    pointer-events: none
+    pointer-events: none;
+  }
+
+  .hover-cursor {
+    transform-origin: center;
+    position: relative;
+    top: -46px;
+    left: -46px;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    z-index: 1001;
+    pointer-events: none;
+
+    svg{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   .transition_div{

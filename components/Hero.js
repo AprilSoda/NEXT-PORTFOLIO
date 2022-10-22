@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useMediaQuery } from 'react-responsive';
-import Link from 'next/link'
+// import { useMediaQuery } from 'react-responsive';
 
 const HeroTitle = [
     {count: 1, h1s:['VFX', 'GENERALIST']},
@@ -14,8 +13,8 @@ const HeroTitle = [
 
 export default function Hero() {
     const videoRef = useRef(null)
-    const [MenuReveal, setMenuReveal] = useState("");
-    const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
+    const [align, setalign] = useState("");
+    // const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -30,14 +29,14 @@ export default function Hero() {
 
     useEffect(()=> {
         setTimeout(function() {
-            setMenuReveal('right');
+            setalign('right');
         }, 5000);
       })
 
     return(
     <>
         <section className="hero-comp">
-            <div className={'centering ' + MenuReveal}>
+            <div className={'centering ' + align}>
                     {HeroTitle.map(( HeroTitle, i ) => {
                         const indexs = HeroTitle.count
                         return(

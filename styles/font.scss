@@ -1,31 +1,19 @@
 @font-face {
-    font-family: 'Custom_font';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_Monoplex-kr@1.0/MonoplexKR-Regular.woff2') format('woff2');
+    font-family: "Custom_font";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_Monoplex-kr@1.0/MonoplexKR-Regular.woff2")
+        format("woff2");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Custom_font';
+    font-family: "Custom_font";
     font-style: normal;
     font-weight: normal;
-    src: local('ProFontWindows'), url('ProFontWindows.woff') format('woff');
+    src: local("ProFontWindows"), url("ProFontWindows.woff") format("woff");
     unicode-range: U+0041-005A, U+0061-007A;
 }
 
-@font-face {
-    font-family: 'exo';
-    src: url("http://fonts.cdnfonts.com/css/exo-4?styles=44459");
-    font-weight: 400;
-    unicode-range: U+0041-005A, U+0061-007A;
-}
+@import url("http://fonts.cdnfonts.com/css/exo-3");
 
-@font-face {
-    font-family: 'exo';
-    src: url("http://fonts.cdnfonts.com/css/exo-4?styles=44461");
-    font-weight: 100;
-    unicode-range: U+0041-005A, U+0061-007A;
-}
-
-
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
