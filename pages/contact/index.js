@@ -1,27 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import Transition from '../../components/Transition';
 import SVG_CHECK from '../../public/SVG_CHECK.svg'
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 const Contact = () => {
-    const [localMsg, setLoaclMsg] = useState("");
-    const [sent, setsent] = useState(false)
-    const [form, setValues] = useState({ name: "", email: "", text: "" });
+    const {register, handleSubmit, formState: { errors }, clearErrors } = useForm();
+    const [sent, setSent] = useState(false);
+    const [unexpectederror, setUnexpoectedError ] = useState("")
+    async function onSubmitForm(values) {
+        clearErrors("name", "email", "text")
 
-    const handleSend = () => {
-        const { name, email, text } = form;
-        if (!name || !email || !text) {
-            return setLoaclMsg("Make sure you got all the fields right!")
-          } else {
-            return setLoaclMsg("Success"); setsent(true);
-          }
-    };
+        let config = {
+            method: 'post',
+            url: `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+            headers: {
+                'Content-type' : 'application/json',
+            },
+            data: values,
+        };
 
-    const onChange = (e) => {
-        setValues({
-            ...form, [e.target.name]: e.target.value
-        });
-    };
+        try {
+            const response = await axios(config);
+            console.log(response);
+            if (response.status === 200) {
+                setSent(true);
+            }
+        }   catch (err) {
+            console.log(err)
+            setUnexpoectedError("Request failed with unexpected error. Try another time")
+        }
+    }
 
 
   return (
@@ -32,18 +42,19 @@ const Contact = () => {
                 <span > 👋 </span>
                 <h1> Say Hello, <br /> {`I won't bite`} </h1>
                 <h6> Allways open door for any contact </h6>
+                <p> Email: <div> lsinglpelayerl@gmail.com </div></p>
             </div>
             {!sent ? (
-                <form className='contact__form' onSubmit={handleSend}>
+                <form className='contact__form' onSubmit={handleSubmit(onSubmitForm)}>
                     <div className="errorMsg contact__error">
-                        {localMsg ? <div className="errorMsg__wrapper"> <span style={{ display: 'flex', alignItems: "center", gap: "1rem" }}> <i className="ri-error-warning-line"></i> {localMsg} </span> </div> : null}
+                        {errors?.name?.message || errors?.email?.message || errors?.text?.message || unexpectederror ? <div className="errorMsg__wrapper"> <span style={{ display: 'flex', alignItems: "center", gap: "1rem" }}> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z" fill="rgba(255,255,255,1)"/></svg> {unexpectederror || "Make sure you got all the fields right!"} </span> </div> : null}
                     </div>
                     <div className="contact__form-inner-text">
                         <input
                             type="name"
                             name="name"
                             id="name"
-                            onChange={onChange}
+                            {...register("name", { required: "triger message this is notting" })}
                             placeholder="Your Name"
                         />
                         <span className="contact__form-inner-text-s-name"> Name </span>
@@ -53,7 +64,7 @@ const Contact = () => {
                             type="email"
                             name="email"
                             id="email"
-                            onChange={onChange}
+                            {...register("email", { required: "triger message this is notting" })}
                             placeholder="Email Addres"
                         />
                         <span className="contact__form-inner-text-s-email"> Email </span>
@@ -64,7 +75,7 @@ const Contact = () => {
                             type="text"
                             name="text"
                             id="text"
-                            onChange={onChange}
+                            {...register("text", { required: "triger message this is notting" })}
                             placeholder="Tell us something"
                         />
                         <span> Message </span>

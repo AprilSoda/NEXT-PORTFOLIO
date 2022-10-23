@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useMediaQuery } from 'react-responsive';
 
+
 import Heroimg from '../../public/img/about-1.webp'
 import img1 from '../../public/img/about-2.jpg'
 import img2 from '../../public/img/about-3.jpg'
@@ -11,6 +12,8 @@ import Footer from '../../components/Footer';
 
 
 const About = () => {
+
+
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
 
@@ -26,7 +29,7 @@ const About = () => {
 
     return (
         <Transition>
-            <div style={{ fontFamily: "Helvtica"}}>
+            <div style={{ fontFamily: "Helvetica -apple-system system-ui"}}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
                         <div className='title'>
@@ -78,8 +81,8 @@ const About = () => {
                                 <div><div> passion & curiosity, I continue to refine </div></div>
                                 <div><div> a process that make’s great movie. </div></div>
                                 <div><div> which i beginning to learn Film-making,  </div></div>
-                                <div><div> Directing, Editing, Sound design, Set design,  </div></div>
-                                <div><div> ext.. and of course the excel.  </div></div>
+                                <div><div> Directing, Editing, Sound design, </div></div>
+                                <div><div> Set design, etc..  </div></div>
                             </div>
                         </li>
                         <li className='row2'>
@@ -91,14 +94,15 @@ const About = () => {
                             </div>
                             <div className='paragraph'>
                                 <div><div>In the process of learning </div></div>
-                                <div><div>i greatly gravitate to visual effect department </div></div>
-                                <div><div>for how they can create.  </div></div>
-                                <div><div>. </div></div>
-                                <div><div>. </div></div>
-                                <div><div>. </div></div>
-                                <div><div>. </div></div>
-                                <div><div>. </div></div>
-                                <div><div>. </div></div>
+                                <div><div>i greatly gravitate to visual effect  </div></div>
+                                <div><div>so creacte the team call AFTER WORKS™  </div></div>
+                                <div><div>and I produced Motion Graphic, </div></div>
+                                <div><div>VFX Film, Advertisement. </div></div>
+                                <div><div>This led me to try many VFX programs.</div></div>
+                                <div><div>However, I realized that not only the </div></div>
+                                <div><div>visuals but also the contents are important.</div></div>
+                                <div><div>So I'm currently in film school to </div></div>
+                                <div><div>study how important visual storytelling is. </div></div>
                             </div>
                         </li>
                         <li className='row3'>
@@ -109,13 +113,13 @@ const About = () => {
                                 <p> Vancouver travel </p>
                             </div>
                             <div className='paragraph'>
-                                <div><div>That being said, when I’m not working, </div></div>
-                                <div><div>i’m either learning new tech  </div></div>
-                                <div><div>(virtual studio, production manegement)  </div></div>
-                                <div><div>love to travel,  </div></div>
-                                <div><div>reading lot of book,  </div></div>
-                                <div><div>build my home office, gaming, </div></div>
-                                <div><div>or trying to spend time with my family. </div></div>
+                                <div><div>That being said, except for work</div></div>
+                                <div><div>I love Art, Music, Drawing,</div></div>
+                                <div><div>Movie, Rocket Science, Coding,</div></div>
+                                <div><div>Love Computer, Build home office,</div></div>
+                                <div><div>Travel, Game.</div></div>
+                                <div><div>or trying to spend time </div></div>
+                                <div><div>with my family. </div></div>
                             </div>
                         </li>
                     </ul>
