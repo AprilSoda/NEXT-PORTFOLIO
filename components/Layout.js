@@ -9,7 +9,6 @@ const Layout = ({ children, router }) => {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta name="description" content="Tae Kyun's homepage" />
             <meta name="author" content="Kim Tae Kyun" />
-            <meta name="author" content="AprilSoda" />
             <link rel="apple-touch-icon" href="apple-touch-icon.png" />
             <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
             <meta name="twitter:title" content="Kim Tae Kyun" />
