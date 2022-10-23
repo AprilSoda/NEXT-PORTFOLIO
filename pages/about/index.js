@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useMediaQuery } from 'react-responsive';
 
-import Heroimg from '../../public/contact-1.webp'
-import img1 from '../../public/contact-2.jpg'
-import img2 from '../../public/contact-3.jpg'
-import img3 from '../../public/contact-4.jpg'
+import Heroimg from '../../public/img/about-1.webp'
+import img1 from '../../public/img/about-2.jpg'
+import img2 from '../../public/img/about-3.jpg'
+import img3 from '../../public/img/about-4.jpg'
 import Transition from '../../components/Transition';
 import Footer from '../../components/Footer';
 
