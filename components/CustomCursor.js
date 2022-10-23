@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useContext } from "react";
 import { gsap } from "gsap";
+gsap.config({
+    autoSleep: 60,
+    force3D: false,
+    nullTargetWarn: false
+})
+
 
 import { MouseContext } from "../components/MouseContext";
 

@@ -50,7 +50,7 @@
             .card-img {
                 position: relative;
                 width: 1280px;
-                height: 500px;
+                height: 410px;
             }
             .thumb_title {
                 position: absolute;
@@ -110,6 +110,17 @@
     opacity: 1;
 }
 
+@media screen and (max-width: 1200px) {
+    .cards .card__item {
+        height: 264px;
+    }
+    .cards .card__item .card__inner .card-img {
+        position: relative;
+        width: 1280px;
+        height: 300px;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .works .work-container .heading p {
         font-size: 12px;
@@ -127,7 +138,7 @@
         text-align: left;
         height: 300px;
         p {
-            visibility: hidden;
+            font-size: 14px;
         }
     }
     .works .work-container .heading .heading-h1 {

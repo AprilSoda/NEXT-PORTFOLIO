@@ -73,11 +73,11 @@ const About = () => {
                             </div>
                             <div className='paragraph' >
                                 <div><div> Born in October 15, 1998 </div></div>
-                                <div><div> I was interested in Computer Graphic in age of 16 </div></div>
-                                <div><div> after over 8 years of time, passion & curiosity,  </div></div>
-                                <div><div> I continue to refine a process that make’s great movie. </div></div>
-                                <div><div> I continue to refine a process that make’s great movie. </div></div>
-                                <div><div> which i beginning to learn Cinematography,  </div></div>
+                                <div><div> I was interested in Computer Graphic in </div></div>
+                                <div><div> age of 16 after over 8 years of time,  </div></div>
+                                <div><div> passion & curiosity, I continue to refine </div></div>
+                                <div><div> a process that make’s great movie. </div></div>
+                                <div><div> which i beginning to learn Film-making,  </div></div>
                                 <div><div> Directing, Editing, Sound design, Set design,  </div></div>
                                 <div><div> ext.. and of course the excel.  </div></div>
                             </div>
