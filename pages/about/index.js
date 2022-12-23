@@ -29,7 +29,7 @@ const About = () => {
 
     return (
         <Transition>
-            <div style={{ fontFamily: "Helvetica -apple-system system-ui"}}>
+            <div style={{ fontFamily: "Helvetica Arial"}}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
                         <div className='title'>
@@ -99,10 +99,11 @@ const About = () => {
                                 <div><div>and I produced Motion Graphic, </div></div>
                                 <div><div>VFX Film, Advertisement. </div></div>
                                 <div><div>This led me to try many VFX programs.</div></div>
-                                <div><div>However, I realized that not only the </div></div>
-                                <div><div>visuals but also the contents are important.</div></div>
-                                <div><div>So I'm currently in film school to </div></div>
-                                <div><div>study how important visual storytelling is. </div></div>
+                                <div><div>However, I have learned that not only is</div></div>
+                                <div><div>visual appeal important, but storytelling is</div></div>
+                                <div><div>even more important. So I'm currently</div></div>
+                                <div><div>in film school to study how important</div></div>
+                                <div><div>visual storytelling is. </div></div>
                             </div>
                         </li>
                         <li className='row3'>

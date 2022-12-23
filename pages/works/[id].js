@@ -173,6 +173,7 @@ const renderBlock = (block) => {
                     autoPlay
                     name="media"
                     loop
+                    muted
                     style={{ width: "100%" }}
                 >
                     <source src={video} />
@@ -241,7 +242,7 @@ export default function Post({ page, blocks }) {
         <Transition>
             <Head>
                 <title>
-                    {"Kyuon - " + page.properties.title.title[0].plain_text}
+                    {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
                 </title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
