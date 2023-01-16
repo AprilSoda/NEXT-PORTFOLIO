@@ -59,14 +59,16 @@ export default function Hero() {
                     )})}
             </div>
             <div className="bg-area">
-                <motion.video 
+                <motion.div
                     className="video"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition= {{ default: {duration: 3, delay: 2 }}}
-                    muted preload="true" ref={videoRef} loop>
-                    <source src="https://player.vimeo.com/external/256453827.hd.mp4?s=f4225f4a6ceb33a9ca56b9f613f6cf4c083c7345&profile_id=175" type="video/mp4" />
-                </motion.video>
+                >
+                    <div class="youtube-container">
+                    <iframe src="https://www.youtube.com/embed/uRvRe9wCpPs?autoplay=1&mute=1&loop=1&color=white&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&playlist=uRvRe9wCpPs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </motion.div>
             </div>
             <motion.div
                 className="copy-area"

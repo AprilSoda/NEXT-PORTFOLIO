@@ -60,7 +60,7 @@
       width: 100%;
       z-index: 1;
     }
-    video, .bg-area img {
+    .video, .bg-area img {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       height: 100%;
@@ -83,4 +83,21 @@
     color: $white-color;
     opacity: 1;
   }
+}
+
+.youtube-container {
+	overflow: hidden;
+	width: 100%;
+  height: 100%;
+	/* No clicking/hover effects */
+	pointer-events: none;
+	
+	iframe {
+		/* Extend it beyond the viewport... */
+		width: 300%;
+		height: 100%;
+		/* ...and bring it back again */
+		margin-left: -100%;
+    object-fit: cover;
+	}
 }
