@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-// import { useMediaQuery } from 'react-responsive';
 
 const HeroTitle = [
     {count: 1, h1s:['VFX', 'GENERALIST']},
@@ -14,7 +13,6 @@ const HeroTitle = [
 export default function Hero() {
     const videoRef = useRef(null)
     const [align, setalign] = useState("");
-    // const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -32,6 +30,18 @@ export default function Hero() {
             setalign('right');
         }, 5000);
       })
+    
+      const videoOptions = {
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          rel: 0,
+          showinfo: 0,
+          mute: 1,
+          loop: 1,
+          playsinline: 1
+        }
+      };
 
     return(
     <>
@@ -66,7 +76,7 @@ export default function Hero() {
                     transition= {{ default: {duration: 3, delay: 2 }}}
                 >
                     <div class="youtube-container">
-                    <iframe src="https://www.youtube.com/embed/uRvRe9wCpPs?autoplay=1&mute=1&loop=1&color=white&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&playlist=uRvRe9wCpPs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/T_aDkRDeaJ4?vol=0&autoplay=1&mute=1&loop=1&color=white&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&playlist=T_aDkRDeaJ4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </motion.div>
             </div>
