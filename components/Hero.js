@@ -1,12 +1,13 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
+
+ // count for timing
 const HeroTitle = [
     {count: 1, h1s:['VFX', 'GENERALIST']},
     {count: 3, h1s:['KIM', 'TAE', 'KYUN,', 'BORN', 'IN', 'KOREA']},
     {count: 8, h1s:['CURRENTLY', 'IN','FILM-SCHOOL']},
-    {count: 11, h1s:['+8', 'YEAR','OF','EXPERIENCE']},
-    {count: 15, h1s:['FEEL', 'FREE', 'TO', 'CONTACT']},
+    {count: 11, h1s:['FEEL', 'FREE', 'TO', 'CONTACT']},
 ]
 
 

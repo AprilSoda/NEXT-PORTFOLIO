@@ -134,10 +134,9 @@ const About = () => {
                         <div className='service'>
                             <div className='s-9'> SERVICE AREAS </div>
                             <div className='tile excep'>
-                                <div>Film Direcctor</div>
-                                <div>Web Development</div>
-                                <div>3D Modeling</div>
-                                <div>Motion Graphic</div>
+                                <div> Film Direcctor </div>
+                                <div> Compositer </div>
+                                <div> Visual Develoment </div>
                             </div>
                         </div>
                         <div className='editing'>
@@ -151,16 +150,16 @@ const About = () => {
                             <div className='s-9'> 3D GENERAL </div>
                             <div className='tile'>
                                 <div>blender<span>{"(main)"}</span></div>
-                                <div>3ds Max</div>
-                                <div>Cinema 4d</div>
                                 <div>Maya</div>
                                 <div>Houdini</div>
-                                <div>After Effects<span>{"(main)"}</span></div>
-                                <div>Nuke</div>
+                                <div>After Effects</div>
+                                <div>Nuke<span>{"(main)"}</span></div>
                                 <div>PF Track<span>{"(main)"}</span></div>
                                 <div>Mocha Pro</div>
                                 <div>Marvelous Designer</div>
                                 <div>Terragen 4</div>
+                                <div>Gaea</div>
+                                <div>Mari</div>
                                 <div>Substance Painter</div>
                                 <div>Unreal Engine</div>
                             </div>
@@ -183,14 +182,6 @@ const About = () => {
                             </div>
                         </div>
                     </div>
-                </section>
-                <section className='quote'>
-                    <div><div>Express how our imagination can be.</div></div>
-                    <div><div>what could be <div>built, destroyed, reshaped.</div></div></div>
-                    <div><div>When that imagination comes to life,</div></div>
-                    <div><div>it will be an <div>unbelievable sensation.</div></div></div>
-                    <div><div>Even if that is a tiny detail,</div></div>
-                    <div><div>it has <div> meaning.</div></div></div>
                 </section>
             </div>
             <Footer />
