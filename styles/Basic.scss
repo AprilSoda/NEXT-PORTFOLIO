@@ -96,13 +96,3 @@ p,
 div {
     transition: font-size 0.5s;
 }
-
-@media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
-    }
-    body {
-        color: white;
-        background: black;
-    }
-}
