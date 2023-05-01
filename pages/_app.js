@@ -4,6 +4,7 @@ import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
 import CustomCursor from '../components/CustomCursor'
 import MouseContextProvider from "../components/MouseContext";
+import Script from 'next/script';
 if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
 }
