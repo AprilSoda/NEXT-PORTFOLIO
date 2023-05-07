@@ -1,10 +1,15 @@
+::-webkit-input-placeholder {
+  font-family: "Helvetica Now Display", sans-serif;
+  font-weight: 500;
+}
+
 .about-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100%);
   padding: 0 7vw;
-  font-family: Helvetica -apple-system system-ui;
+  font-family: Helvetica Now Display;
   .about-wrapper {
     position: relative;
     display: grid;
@@ -29,7 +34,7 @@
         font-size: clamp(58px, 6vw, 72px);
       }
       h6 {
-        font-weight:normal;
+        font-weight: 500;
         font-size: clamp(16px, 1vw, 24px);
       }
       p {
@@ -49,14 +54,14 @@
       .contact__form-inner-text {
         position: relative;
         input {
-          font-family: Helvetica -apple-system system-ui;
+          font-family: Helvetica Now Display -apple-system system-ui;
           text-transform: none;
           font-size: 14px;
           outline: none;
           width: 100%;
-          color: var(--text-color);
+          color: $text-color;
           background-color: transparent;
-          border-bottom: 1px solid var(--scroll-thumb-color);
+          border-bottom: 1px solid $scroll-thumb-color;
           transition: color 0.3s ease;
           line-height: unset;
           padding: 1rem 0;
@@ -73,7 +78,7 @@
           opacity: 1;
         }
         textarea {
-          font-family: Helvetica -apple-system system-ui;
+          font-family: Helvetica Now Display -apple-system system-ui;
           text-transform: none;
           padding: 1rem 0;
           font-size: 14px;
@@ -82,8 +87,8 @@
           background-color: transparent;
           resize: none;
           border: none;
-          color: var(--text-color);
-          border-bottom: 1px solid var(--scroll-thumb-color);
+          color: $text-color;
+          border-bottom: 1px solid $scroll-thumb-color;
           word-break: keep-all;
           transition: color 0.3s ease;
 
@@ -101,10 +106,10 @@
         }
       }
       .send_button{
-        font-family: Helvetica;
+        font-family: Helvetica Now Display;
         text-transform: none;
         background: transparent;
-        color: var(--title-color);
+        color: $title-color;
         text-align: left;
         font-size: 24px;
       }

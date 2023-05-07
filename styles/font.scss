@@ -10,10 +10,42 @@
     font-family: "Custom_font";
     font-style: normal;
     font-weight: normal;
-    src: local("ProFontWindows"), url("ProFontWindows.woff") format("woff");
+    src: local("ProFontWindows"), url("font/ProFontWindows.woff") format("woff");
     unicode-range: U+0041-005A, U+0061-007A;
 }
 
 @import url("https://fonts.cdnfonts.com/css/exo-3");
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+
+// Helvetica Now Display Import
+
+@mixin font-face($name, $file, $format, $weight: normal, $style: normal) {
+    @font-face {
+      font-family: "#{$name}";
+      src: url("font/" + $file + "." + $format) format("#{$format}");
+      font-weight: $weight;
+      font-style: $style;
+    }
+  }
+
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Hairline", woff, 100);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Thin", woff, 200);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtLt", woff, 300);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Light", woff, 400);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Regular", woff, 500);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Medium", woff, 600);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Bold", woff, 700);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtraBold", woff, 800);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Black", woff, 900);
+  
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-HairlineI", woff, 100, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ThinIta", woff, 200, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtLtIta", woff, 300, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Light", woff, 400, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-RegIta", woff, 500, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-MedIta", woff, 600, italic);
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-BoldIta", woff, 700, italic);
+  
+  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-BlackIta", woff, 900, italic);

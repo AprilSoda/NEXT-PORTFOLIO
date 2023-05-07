@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useMediaQuery } from 'react-responsive';
 
-
 import Heroimg from '../../public/img/about-1.webp'
 import img1 from '../../public/img/about-2.jpg'
 import img2 from '../../public/img/about-3.jpg'
@@ -29,7 +28,7 @@ const About = () => {
 
     return (
         <Transition>
-            <div style={{ fontFamily: "Helvetica Arial"}}>
+            <div style={{ fontFamily: "Helvetica Now Display"}}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
                         <div className='title'>
@@ -162,23 +161,6 @@ const About = () => {
                                 <div>Mari</div>
                                 <div>Substance Painter</div>
                                 <div>Unreal Engine</div>
-                            </div>
-                        </div>
-                        <div className='two_general'>
-                            <div className='s-9'> 2D GENERAL </div>
-                            <div className='tile'>
-                                <div>Photoshop</div>
-                                <div>Illustrator</div>
-                                <div>Figma</div>
-                            </div>
-                        </div>
-                        <div className='audio'>
-                            <div className='s-9'> AUDIO </div>
-                            <div className='tile'>
-                                <div>Abletion Live</div>
-                                <div>Audition</div>
-                                <div>FL Studio</div>
-                                <div>Logic Pro</div>
                             </div>
                         </div>
                     </div>
