@@ -2,6 +2,10 @@ import React from 'react'
 
 function Footer() {
 
+//using moment.js to get current year
+const year = new Date().getFullYear();
+
+
 const scrollToTop = () => {
     window.scrollTo({
         top: 0,
@@ -11,7 +15,7 @@ const scrollToTop = () => {
 
   return (
     <footer>
-    <p>Copyright © 2021 Kim Tae Kyun</p>
+    <p>Copyright © {year} Kim Tae Kyun</p>
     <button onClick={scrollToTop}>↑ Back to top</button>
     </footer>
   )
