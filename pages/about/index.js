@@ -9,34 +9,13 @@ import img2 from '../../public/img/about-3.jpg'
 import img3 from '../../public/img/about-4.jpg'
 import Transition from '../../components/Transition';
 import Footer from '../../components/Footer';
-import withImageLoading from '../../components/withImageLoading';
 
 
 const About = () => {
-
-
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
-
-    const imageUrls = [Heroimg, img1, img2, img3];
-
-
-    // useEffect(() => {
-    //     var ab = gsap.timeline()
-    //     ab.addLabel("sp", 1.6)
-    //     ab.to('.img-wrapper', { duration: 0, visibility: "visible" }, "sp")
-    //     ab.from(".about-title .img-wrapper .img-inner:after", { duration: 1.4, width: "100%", ease: "Power2.Out" }, "sp+=0.5")
-    //     ab.from('.img-wrapper .img-inner img', { duration: 1.4, scale: 1.6, ease: "Power2.inOut" }, "sp+=0.01")
-    //     ab.from('.about-title .title div *', { duration: 1, y: "10vw", ease: "expo.out", stagger: 0.1 }, "sp+=0.2")
-    // }, [])
-    let on1 = useRef(null);
 
     return (
         <Transition>
-            <Head>
-                {imageUrls.map((imageUrl) => (
-                    <link key={imageUrl} rel="preload" as="image" href={imageUrl} />
-                ))}
-            </Head>
             <div style={{ fontFamily: "Helvetica Now Display"}}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
@@ -70,7 +49,7 @@ const About = () => {
                         </div>
                     </div>
                 </section>
-                <section ref={on1} className="s-story">
+                <section className="s-story">
                     <div className='about'>
                         <span> ABOUT KIM </span>
                     </div>
@@ -142,9 +121,9 @@ const About = () => {
                         <div className='service'>
                             <div className='s-9'> SERVICE AREAS </div>
                             <div className='tile excep'>
-                                <div> Film Direcctor </div>
+                                <div> VFX Supervisor </div>
                                 <div> Compositer </div>
-                                <div> Visual Develoment </div>
+                                <div> Cinematographer </div>
                             </div>
                         </div>
                         <div className='editing'>
@@ -162,7 +141,8 @@ const About = () => {
                                 <div>Houdini</div>
                                 <div>After Effects</div>
                                 <div>Nuke<span>{"(main)"}</span></div>
-                                <div>PF Track<span>{"(main)"}</span></div>
+                                <div>3DEqualizer<span>{"(main)"}</span></div>
+                                <div>PF Track</div>
                                 <div>Mocha Pro</div>
                                 <div>Marvelous Designer</div>
                                 <div>Terragen 4</div>
@@ -180,4 +160,4 @@ const About = () => {
     );
 };
 
-export default withImageLoading(About, [Heroimg, img1, img2, img3]);
+export default About;

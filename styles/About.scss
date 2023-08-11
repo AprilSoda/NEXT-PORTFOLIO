@@ -216,14 +216,10 @@
         margin: 4vw 0 10vw;
 
         display: grid;
-        grid-template-columns: 2fr, repeat(4, 1fr);
-        grid-template-rows: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
         gap: 1vw;
-        .service {
-            grid-row: 1 / span 2;
-        }
-        .three_general {
-            grid-column: 3 / span 3;
+        .three_general{
+            grid-area: 2 / span 2;
         }
     }
 }
@@ -360,7 +356,7 @@
         height: 100%;
         div {
             padding: 0;
-            line-height: 10vw;
+            line-height: 6vw;
         }
     }
 }

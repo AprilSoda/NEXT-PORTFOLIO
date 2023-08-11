@@ -8,90 +8,10 @@
     justify-content: center;
     align-items: center;
     background-color: white;
-  }
-  
-  .red-line {
-    width: 20vw; /* 빨간 선의 가로 크기 */
-    height: 2px; /* 빨간 선의 세로 크기 */
-    background-color: red;
-  }
-  
-  .green-line {
-    position: relative;
-    height: 100%;
-    background-color: green;
-    transform-origin: top center;
-    animation: animateGreenLine 4s infinite steps(50); /* 애니메이션 적용 */
-  }
 
-  .text{
-    margin-top: 30px;
-    font-size: $h2-font-size;
-    color: black;
-  }
-  
-  @keyframes animateGreenLine {
-    0%{
-        width: 0;
-    }
-    9%{
-        width: 0;
-    }
-    10%{
-        width: 10%;
-    }
-    19%{
-        width: 10%;
-    }
-    20%{
-        width: 20%;
-    }
-    29%{
-        width: 20%;
-    }
-    30%{
-        width: 30%;
-    }
-    39%{
-        width: 30%;
-    }
-    40%{
-        width: 40%;
-    }
-    49%{
-        width: 40%;
-    }
-    50%{
-        width: 50%;
-    }
-    59%{
-        width: 50%;
-    }
-    60%{
-        width: 60%;
-    }
-    69%{
-        width: 60%;
-    }
-    70%{
-        width: 70%;
-    }
-    79%{
-        width: 70%;
-    }
-    80%{
-        width: 80%;
-    }
-    89%{
-        width: 80%;
-    }
-    90%{
-        width: 90%;
-    }
-    99%{
-        width: 90%;
-    }
-    100%{
-        width: 100%;
-    }
+    .text{
+        margin-top: 30px;
+        font-size: $h2-font-size;
+        color: black;
+      }
   }
