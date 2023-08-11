@@ -41,9 +41,9 @@ function withImageLoading(WrappedComponent, imageUrls) {
         ))}
     </Head>
     <div className="animation-container">
-        <div className="red-line">
+        {/* <div className="red-line">
             <div className="green-line" />
-        </div>
+        </div> */}
         <div className='text'>Loading...</div>
     </div>
     </>
