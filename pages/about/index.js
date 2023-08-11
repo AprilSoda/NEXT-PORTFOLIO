@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
+import Head from 'next/head';
 import { useMediaQuery } from 'react-responsive';
 
 import Heroimg from '../../public/img/about-1.webp'
@@ -16,6 +17,8 @@ const About = () => {
 
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
+    const imageUrls = [Heroimg, img1, img2, img3];
+
 
     // useEffect(() => {
     //     var ab = gsap.timeline()
@@ -29,6 +32,11 @@ const About = () => {
 
     return (
         <Transition>
+            <Head>
+                {imageUrls.map((imageUrl) => (
+                    <link key={imageUrl} rel="preload" as="image" href={imageUrl} />
+                ))}
+            </Head>
             <div style={{ fontFamily: "Helvetica Now Display"}}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
@@ -56,7 +64,7 @@ const About = () => {
                         <div className='img-wrapper'>
                             <div className='img-inner'>
                                 <figure>
-                                    <Image rel="preload" src={Heroimg} />
+                                    <Image rel="preload" priority src={Heroimg} />
                                 </figure>
                             </div>
                         </div>
