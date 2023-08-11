@@ -7,6 +7,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: white;
   }
   
   .red-line {
@@ -26,7 +27,7 @@
   .text{
     margin-top: 30px;
     font-size: $h2-font-size;
-    color: white;
+    color: black;
   }
   
   @keyframes animateGreenLine {
