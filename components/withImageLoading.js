@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 
 function withImageLoading(WrappedComponent, imageUrls) {
   return function WithImageLoading(props) {
@@ -34,6 +35,11 @@ function withImageLoading(WrappedComponent, imageUrls) {
       <WrappedComponent {...props} />
     ) : (
     <>
+    <Head>
+        {imageUrls.map((imageUrl) => (
+          <link key={imageUrl} rel="preload" as="image" href={imageUrl} />
+        ))}
+    </Head>
     <div className="animation-container">
         <div className="red-line">
             <div className="green-line" />
