@@ -9,8 +9,6 @@ if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
 }
 
-//google analytics
-
 
 
 function MyApp({ Component, pageProps, router }) {

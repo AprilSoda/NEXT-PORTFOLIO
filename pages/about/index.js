@@ -8,6 +8,7 @@ import img2 from '../../public/img/about-3.jpg'
 import img3 from '../../public/img/about-4.jpg'
 import Transition from '../../components/Transition';
 import Footer from '../../components/Footer';
+import withImageLoading from '../../components/withImageLoading';
 
 
 const About = () => {
@@ -171,4 +172,4 @@ const About = () => {
     );
 };
 
-export default About;
+export default withImageLoading(About, [Heroimg, img1, img2, img3]);

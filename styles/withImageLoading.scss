@@ -1,0 +1,34 @@
+.animation-container {
+    position: relative;
+    width: 50px;
+    height: 100px; /* 세로 빨간색 선의 높이 */
+  }
+  
+  .red-line {
+    position: absolute;
+    top: 0;
+    left: 25px; /* 선 가운데 정렬을 위해 조정 */
+    width: 1px;
+    height: 100%;
+    background-color: red;
+  }
+  
+  .green-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background-color: green;
+    transform-origin: top center;
+    animation: animateGreenLine 2s infinite steps(50); /* 애니메이션 적용 */
+  }
+  
+  @keyframes animateGreenLine {
+    0%, 100% {
+      height: 0;
+    }
+    50% {
+      height: 100%;
+    }
+  }
