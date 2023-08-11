@@ -35,9 +35,10 @@ function withImageLoading(WrappedComponent, imageUrls) {
     ) : (
     <>
     <div className="animation-container">
-        <div>Loading...</div>
-        <div className="red-line"></div>
-        <div className="green-line"></div>
+        <div className="red-line">
+            <div className="green-line" />
+        </div>
+        <div className='text'>Loading...</div>
     </div>
     </>
     );

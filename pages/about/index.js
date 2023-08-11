@@ -56,7 +56,7 @@ const About = () => {
                         <div className='img-wrapper'>
                             <div className='img-inner'>
                                 <figure>
-                                    <Image src={Heroimg} />
+                                    <Image rel="preload" src={Heroimg} />
                                 </figure>
                             </div>
                         </div>
@@ -70,7 +70,7 @@ const About = () => {
                         <li className='row1'>
                             <div className='img' >
                                 <figure>
-                                    <Image src={img1} alt="Seoul Institute Of The Art Film Shoot" />
+                                    <Image rel="preload" src={img1} alt="Seoul Institute Of The Art Film Shoot" />
                                 </figure>
                                 <p> Seoul Institute Of The Art Film Shoot </p>
                             </div>
@@ -88,7 +88,7 @@ const About = () => {
                         <li className='row2'>
                             <div className='img'>
                                 <figure>
-                                    <Image src={img2} alt="Short Oh hako Shoot" />
+                                    <Image rel="preload" src={img2} alt="Short Oh hako Shoot" />
                                 </figure>
                                 <p> Short Oh hako Shoot </p>
                             </div>
@@ -109,7 +109,7 @@ const About = () => {
                         <li className='row3'>
                             <div className='img'>
                                 <figure>
-                                    <Image src={img3} alt="Vancouver Travel" />
+                                    <Image rel="preload" src={img3} alt="Vancouver Travel" />
                                 </figure>
                                 <p> Vancouver travel </p>
                             </div>
