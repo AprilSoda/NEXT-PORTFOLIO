@@ -1,12 +1,6 @@
 import React, { useRef, useState } from 'react';
-import Image from 'next/image';
-import Head from 'next/head';
 import { useMediaQuery } from 'react-responsive';
-
-import Heroimg from '../../public/img/about-1.webp'
-import img1 from '../../public/img/about-2.jpg'
-import img2 from '../../public/img/about-3.jpg'
-import img3 from '../../public/img/about-4.jpg'
+import Image from 'next/image';
 import Transition from '../../components/Transition';
 import Footer from '../../components/Footer';
 
@@ -43,7 +37,7 @@ const About = () => {
                         <div className='img-wrapper'>
                             <div className='img-inner'>
                                 <figure>
-                                    <Image rel="preload" priority src={Heroimg} />
+                                    <img src='/about-1.webp' alt="TaeKyun Kim" layout='fill'/>
                                 </figure>
                             </div>
                         </div>
@@ -57,7 +51,7 @@ const About = () => {
                         <li className='row1'>
                             <div className='img' >
                                 <figure>
-                                    <Image rel="preload" src={img1} alt="Seoul Institute Of The Art Film Shoot" />
+                                    <img src="/about-2.jpg" alt="Seoul Institute Of The Art Film Shoot" />
                                 </figure>
                                 <p> Seoul Institute Of The Art Film Shoot </p>
                             </div>
@@ -75,7 +69,7 @@ const About = () => {
                         <li className='row2'>
                             <div className='img'>
                                 <figure>
-                                    <Image rel="preload" src={img2} alt="Short Oh hako Shoot" />
+                                    <img src='/about-3.jpg' alt="Short Oh hako Shoot" />
                                 </figure>
                                 <p> Short Oh hako Shoot </p>
                             </div>
@@ -96,7 +90,7 @@ const About = () => {
                         <li className='row3'>
                             <div className='img'>
                                 <figure>
-                                    <Image rel="preload" src={img3} alt="Vancouver Travel" />
+                                    <img src='about-4.jpg' alt="Vancouver Travel" />
                                 </figure>
                                 <p> Vancouver travel </p>
                             </div>
