@@ -28,9 +28,11 @@
     "react-responsive": "^9.0.0",
     "react-textarea-autosize": "^8.3.4",
     "sass": "^1.55.0",
+    "save-dev": "^0.0.1-security",
     "sharp": "^0.31.1",
     "styled-components": "^5.3.6",
-    "swiper": "^8.4.3"
+    "swiper": "^8.4.3",
+    "terser-webpack-plugin": "^5.3.10"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.4.0",
