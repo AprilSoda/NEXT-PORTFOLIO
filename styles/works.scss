@@ -30,10 +30,30 @@
             }
         }
     }
+    .work-sort{
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        margin-top: 5vh;
+        .filter_item{
+            margin: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            color: $text-color;
+            cursor: pointer;
+            transition: color 0.5s ease; // Add transition property for color change
+            &.active{
+                color: $title-color;
+            }
+            &:hover {
+                color: $secondary-color;
+            }
+        }
+    }
 }
 
 .cards {
-    margin-top: 10vh;
+    margin-top: 3vh;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: auto;

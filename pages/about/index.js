@@ -3,14 +3,17 @@ import { useMediaQuery } from 'react-responsive';
 import Image from 'next/image';
 import Transition from '../../components/Transition';
 import Footer from '../../components/Footer';
-
+import moment from 'moment';
 
 const About = () => {
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
+    let currentlYear = moment().year();
+    let difference = currentlYear - 2016;
+
     return (
         <Transition>
-            <div style={{ fontFamily: "Helvetica Now Display"}}>
+            <div style={{ fontFamily: "Helvetica Now Display" }}>
                 <section className='about-title'>
                     <div className='about-title-wrapper'>
                         <div className='title'>
@@ -37,7 +40,7 @@ const About = () => {
                         <div className='img-wrapper'>
                             <div className='img-inner'>
                                 <figure>
-                                    <img src='/about-1.webp' alt="TaeKyun Kim" layout='fill'/>
+                                    <img src='/about-1.webp' alt="TaeKyun Kim" layout='fill' />
                                 </figure>
                             </div>
                         </div>
@@ -58,7 +61,7 @@ const About = () => {
                             <div className='paragraph' >
                                 <div><div> Born in October 15, 1998 </div></div>
                                 <div><div> I was interested in Computer Graphic in </div></div>
-                                <div><div> age of 16 after over 8 years of time,  </div></div>
+                                <div><div> age of 16 after over {difference} years of time,  </div></div>
                                 <div><div> passion & curiosity, I continue to refine </div></div>
                                 <div><div> a process that make’s great movie. </div></div>
                                 <div><div> which i beginning to learn Film-making,  </div></div>
@@ -110,7 +113,7 @@ const About = () => {
                     <div className='skill'>
                         <span> SKILL </span>
                     </div>
-                    <div className='tryhard'> <h4>Over 8 years dedicated to doing it better... </h4></div>
+                    <div className='tryhard'> <h4> Over {difference} years dedicated to doing it better... </h4></div>
                     <div className='tryhardgrid'>
                         <div className='service'>
                             <div className='s-9'> SERVICE AREAS </div>
@@ -138,12 +141,10 @@ const About = () => {
                                 <div>3DEqualizer<span>{"(main)"}</span></div>
                                 <div>PF Track</div>
                                 <div>Mocha Pro</div>
-                                <div>Marvelous Designer</div>
                                 <div>Terragen 4</div>
                                 <div>Gaea</div>
                                 <div>Mari</div>
                                 <div>Substance Painter</div>
-                                <div>Unreal Engine</div>
                             </div>
                         </div>
                     </div>

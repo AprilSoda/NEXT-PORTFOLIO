@@ -151,7 +151,14 @@ const renderBlock = (block) => {
                 value.url
             return (
                 <figure>
-                    <img src={embed} />
+                    <img src={embed} referrerPolicy="no-referrer" />
+                </figure>
+            );
+        case "link_preview":
+            const link_preview = value.url;
+            return (
+                <figure>
+                    <img src={link_preview} referrerPolicy="no-referrer" />
                 </figure>
             );
         case "video":
@@ -227,9 +234,8 @@ const renderBlock = (block) => {
                 </a>
             );
         default:
-            return `❌ Unsupported block (${
-                type === "unsupported" ? "unsupported by Notion API" : type
-            })`;
+            return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
+                })`;
     }
 };
 
@@ -302,7 +308,7 @@ export default function Post({ page, blocks }) {
                     </a>
                 </div>
             </article>
-            <Footer/>
+            <Footer />
         </Transition>
     );
 }

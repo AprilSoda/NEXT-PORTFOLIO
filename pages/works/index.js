@@ -1,36 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getDatabase } from "../../lib/notion";
+import { getDatabase, getFilterdDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
-import { MouseContext } from "../../components/MouseContext";
+import MouseContextProvider, { MouseContext } from "../../components/MouseContext";
 export const databaseId = process.env.NOTION_DATABASE_ID;
+
+//Create Context
+export const MovieContext = React.createContext();
 
 const Works = ({ posts }) => {
     const { handleCursorChange } = useContext(MouseContext);
+    const [selectedfilter, setSelectedfilter] = useState("ALL");
+    const [filterdItems, setFilterdItems] = useState(posts);
 
-    function isCoverExsist(is) {
-        if (typeof is.cover === null) {
-            return "";
-        } else {
-            return is.cover.external.url;
-        }
-    }
+    let filters = ["ALL", ...new Set(posts.map(post => post.properties.sort.select.name))];
 
+    useEffect(() => {
+    }, [selectedfilter]);
+
+    //Amimation
     const container = {
         hidden: { opacity: 0 },
         show: {
             opacity: 1,
             transition: {
-                delayChildren: 0.5,
+                delayChildren: 0.2,
                 staggerChildren: 0.2,
             },
         },
     };
-
     const item = {
         hidden: { opacity: 0, y: 100 },
         show: {
@@ -39,6 +41,7 @@ const Works = ({ posts }) => {
             transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
         },
     };
+    //Amimation End
 
     return (
         <Transition>
@@ -94,58 +97,71 @@ const Works = ({ posts }) => {
                         </motion.p>
                     </div>
                 </div>
-
+                <div className="work-sort">
+                    {filters.map((Filter, index) => (
+                        <button
+                            className={Filter === selectedfilter ? "filter_item active" : "filter_item"}
+                            key={index}
+                            onClick={() => setSelectedfilter(Filter)}>
+                            {Filter}
+                        </button>
+                    ))}
+                </div>
                 <motion.ul
+                    key={selectedfilter}
                     className="cards"
                     variants={container}
                     initial="hidden"
                     animate="show"
                 >
-                    {posts.map((post, index) => (
-                        <motion.li
-                            key={index}
-                            className="card__item"
-                            variants={item}
-                        >
-                            <Link href={`works/${post.id}`}>
-                                <a className="card__inner">
-                                    <Button type="pic">
-                                        <div
-                                            className="thumb_title"
-                                            onMouseEnter={() =>
-                                                handleCursorChange(true)
-                                            }
-                                            onMouseLeave={() =>
-                                                handleCursorChange(false)
-                                            }
-                                        >
-                                            <h4 className="text">
-                                                {
-                                                    post.properties.title
-                                                        .title[0].plain_text
+                    {filterdItems.map((post, index) => (
+                        selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter ? (
+                            <motion.li
+                                key={selectedfilter + index} // key prop 변경
+                                className="card__item"
+                                variants={item}
+                            >
+                                {console.log(post.properties.sort.select.name)}
+                                <Link href={`works/${post.id}`}>
+                                    <a className="card__inner">
+                                        <Button type="pic">
+                                            <div
+                                                className="thumb_title"
+                                                onMouseEnter={() =>
+                                                    handleCursorChange(true)
                                                 }
-                                            </h4>
-                                            <h6 className="sort">
-                                                {
-                                                    post.properties.sort.select
-                                                        .name
+                                                onMouseLeave={() =>
+                                                    handleCursorChange(false)
                                                 }
-                                            </h6>
-                                        </div>
+                                            >
+                                                <h4 className="text">
+                                                    {
+                                                        post.properties.title
+                                                            .title[0].plain_text
+                                                    }
+                                                </h4>
+                                                <h6 className="sort">
+                                                    {
+                                                        post.properties.sort.select
+                                                            .name
+                                                    }
+                                                </h6>
+                                            </div>
 
-                                        <div className="card-img">
-                                            <Image
-                                                src={isCoverExsist(post)}
-                                                alt="Work Thumbnail"
-                                                layout="fill"
-                                                objectFit="cover"
-                                                priority="true"
-                                            />
-                                        </div>
-                                    </Button>
-                                </a>
-                            </Link>
-                        </motion.li>
+                                            <div className="card-img">
+                                                <Image
+                                                    src={post.cover ? post.cover.external.url : null}
+                                                    alt="Work Thumbnail"
+                                                    layout="fill"
+                                                    objectFit="cover"
+                                                    priority="true"
+                                                />
+                                            </div>
+                                        </Button>
+                                    </a>
+                                </Link>
+                            </motion.li>
+                        ) : null
                     ))}
                 </motion.ul>
             </section>
@@ -156,7 +172,7 @@ const Works = ({ posts }) => {
 
 export const getStaticProps = async () => {
     const database = await getDatabase(databaseId);
-    // console.log(JSON.stringify(database))
+    // console.log(database)
     return {
         props: {
             posts: database,
