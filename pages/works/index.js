@@ -121,7 +121,6 @@ const Works = ({ posts }) => {
                                 className="card__item"
                                 variants={item}
                             >
-                                {console.log(post.properties.sort.select.name)}
                                 <Link href={`works/${post.id}`}>
                                     <a className="card__inner">
                                         <Button type="pic">
@@ -150,7 +149,7 @@ const Works = ({ posts }) => {
 
                                             <div className="card-img">
                                                 <Image
-                                                    src={post.cover ? post.cover.external.url : null}
+                                                    src={post.cover ? post.cover.external.url : ""}
                                                     alt="Work Thumbnail"
                                                     layout="fill"
                                                     objectFit="cover"

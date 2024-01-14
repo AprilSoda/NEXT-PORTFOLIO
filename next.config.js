@@ -7,7 +7,8 @@ const nextConfig = {
       'www.notion.so',
       'image.unsplash.com',
       's3.us-west-2.amazonaws.com',
-      'drive.google.com'
+      'drive.google.com',
+      'i.ibb.co'
     ]
   },
   webpack(config) {
