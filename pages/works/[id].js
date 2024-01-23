@@ -10,14 +10,6 @@ import { getDatabase, getPage, getBlocks } from "../../lib/notion";
 import styles from "./post.module.css";
 import { databaseId } from "./index.js";
 
-// Import Swiper
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs } from "swiper";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
-
 export const Text = ({ text }) => {
     if (!text) {
         return null;
@@ -302,7 +294,7 @@ export default function Post({ page, blocks }) {
                         ))}
                     </section>
                     <a className={styles.back} onClick={() => router.back()}>
-                        ← GO BACK
+                        ← ALL PROJECTS
                     </a>
                 </div>
             </article>
