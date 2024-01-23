@@ -7,6 +7,13 @@
     top: 0;
     width: 100%;
     z-index: 10;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1); /* Add transition for a smooth slide effect */
+    transform: translateY(0);
+  }
+
+  .header-comp.hidden {
+    transform: translateY(-100px);
+    pointer-events: none; /* Optional: Disable pointer events when hidden */
   }
   
   .header-comp .header-inner {
@@ -43,10 +50,9 @@
   .header-comp .sub-menu-area li{
   height: 100%;
   width: 100%;
+  
   }
 
   .header-comp .sub-menu-area a{
-    margin: 0 2vw
+    margin: 0 2vw;
   }
-
-  

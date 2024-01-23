@@ -142,7 +142,7 @@ const renderBlock = (block) => {
             const caption = value.caption ? value.caption[0]?.plain_text : "";
             return (
                 <figure>
-                    <img src={src} alt={caption} />
+                    <img src={src} alt={caption} style={{ borderRadius: '18px', marginTop: '25px' }} />
                     {caption && <figcaption>{caption}</figcaption>}
                 </figure>
             );
@@ -151,14 +151,14 @@ const renderBlock = (block) => {
                 value.url
             return (
                 <figure>
-                    <img src={embed} referrerPolicy="no-referrer" />
+                    <img src={embed} referrerPolicy="no-referrer" style={{ borderRadius: '18px', marginTop: '25px' }} />
                 </figure>
             );
         case "link_preview":
             const link_preview = value.url;
             return (
                 <figure>
-                    <img src={link_preview} referrerPolicy="no-referrer" />
+                    <img src={link_preview} referrerPolicy="no-referrer" style={{ borderRadius: '18px', marginTop: '25px' }} />
                 </figure>
             );
         case "video":
@@ -242,12 +242,10 @@ const renderBlock = (block) => {
 export default function Post({ page, blocks }) {
     const router = useRouter();
 
-    const slides = page.properties.photo.files.map((data) => {
-        return data;
-    });
-    const slidea = slides.map((data) => {
-        return data.external.url;
-    });
+    function formatDate(inputDate) {
+        const [month, year] = new Date(inputDate).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit' }).split('/');
+        return `${month}. ${year}`;
+    }
 
     if (!page || !blocks) {
         return <div />;
@@ -285,7 +283,7 @@ export default function Post({ page, blocks }) {
                             <div className="b6"> DATE </div>
                             <div className="b3">
                                 {" "}
-                                {page.properties.date.date.start}{" "}
+                                {formatDate(page.properties.date.date.start)}{" "}
                             </div>
                         </div>
                         <div className="flexin Client">
