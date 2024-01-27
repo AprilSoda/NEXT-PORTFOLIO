@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -231,8 +231,39 @@ const renderBlock = (block) => {
     }
 };
 
+
+//Master index
 export default function Post({ page, blocks }) {
     const router = useRouter();
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+
+    // 이미지 URL들을 상태로 관리
+    const imageUrls = blocks
+        .filter(block => block.type === 'image')
+        .map(block => block.image.external.url);
+    imageUrls.push(page.cover.external.url);
+    console.log("imageUrls", imageUrls.length);
+
+
+    // 이미지 로드 상태를 추적하는 상태
+    const [imageLoadStatus, setImageLoadStatus] = useState(
+        imageUrls.reduce((status, url) => ({ ...status, [url]: false }), {})
+    );
+
+    // 이미지가 로드될 때마다 해당 이미지의 로드 상태를 업데이트
+    const handleImageLoad = url => {
+        setImageLoadStatus(prevStatus => ({ ...prevStatus, [url]: true }));
+        console.log("imagesLoaded", imagesLoaded);
+    };
+
+    useEffect(() => {
+        // 모든 이미지의 로드 상태가 '로드 완료' 상태인지 확인
+        const allImagesLoaded = Object.values(imageLoadStatus).every(status => status);
+        setImagesLoaded(allImagesLoaded);
+    }, [imageLoadStatus]);
+
+
+
 
     function formatDate(inputDate) {
         const [month, year] = new Date(inputDate).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit' }).split('/');
@@ -243,63 +274,75 @@ export default function Post({ page, blocks }) {
         return <div />;
     }
     return (
-        <Transition>
-            <Head>
-                <title>
-                    {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
-                </title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <div className="w_title_container">
-                <div className="w_title">
-                    <div className="thumb">
-                        <img src={page.cover.external.url} />
-                    </div>
-                    <div className="title">
-                        <h1> {page.properties.title.title[0].plain_text} </h1>
-                    </div>
+        <>
+            {imageUrls.map((url, index) => (
+                <img key={index} src={url} style={{ display: 'none' }} onLoad={() => handleImageLoad(url)} />
+            ))}
+            {!imagesLoaded ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: "white", color: "black" }}>
+                    <p>Loading...</p>
                 </div>
-            </div>
-            <article className="container">
-                <div className="content">
-                    <div className="info">
-                        <div className="flexin b6 onoffb"> INFO </div>
-                        <div className="flexin sort">
-                            <div className="b6"> SORT </div>
-                            <div className="b3">
-                                {" "}
-                                {page.properties.sort.select.name}{" "}
+            ) : (
+                <Transition>
+                    <Head>
+                        <title>
+                            {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
+                        </title>
+                        <link rel="icon" href="/favicon.ico" />
+                    </Head>
+
+                    <div className="w_title_container">
+                        <div className="w_title">
+                            <div className="thumb">
+                                <img src={page.cover.external.url} />
                             </div>
-                        </div>
-                        <div className="flexin date">
-                            <div className="b6"> DATE </div>
-                            <div className="b3">
-                                {" "}
-                                {formatDate(page.properties.date.date.start)}{" "}
-                            </div>
-                        </div>
-                        <div className="flexin Client">
-                            <div className="b6"> CLIENT </div>
-                            <div className="b3">
-                                {" "}
-                                {page.properties.client.select.name}{" "}
+                            <div className="title">
+                                <h1> {page.properties.title.title[0].plain_text} </h1>
                             </div>
                         </div>
                     </div>
-                    <section className="block">
-                        {blocks.map((block) => (
-                            <Fragment key={block.id}>
-                                {renderBlock(block)}
-                            </Fragment>
-                        ))}
-                    </section>
-                    <a className={styles.back} onClick={() => router.back()}>
-                        ← ALL PROJECTS
-                    </a>
-                </div>
-            </article>
-            <Footer />
-        </Transition>
+                    <article className="container">
+                        <div className="content">
+                            <div className="info">
+                                <div className="flexin b6 onoffb"> INFO </div>
+                                <div className="flexin sort">
+                                    <div className="b6"> SORT </div>
+                                    <div className="b3">
+                                        {" "}
+                                        {page.properties.sort.select.name}{" "}
+                                    </div>
+                                </div>
+                                <div className="flexin date">
+                                    <div className="b6"> DATE </div>
+                                    <div className="b3">
+                                        {" "}
+                                        {formatDate(page.properties.date.date.start)}{" "}
+                                    </div>
+                                </div>
+                                <div className="flexin Client">
+                                    <div className="b6"> CLIENT </div>
+                                    <div className="b3">
+                                        {" "}
+                                        {page.properties.client.select.name}{" "}
+                                    </div>
+                                </div>
+                            </div>
+                            <section className="block">
+                                {blocks.map((block) => (
+                                    <Fragment key={block.id}>
+                                        {renderBlock(block)}
+                                    </Fragment>
+                                ))}
+                            </section>
+                            <a className={styles.back} onClick={() => router.back()}>
+                                ← ALL PROJECTS
+                            </a>
+                        </div>
+                    </article>
+                    <Footer />
+                </Transition>
+            )}
+        </>
     );
 }
 
@@ -315,7 +358,7 @@ export const getStaticProps = async (context) => {
     const { id } = context.params;
     const page = await getPage(id);
     const blocks = await getBlocks(id);
-    console.log(blocks);
+    // console.log(blocks);
     // Retrieve block children for nested blocks (one level deep), for example toggle blocks
     // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
     const childBlocks = await Promise.all(
