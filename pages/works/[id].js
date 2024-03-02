@@ -157,19 +157,21 @@ const renderBlock = (block) => {
             const video =
                 value.type === "external" ? value.external.url : value.file.url;
             return value.type === "external" ? (
-                <div style={{ padding: "54.06% 0 0 0", position: "relative" }}>
+                <div style={{ width: "100%", padding: "62% 0 0 0", position: "relative", overflow: "hidden" }}>
                     <iframe
-                        src={video}
-                        frameBorder="0"
-                        sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation allow-forms allow-same-origin allow-storage-access-by-user-activation"
-                        allowFullScreen=""
+                        src={video + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         style={{
                             position: "absolute",
-                            left: "0",
-                            top: "0",
                             width: "100%",
-                            height: "100%",
-                            pointerEvents: "auto",
+                            height: "115%",
+                            left: "50%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            border: "0",
+                            outline: "unset",
                             backgroundColor: "black",
                         }}
                     />
@@ -242,7 +244,7 @@ export default function Post({ page, blocks }) {
         .filter(block => block.type === 'image')
         .map(block => block.image.external.url);
     imageUrls.push(page.cover.external.url);
-    console.log("imageUrls", imageUrls.length);
+    // console.log("imageUrls", imageUrls.length);
 
 
     // 이미지 로드 상태를 추적하는 상태
@@ -253,7 +255,7 @@ export default function Post({ page, blocks }) {
     // 이미지가 로드될 때마다 해당 이미지의 로드 상태를 업데이트
     const handleImageLoad = url => {
         setImageLoadStatus(prevStatus => ({ ...prevStatus, [url]: true }));
-        console.log("imagesLoaded", imagesLoaded);
+        // console.log("imagesLoaded", imagesLoaded);
     };
 
     useEffect(() => {
@@ -278,70 +280,70 @@ export default function Post({ page, blocks }) {
             {imageUrls.map((url, index) => (
                 <img key={index} src={url} style={{ display: 'none' }} onLoad={() => handleImageLoad(url)} />
             ))}
-            {!imagesLoaded ? (
+            {/* {!imagesLoaded ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: "white", color: "black" }}>
                     <p>Loading...</p>
                 </div>
-            ) : (
-                <Transition>
-                    <Head>
-                        <title>
-                            {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
-                        </title>
-                        <link rel="icon" href="/favicon.ico" />
-                    </Head>
+            ) : ( */}
+            <Transition>
+                <Head>
+                    <title>
+                        {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
+                    </title>
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
 
-                    <div className="w_title_container">
-                        <div className="w_title">
-                            <div className="thumb">
-                                <img src={page.cover.external.url} />
-                            </div>
-                            <div className="title">
-                                <h1> {page.properties.title.title[0].plain_text} </h1>
-                            </div>
+                <div className="w_title_container">
+                    <div className="w_title">
+                        <div className="thumb">
+                            <img src={page.cover.external.url} />
+                        </div>
+                        <div className="title">
+                            <h1> {page.properties.title.title[0].plain_text} </h1>
                         </div>
                     </div>
-                    <article className="container">
-                        <div className="content">
-                            <div className="info">
-                                <div className="flexin b6 onoffb"> INFO </div>
-                                <div className="flexin sort">
-                                    <div className="b6"> SORT </div>
-                                    <div className="b3">
-                                        {" "}
-                                        {page.properties.sort.select.name}{" "}
-                                    </div>
-                                </div>
-                                <div className="flexin date">
-                                    <div className="b6"> DATE </div>
-                                    <div className="b3">
-                                        {" "}
-                                        {formatDate(page.properties.date.date.start)}{" "}
-                                    </div>
-                                </div>
-                                <div className="flexin Client">
-                                    <div className="b6"> CLIENT </div>
-                                    <div className="b3">
-                                        {" "}
-                                        {page.properties.client.select.name}{" "}
-                                    </div>
+                </div>
+                <article className="container">
+                    <div className="content">
+                        <div className="info">
+                            <div className="flexin b6 onoffb"> INFO </div>
+                            <div className="flexin sort">
+                                <div className="b6"> SORT </div>
+                                <div className="b3">
+                                    {" "}
+                                    {page.properties.sort.select.name}{" "}
                                 </div>
                             </div>
-                            <section className="block">
-                                {blocks.map((block) => (
-                                    <Fragment key={block.id}>
-                                        {renderBlock(block)}
-                                    </Fragment>
-                                ))}
-                            </section>
-                            <a className={styles.back} onClick={() => router.back()}>
-                                ← ALL PROJECTS
-                            </a>
+                            <div className="flexin date">
+                                <div className="b6"> DATE </div>
+                                <div className="b3">
+                                    {" "}
+                                    {formatDate(page.properties.date.date.start)}{" "}
+                                </div>
+                            </div>
+                            <div className="flexin Client">
+                                <div className="b6"> CLIENT </div>
+                                <div className="b3">
+                                    {" "}
+                                    {page.properties.client.select.name}{" "}
+                                </div>
+                            </div>
                         </div>
-                    </article>
-                    <Footer />
-                </Transition>
-            )}
+                        <section className="block">
+                            {blocks.map((block) => (
+                                <Fragment key={block.id}>
+                                    {renderBlock(block)}
+                                </Fragment>
+                            ))}
+                        </section>
+                        <a className={styles.back} onClick={() => router.back()}>
+                            ← ALL PROJECTS
+                        </a>
+                    </div>
+                </article>
+                <Footer />
+            </Transition>
+            {/* )} */}
         </>
     );
 }

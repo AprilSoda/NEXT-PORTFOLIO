@@ -1,5 +1,8 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useContext } from 'react'
 import { motion } from 'framer-motion'
+import Button from './Button'
+import MouseContextProvider, { MouseContext } from './MouseContext'
+import ModalShowreel from './modal-showreel'
 
 
 // count for timing
@@ -14,6 +17,8 @@ const HeroTitle = [
 export default function Hero() {
     const videoRef = useRef(null)
     const [align, setalign] = useState("");
+    const { handleCursorChange } = useContext(MouseContext);
+    const [isOpen, setIsOpen] = useState(false);
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -46,8 +51,21 @@ export default function Hero() {
 
     return (
         <>
+            <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
             <section className="hero-comp">
-                <div className={'centering ' + align}>
+                <div className={'centering ' + align}
+                    onMouseEnter={() =>
+                        handleCursorChange("showreel")
+                    }
+                    onMouseLeave={() =>
+                        handleCursorChange("off")
+                    }
+                    onClick={() => {
+                        setIsOpen(true);
+                        handleCursorChange("off");
+                    }}
+                    style={{ cursor: 'pointer' }}
+                >
                     {HeroTitle.map((HeroTitle, i) => {
                         const indexs = HeroTitle.count
                         return (
@@ -89,7 +107,13 @@ export default function Hero() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 3 }}
                 >
-                    &#169; Kimtaekyun. All right reserved. <span>{thisYear()}</span>
+                    <div className="social">
+                        <Button><a href="https://www.instagram.com/lsingleplayer/" target="_blank" rel="noreferrer">Instagram</a></Button>
+                        <Button><a href="https://www.linkedin.com/in/tae-kyun-kim/" target="_blank" rel="noreferrer">LinkedIn</a></Button>
+                    </div>
+                    <div>
+                        &#169; Kimtaekyun. All right reserved. <span>{thisYear()}</span>
+                    </div>
                 </motion.div>
             </section>
         </>

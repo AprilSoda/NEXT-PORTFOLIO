@@ -127,10 +127,10 @@ const Works = ({ posts }) => {
                                             <div
                                                 className="thumb_title"
                                                 onMouseEnter={() =>
-                                                    handleCursorChange(true)
+                                                    handleCursorChange("hover")
                                                 }
                                                 onMouseLeave={() =>
-                                                    handleCursorChange(false)
+                                                    handleCursorChange("off")
                                                 }
                                             >
                                                 <h4 className="text">

@@ -76,12 +76,23 @@
     position: absolute;
     z-index: 12;
     width: 100%;
-    bottom: 10px;
+    bottom: 20px;
     text-align: center;
     text-transform: uppercase;
-    font-size: $smaller-font-size;
-    color: $white-color;
+    font-size: $normal-font-size;
+    color: $title-color-alt;
     opacity: 1;
+    .social{
+      position: absolute;
+      right: 0px;
+      padding: 0 3vw;
+      display: flex;
+      align-items: center;
+      a{
+        padding: 0 1rem;
+        display: inline-block;
+      }
+    }
   }
 }
 
@@ -101,3 +112,37 @@
     object-fit: cover;
 	}
 }
+
+/*=============== modal ===============*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9); /* 반투명한 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 80;
+}
+
+.modal-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 90vw;
+  .videoWrapper{
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 비율을 유지하기 위해 설정 */
+    // overflow: hidden;
+    height: 0;
+    iframe{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+

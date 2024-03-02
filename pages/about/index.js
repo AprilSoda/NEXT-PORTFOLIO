@@ -22,7 +22,7 @@ const About = () => {
                                     <div ><h1> Hey I&apos; m TaeKyun Kim </h1></div>
                                     <div ><h1> VFX Generalist, </h1></div>
                                     <div ><h1> Interest in Space & Film </h1></div>
-                                    <div ><h6> lsingleplayerl@gmail.com </h6></div>
+                                    <div ><h6> hello@kimtaekyun.dev </h6></div>
                                     <div ><h6> Seoul, South Korea <span> (UTC+9) </span></h6></div>
                                 </>
                             ) : (
@@ -32,7 +32,7 @@ const About = () => {
                                     <div><h1> VFX Generalist, </h1></div>
                                     <div><h1> Interest in </h1></div>
                                     <div><h1>  Space & Film </h1></div>
-                                    <div style={{ marginTop: "3vh" }}><h6> lsingleplayerl@gmail.com </h6></div>
+                                    <div style={{ marginTop: "3vh" }}><h6> hello@kimtaekyun.dev </h6></div>
                                     <div ><h6> Seoul, South Korea <span> (UTC+9) </span></h6></div>
                                 </>
                             )}

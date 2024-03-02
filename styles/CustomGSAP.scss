@@ -24,9 +24,17 @@
 
   .main-cursor {
     position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .main-cursor-inner {
     background-color: white;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     z-index: 1000;
     pointer-events: none;
@@ -34,7 +42,7 @@
 
   .hover-cursor {
     transform-origin: center;
-    position: relative;
+    position: absolute;
     top: -46px;
     left: -46px;
     background-color: white;
@@ -49,6 +57,38 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+  }
+
+  .showreel-cursor {
+    transform-origin: center;
+    position: absolute;
+    top: -47px;
+    left: -45px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    z-index: 1001;
+    pointer-events: none;
+
+    svg{
+      position: absolute;
+      top: calc(50% + 2px);
+      left: calc(50% + 2px);
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    p{
+      font-family: 'Helvetica Now Display', sans-serif;
+      position: absolute;
+      top:100%;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      pointer-events: none;
     }
   }
 
