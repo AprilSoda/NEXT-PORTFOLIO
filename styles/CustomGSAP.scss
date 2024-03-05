@@ -108,3 +108,9 @@
     width: 100%;
     z-index: 9;
   }
+
+  @media (hover: none) and (pointer: coarse) {
+    .main-cursor {
+        display: none;
+    }
+}

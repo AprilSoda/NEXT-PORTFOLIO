@@ -26,7 +26,7 @@
           display: inline-block;
           margin: 0 0.3rem;
           line-height: 1;
-          font-size: min(4vw, 46px);
+          font-size: clamp(12px, 4vw, 46px);
         }
       }
     }
@@ -95,7 +95,15 @@
     }
   }
 }
-
+@media (max-width: 800px) {
+  .hero-comp .copy-area{
+    text-align: right;
+    padding: 0 calc(3vw + 1rem);
+  }
+  .hero-comp .copy-area .social {
+    bottom: 30px;
+  }
+}
 .youtube-container {
 	overflow: hidden;
 	width: 100%;

@@ -83,7 +83,6 @@ const CustomCursor = () => {
     }, []);
 
 
-
     if (cursorType === "hover") {
         gsap.killTweensOf([mainCursor_inner.current, hoverCursor.current]); // 이전 애니메이션 중지
         gsap.to(mainCursor_inner.current, {
