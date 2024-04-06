@@ -1,0 +1,54 @@
+.ar{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1000;
+}
+
+.bt{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: none;
+  background: transparent;
+  z-index: 12;
+
+  bottom: 2.4rem;
+  left: 2.4rem;
+  transform: translateY(100px);
+  transition: transform 0.5s cubic-bezier(0.43, 0.195, 0.02, 1);
+  background-color: white;
+  border-radius: 0rem;
+
+  span{
+    z-index: 1;
+    width: 1.2rem;
+    height: 1.2rem;
+    transform: rotate(180deg);
+    svg{
+      z-index: 2;
+      width: 1.2rem;
+      height: 1.2rem;
+      fill: rgb(0, 0, 0);
+      animation-name: dieutq;
+      animation-fill-mode: both;
+      animation-duration: 1s;
+      animation-play-state: paused;
+    }
+  }
+}
+
+.show{
+  transform: translateY(0px);
+}
+.bottom{
+  transition: transform 1.2s cubic-bezier(0.43, 0.195, 0.02, 1);
+  transform: translateY(-50px);
+}

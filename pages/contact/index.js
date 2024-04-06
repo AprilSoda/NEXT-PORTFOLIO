@@ -42,7 +42,7 @@ const Contact = () => {
                         <span > 👋 </span>
                         <h1> Say Hello, <br /> {`I won't bite`} </h1>
                         <h6> Allways open door for any contact </h6>
-                        <p> Email: <div> hello@kimtaekyun.dev </div></p>
+                        <p> Email :<div>hello@kimtaekyun.dev </div></p>
                     </div>
                     {!sent ? (
                         <form className='contact__form' onSubmit={handleSubmit(onSubmitForm)}>

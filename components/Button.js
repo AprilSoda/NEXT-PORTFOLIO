@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import { useRouter } from "next/router";
 
 const Button = ({ children, type }) => {
   const target = useRef();
+  const router = useRouter();
 
   function handleMouseMove(e) {
     const { clientX: cx, clientY: cy } = e.nativeEvent;
@@ -37,6 +39,25 @@ const Button = ({ children, type }) => {
       ease: "expo.out"
     });
   };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      gsap.to(target.current, {
+        duration: 0.5,
+        x: 0,
+        y: 0,
+        color: "rgb(256, 256, 256)",
+        scale: 1,
+        ease: "expo.out"
+      });
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router]);
 
   return (
     <div

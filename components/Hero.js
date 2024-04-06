@@ -9,7 +9,7 @@ import ModalShowreel from './modal-showreel'
 const HeroTitle = [
     { count: 1, h1s: ['VFX', 'GENERALIST'] },
     { count: 3, h1s: ['KIM', 'TAE', 'KYUN,', 'SOUTH', 'KOREA'] },
-    { count: 8, h1s: ['CURRENTLY', 'FREELANCING'] },
+    { count: 8, h1s: ['CURRENTLY', 'AT', 'M83', 'STUDIO'] },
     { count: 11, h1s: ['FEEL', 'FREE', 'TO', 'CONTACT'] },
 ]
 
@@ -52,18 +52,8 @@ export default function Hero() {
     return (
         <>
             <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
-            <section className="hero-comp">
+            <section className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
                 <div className={'centering ' + align}
-                    onMouseEnter={() =>
-                        handleCursorChange("showreel")
-                    }
-                    onMouseLeave={() =>
-                        handleCursorChange("off")
-                    }
-                    onClick={() => {
-                        setIsOpen(true);
-                        handleCursorChange("off");
-                    }}
                     style={{ cursor: 'pointer' }}
                 >
                     {HeroTitle.map((HeroTitle, i) => {
@@ -74,14 +64,37 @@ export default function Hero() {
                                     {HeroTitle.h1s.map((v, i) => {
                                         var indexing = i + indexs
                                         return (
-                                            <motion.h1
-                                                key={indexing}
-                                                initial={{ opacity: 0, translateY: -30 }}
-                                                animate={{ opacity: 1, translateY: 0 }}
-                                                transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 1 + indexing * 0.1 } }}
-                                            >
-                                                {v}
-                                            </motion.h1>
+                                            v === "M83" || v === "STUDIO" ? (
+                                                <a key={indexing} href="https://m83.co.kr/" target="_blank" rel="noopener noreferrer">
+                                                    <motion.h1
+                                                        key={indexing}
+                                                        initial={{ opacity: 0, translateY: -30 }}
+                                                        animate={{ opacity: 1, translateY: 0 }}
+                                                        transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 1 + indexing * 0.1 } }}
+                                                    >
+                                                        {v}
+                                                    </motion.h1>
+                                                </a>
+                                            ) : (
+                                                <motion.h1
+                                                    onMouseEnter={() =>
+                                                        handleCursorChange("showreel")
+                                                    }
+                                                    onMouseLeave={() =>
+                                                        handleCursorChange("off")
+                                                    }
+                                                    onClick={() => {
+                                                        setIsOpen(true);
+                                                        handleCursorChange("off");
+                                                    }}
+                                                    key={indexing}
+                                                    initial={{ opacity: 0, translateY: -30 }}
+                                                    animate={{ opacity: 1, translateY: 0 }}
+                                                    transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 1 + indexing * 0.1 } }}
+                                                >
+                                                    {v}
+                                                </motion.h1>
+                                            )
                                         )
                                     })}
                                 </div>

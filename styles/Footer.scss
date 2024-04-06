@@ -1,10 +1,28 @@
 footer{
+    position: relative;
     padding: 300px 3vw 3vh 3vw;
-    display: flex;
-    justify-content: space-between;
     color: rgb(197, 197, 197);
     text-transform: uppercase;
-    button{
-        color: rgb(197, 197, 197);
+    div{
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        bottom: 2.4rem;
+        left: 2.4rem;
+        right: 2.4rem;
+        z-index: 1500;
+        padding-top: 1rem;
+        button{
+            color: rgb(197, 197, 197);
+        }
+        &::before{
+            content: "";
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            border-top: 1px solid rgb(255, 255, 255);
+            opacity: 0.12;
+        }
     }
 }
