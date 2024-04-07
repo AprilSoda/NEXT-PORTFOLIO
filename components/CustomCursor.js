@@ -1,15 +1,13 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 import { gsap } from "gsap";
+import { MouseContext } from "../components/MouseContext";
+import Arrow from "../public/Arrow.svg";
+
 gsap.config({
     autoSleep: 60,
     force3D: false,
     nullTargetWarn: false
 })
-
-
-import { MouseContext } from "../components/MouseContext";
-
-import Arrow from "../public/Arrow.svg";
 
 const CustomCursor = () => {
     const mainCursor = useRef(null);
@@ -19,6 +17,8 @@ const CustomCursor = () => {
     const showreeltext = useRef(null);
 
     const { cursorType } = useContext(MouseContext);
+
+
 
     useEffect(() => {
         function mousemoveEvent(e) {

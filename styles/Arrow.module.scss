@@ -52,3 +52,9 @@
   transition: transform 1.2s cubic-bezier(0.43, 0.195, 0.02, 1);
   transform: translateY(-50px);
 }
+
+@media screen and (max-width: 768px){
+  .bottom{
+    transform: translateY(-90px);
+  }
+}

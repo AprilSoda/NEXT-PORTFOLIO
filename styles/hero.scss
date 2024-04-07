@@ -106,7 +106,7 @@
 }
 .youtube-container {
 	overflow: hidden;
-	width: 100%;
+	width: 100dvh;
   height: 100%;
 	/* No clicking/hover effects */
 	pointer-events: none;
@@ -116,7 +116,7 @@
 		width: 300%;
 		height: 100%;
 		/* ...and bring it back again */
-		margin-left: -100%;
+		margin-left: -100dvh;
     object-fit: cover;
 	}
 }

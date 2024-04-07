@@ -12,27 +12,28 @@ if (typeof window !== 'undefined') {
 
 
 function MyApp({ Component, pageProps, router }) {
+
   return (
-  <>
-    <MouseContextProvider>
-    <CustomCursor />
-    <Layout router={router} >
-      <AnimatePresence
-        exitBeforeEnter={true}
-        initial={true}
-        onExitComplete={() => {
-          if (typeof window !== 'undefined') {
-            window.scrollTo({ top: 0 })
-          }
-        }}
-      >
-        <Component {...pageProps} key={router.route} />
-      </AnimatePresence>
-    </Layout>
-    </MouseContextProvider>
-  </>
-    
-    );
+    <>
+      <MouseContextProvider>
+        <CustomCursor />
+        <Layout router={router} >
+          <AnimatePresence
+            exitBeforeEnter={true}
+            initial={true}
+            onExitComplete={() => {
+              if (typeof window !== 'undefined') {
+                window.scrollTo({ top: 0 })
+              }
+            }}
+          >
+            <Component {...pageProps} key={router.route} />
+          </AnimatePresence>
+        </Layout>
+      </MouseContextProvider>
+    </>
+
+  );
 }
 
 export default MyApp
