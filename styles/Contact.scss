@@ -18,9 +18,10 @@
     .about-text {
       margin-top: 25px;
       position: relative;
+      align-content: center;
       span {
-        position: absolute;
-        top: -2.9rem;
+        position: relative;
+        top: 2.1rem;
         left: 13.2rem;
         transform: rotate(18deg);
         transform-origin: right bottom;

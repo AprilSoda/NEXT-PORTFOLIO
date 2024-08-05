@@ -14,7 +14,7 @@ const Header = ({ workcount }) => {
         const handleScroll = () => {
             if (typeof window !== 'undefined') {
                 const currentScrollPos = window.pageYOffset;
-                const isVisible = prevScrollPos > currentScrollPos;
+                const isVisible = prevScrollPos > currentScrollPos || currentScrollPos <= 100;
 
                 setPrevScrollPos(currentScrollPos);
                 setVisible(isVisible);

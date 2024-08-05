@@ -125,7 +125,7 @@ export default function Hero() {
                         <Button><a href="https://www.linkedin.com/in/tae-kyun-kim/" target="_blank" rel="noreferrer">LinkedIn</a></Button>
                     </div>
                     <div>
-                        copyright <span>{thisYear()}</span> &#169; All right reserved.
+                        copyright <span>{thisYear()}</span> &#169; All right reserved
                     </div>
                 </motion.div>
             </section>
