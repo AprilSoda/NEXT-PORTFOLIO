@@ -1,7 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import React, { useState } from 'react';
+import useIsMobile from './useIsMobile';
+import PageMobileCategory from './PageMobileCategory';
+
+//SVG
+import SVG_OPEN from '../public/SVG_OPEN.svg';
+import SVG_CLOSE from '../public/SVG_CLOSE.svg';
 
 export default function PageAside({ blogs, setSelectedCategory, selectedCategory }) {
+  const [handleMobileCateogry, setHandleMobileCateogry] = useState(false);
 
   // 블로그 데이터에서 카테고리 추출
   const allMultiSelectNames = blogs.flatMap(blog =>
@@ -9,31 +15,29 @@ export default function PageAside({ blogs, setSelectedCategory, selectedCategory
   );
   const Categories = ["ALL", ...new Set(allMultiSelectNames)];
 
-  //Animation
-  const asideRef = useRef(null);
-  // useEffect(() => {
-  //   gsap.from()
-
   return (
     <>
       <div className="head-wrap">
+        <PageMobileCategory
+          handleMobileCateogry={handleMobileCateogry}
+          setHandleMobileCateogry={setHandleMobileCateogry}
+          Categories={Categories}
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
+        />
         <div className="head-category-area">
-          <button className="head-category">
+          <button className="head-category" onClick={() => { setHandleMobileCateogry(!handleMobileCateogry) }}>
             {selectedCategory}
             <span>
-              <svg width="12" height="8" viewBox="0 0 12 8">
-                <path
-                  d="M6.00006 7.3146L11.6569 1.65775L10.2427 0.243536L6.00064 4.4856L1.75723 0.242188L0.343018 1.6564L6.00006 7.3146Z">
-                </path>
-              </svg>
+              <SVG_OPEN />
             </span>
           </button>
         </div>
       </div>
-      <aside className="nav-area is--open">
+      <aside className="nav-area active">
         <div className="nav-container">
           <div className="nav-inner scrollbar--hidden">
-            <a className="btn-cancel">닫기</a>
+            <a className="btn-cancel"> <SVG_CLOSE /> </a>
             <ul className="nav-items">
               <li className="cate-level-1  is--open">
                 <a className="item is--on"><span>🔥</span>인기 카테고리</a>

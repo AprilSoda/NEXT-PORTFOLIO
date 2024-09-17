@@ -117,7 +117,8 @@ body {
 
 .blog-selection{
     position: relative;
-    width: 720px;
+    max-width: 720px;
+    width: 100%;
     padding: 0 calc(min(16px,8vw));
     display: flex;
     flex-direction: column;
