@@ -336,7 +336,7 @@ export default function Post({ page, blocks }) {
                                 </Fragment>
                             ))}
                         </section>
-                        <a className={styles.back} onClick={() => router.back()}>
+                        <a className="go_back" onClick={() => router.back()}>
                             ← ALL PROJECTS
                         </a>
                     </div>

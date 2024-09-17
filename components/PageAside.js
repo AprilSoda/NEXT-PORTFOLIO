@@ -41,7 +41,12 @@ export default function PageAside({ blogs, setSelectedCategory, selectedCategory
                   {Categories.map((category, index) => {
                     return (
                       <li className="cate-level-2" key={index}>
-                        <a className="item" onClick={() => setSelectedCategory(category)}>{category}</a>
+                        <a
+                          className={`item ${selectedCategory === category ? 'is--on' : ''}`}
+                          onClick={() => setSelectedCategory(category)}
+                        >
+                          {category}
+                        </a>
                       </li>
                     );
                   })}

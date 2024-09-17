@@ -7,23 +7,30 @@ const NavigationButton = ({ post, direction }) => {
 
   const coverImage = post.cover.external.url || post.cover.internal.url;
   return (
-    <Link href={`/blogs/${post.id}`} passHref>
-      <a className={`nav-button ${direction}`}>
-        {coverImage && (
-          <Image
-            src={coverImage}
-            alt={`${direction} post cover`}
-            width={300}
-            height={100}
-            objectFit="cover"
-            className="nav-button-cover"
-          />
-        )}
-        <div className="nav-button-title">
-          {post.properties.title.title[0].plain_text}
-        </div>
-      </a>
-    </Link>
+    <div className={`nav ${direction}`}>
+      <p className={`nav-text ${direction}`}>
+        {direction === 'prev' && 'Previous'}
+        {direction === 'next' && 'Next'}
+      </p>
+
+      <Link href={`/blogs/${post.id}`} passHref>
+        <a className={`nav-button ${direction}`}>
+          {coverImage && (
+            <Image
+              src={coverImage}
+              alt={`${direction} post cover`}
+              width={300}
+              height={100}
+              objectFit="cover"
+              className="nav-button-cover"
+            />
+          )}
+          <div className="nav-button-title">
+            {post.properties.title.title[0].plain_text}
+          </div>
+        </a>
+      </Link>
+    </div>
   );
 };
 

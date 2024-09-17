@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, router }) {
         <CustomCursor />
         <Layout router={router} >
           <AnimatePresence
-            exitBeforeEnter={true}
+            mode='wait'
             initial={true}
             onExitComplete={() => {
               if (typeof window !== 'undefined') {

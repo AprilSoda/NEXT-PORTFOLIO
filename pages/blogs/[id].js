@@ -19,7 +19,7 @@ import dynamic from "next/dynamic";
 
 // 동적 임포트
 const Code = dynamic(() => import('react-notion-x/build/third-party/code').then((notion) => notion.Code), { ssr: false });
-// const Collection = dynamic(() => import('react-notion-x/build/third-party/collection').then((notion) => notion.Collection), { ssr: false });
+const Collection = dynamic(() => import('react-notion-x/build/third-party/collection').then((notion) => notion.Collection), { ssr: false });
 const Equation = dynamic(() => import('react-notion-x/build/third-party/equation').then((notion) => notion.Equation), { ssr: false });
 const Pdf = dynamic(() => import('react-notion-x/build/third-party/pdf').then((notion) => notion.Pdf), { ssr: false });
 const Modal = dynamic(() => import('react-notion-x/build/third-party/modal').then((m) => m.Modal), { ssr: false });
@@ -54,7 +54,7 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
           Equation,
           Pdf,
           Modal,
-          Collection: false,
+          Collection: () => null,
           nextImage: Image, // Next 이미지 (optimization) 사용하고 싶을 경우 해당 컴포넌트 전달
           nextLink: Link, // Next 링크 사용하고 싶을 경우 해당 컴포넌트 전달
         }}
@@ -65,11 +65,13 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
         showTableOfContents={showTableOfContents}
         minTableOfContentsItems={minTableOfContentsItems}
       />
+      <section className="blog-scroller">
+        <div className="blog-selection">
+          <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
+          <a className="go_back" onClick={() => router.push("/blogs")}> ← All blogs </a>
+        </div>
+      </section>
 
-      <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
-
-
-      <a onClick={() => router.push("/blogs")}> ← ALL TIPS </a>
       <Footer />
     </Transition>
   );
