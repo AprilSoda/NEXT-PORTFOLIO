@@ -19,8 +19,6 @@ const Works = ({ posts }) => {
 
     let filters = ["ALL", ...new Set(posts.map(post => post.properties.sort.select.name))];
 
-    useEffect(() => {
-    }, [selectedfilter]);
 
     //Amimation
     const container = {

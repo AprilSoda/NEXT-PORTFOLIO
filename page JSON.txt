@@ -100,6 +100,3 @@
    },
    "url":"https://www.notion.so/cd3cc2c698b646dc8ee6ad3d0ce4cd34"
 }
-
-
-https://swiperjs.com/react

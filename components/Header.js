@@ -45,7 +45,7 @@ const Header = ({ workcount }) => {
                 </div>
                 <ul className="sub-menu-area">
                     <li><Button><Link href="/works"><a> WORKS </a></Link></Button></li>
-                    {/* <Link href="/devlog"><a> DEV LOG </a></Link> */}
+                    <li><Button><Link href="/blogs"><a> BLOG </a></Link></Button></li>
                     <li><Button><Link href="/about"><a> ABOUT </a></Link></Button></li>
                     <li><Button><Link href="/contact"><a> CONTACT </a></Link></Button></li>
                 </ul>

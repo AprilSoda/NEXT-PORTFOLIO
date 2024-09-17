@@ -3,13 +3,12 @@ const path = require('path')
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'www.notion.so',
-      'image.unsplash.com',
-      's3.us-west-2.amazonaws.com',
-      'drive.google.com',
-      'i.ibb.co'
-    ]
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({

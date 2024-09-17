@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import Transition from '../../components/Transition';
 import SVG_CHECK from '../../public/SVG_CHECK.svg'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP);
 
 const Contact = () => {
     const { register, handleSubmit, formState: { errors }, clearErrors } = useForm();
@@ -29,20 +33,33 @@ const Contact = () => {
             }
         } catch (err) {
             console.log(err)
-            setUnexpoectedError("Request failed with unexpected error. Try another time")
+            setUnexpoectedError("unexpected error. Try another time")
         }
     }
+
+    const container = useRef(null);
+
+    useGSAP(
+        () => {
+            const tl = gsap.timeline({ immediateRender: false, autoRemoveChildren: true });
+            tl.from(".about-text", { duration: 2, y: "100px", ease: "expo.out" });
+            tl.from(["#obj2", "#obj3"], { duration: 2, opacity: 0, y: "96px", skewY: 3, ease: "elastic.out(0.8, 0.5)", stagger: 0.3 }, "0.3");
+            tl.from(["#name", "#email", "#text", ".send_button"], { duration: 1, opacity: 0, y: "96px", ease: "expo.out", stagger: 0.2 }, "0.7");
+        },
+        { scope: ".about-container", revertOnUpdate: true }
+    );
 
 
     return (
         <Transition>
-            <div className='about-container'>
+            <div className='about-container' ref={container}>
                 <div className="about-wrapper">
-                    <div className="about-text" >
-                        <span > 👋 </span>
-                        <h1> Say Hello, <br /> {`I won't bite`} </h1>
-                        <h6> Allways open door for any contact </h6>
-                        <p> Email :<div>hello@kimtaekyun.dev </div></p>
+                    <div className="about-text">
+                        <h1 id='obj2'> Say Hello, <br /> {`I won't bite`} </h1>
+                        <div id='obj3'>
+                            <h6> Allways open door for any contact </h6>
+                            <p> Email :<a>hello@kimtaekyun.dev </a></p>
+                        </div>
                     </div>
                     {!sent ? (
                         <form className='contact__form' onSubmit={handleSubmit(onSubmitForm)}>

@@ -24,10 +24,12 @@
 
   .main-cursor {
     position: fixed;
+    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    z-index: 1000;
     pointer-events: none;
   }
 
@@ -72,6 +74,7 @@
     border: 3px solid white;
     z-index: 1001;
     pointer-events: none;
+    text-shadow: 2px 2px 4px #000000;
 
     svg{
       position: absolute;

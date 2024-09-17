@@ -99,5 +99,55 @@ div {
 
 body {
     color: white;
-    background: black;
+    background: $body-color;
+}
+
+
+// blog
+
+.blog-navigation {
+    font-family: $body-font;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin: 10rem calc(min(16px, 8vw)) 2rem calc(min(16px, 8vw));
+}
+
+.nav-button {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.5rem;
+    background-color: $container-color;
+    border-radius: 12px;
+    transition: background-color, transform 0.3s ease;
+}
+
+.nav-button.next{
+    text-align: right;
+}
+
+.nav-button:hover {
+    transform: translateY(-5px);
+    background-color: $secondary-color;
+}
+
+.nav-button-cover {
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+  
+.nav-button-title {
+    width: 100%;
+    font-size: $h2-font-size;
+    overflow: hidden;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+}
+  
+.nav-button.next .nav-button-cover {
+    margin-right: 0;
+    margin-left: 0.5rem;
 }
