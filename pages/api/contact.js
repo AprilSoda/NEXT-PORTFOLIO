@@ -6,7 +6,9 @@ export default async (req, res) => {
   console.log(req.body.name)
 
   const transport = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.hiworks.com",
+    port: 465,
+    secure: true, // use SSL
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS

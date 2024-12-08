@@ -40,7 +40,7 @@ export default function PageAside({ blogs, setSelectedCategory, selectedCategory
             <a className="btn-cancel"> <SVG_CLOSE /> </a>
             <ul className="nav-items">
               <li className="cate-level-1  is--open">
-                <a className="item is--on"><span>🔥</span>인기 카테고리</a>
+                <a className="item is--on"><span>🔥</span>Popular Category</a>
                 <ul className="level-2-wrap">
                   {Categories.map((category, index) => {
                     return (

@@ -49,7 +49,7 @@ export default function PageCard({ blogs, selectedCategory }) {
       <main className="content-area">
         <div className="item-list top-group">
           <div className="title">
-            <h1>최근 작성된 포스트</h1>
+            <h1>Recent Post</h1>
           </div>
           <div className="card-area" ref={container}>
             {filteredBlogs.map((blog, index) => (

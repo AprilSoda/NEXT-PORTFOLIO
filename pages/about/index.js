@@ -9,7 +9,7 @@ const About = () => {
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
     let currentlYear = moment().year();
-    let difference = currentlYear - 2016;
+    let difference = currentlYear - 2014;
 
     return (
         <Transition>
@@ -145,6 +145,8 @@ const About = () => {
                                 <div>Gaea</div>
                                 <div>Mari</div>
                                 <div>Substance Painter</div>
+                                <div>Flow Production Tracking {"(ShotGrid)"}</div>
+                                <div>Autodesk RV</div>
                             </div>
                         </div>
                     </div>
