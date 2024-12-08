@@ -168,6 +168,8 @@ body {
 
 .nav-button-cover {
     margin-right: 0.5rem;
+    max-height: 100px;
+    object-fit: cover;
 }
   
 .nav-button-title {

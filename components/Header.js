@@ -40,14 +40,14 @@ const Header = ({ workcount }) => {
             >
                 <div className="logo">
                     <Button>
-                        <Link href='/' ><a> <SVG_LOGO /> </a></Link>
+                        <Link href='/' ><SVG_LOGO /> </Link>
                     </Button>
                 </div>
                 <ul className="sub-menu-area">
-                    <li><Button><Link href="/works"><a> WORKS </a></Link></Button></li>
-                    <li><Button><Link href="/blogs"><a> BLOG </a></Link></Button></li>
-                    <li><Button><Link href="/about"><a> ABOUT </a></Link></Button></li>
-                    <li><Button><Link href="/contact"><a> CONTACT </a></Link></Button></li>
+                    <li><Button><Link href="/works"> WORKS </Link></Button></li>
+                    <li><Button><Link href="/blogs"> BLOG </Link></Button></li>
+                    <li><Button><Link href="/about"> ABOUT </Link></Button></li>
+                    <li><Button><Link href="/contact"> CONTACT </Link></Button></li>
                 </ul>
             </motion.nav>
         </header>
