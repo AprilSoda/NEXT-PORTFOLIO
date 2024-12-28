@@ -8,6 +8,7 @@ import { getDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import BlogNavigation from "../../components/BlogNavigation";
+import Head from "next/head";
 
 
 // notion-x 관련 스타일시트
@@ -45,35 +46,42 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
   const showTableOfContents = !!isBlogPost
   const minTableOfContentsItems = 3
 
-  return (
-    <Transition>
-      <NotionRenderer
-        disableHeader // notion 헤더 안보이도록
-        components={{
-          Code,
-          Equation,
-          Pdf,
-          Modal,
-          Collection: () => null,
-          nextImage: Image, // Next 이미지 (optimization) 사용하고 싶을 경우 해당 컴포넌트 전달
-          nextLink: Link, // Next 링크 사용하고 싶을 경우 해당 컴포넌트 전달
-        }}
-        recordMap={blog_id} // 블로그 데이터
-        fullPage={true} // 전체 페이지 설정
-        darkMode={true} // 다크모드 설정
-        showCollectionViewDropdown={false}
-        showTableOfContents={showTableOfContents}
-        minTableOfContentsItems={minTableOfContentsItems}
-      />
-      <section className="blog-scroller">
-        <div className="blog-selection">
-          <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
-          <a className="go_back" onClick={() => router.push("/blogs")}> ← All blogs </a>
-        </div>
-      </section>
+  console.log(blog_id);
 
-      <Footer />
-    </Transition>
+  return (
+    <>
+      <Head>
+        <title> {blog_id?.title} </title>
+      </Head>
+      <Transition>
+        <NotionRenderer
+          disableHeader // notion 헤더 안보이도록
+          components={{
+            Code,
+            Equation,
+            Pdf,
+            Modal,
+            Collection: () => null,
+            nextImage: Image, // Next 이미지 (optimization) 사용하고 싶을 경우 해당 컴포넌트 전달
+            nextLink: Link, // Next 링크 사용하고 싶을 경우 해당 컴포넌트 전달
+          }}
+          recordMap={blog_id} // 블로그 데이터
+          fullPage={true} // 전체 페이지 설정
+          darkMode={true} // 다크모드 설정
+          showCollectionViewDropdown={false}
+          showTableOfContents={showTableOfContents}
+          minTableOfContentsItems={minTableOfContentsItems}
+        />
+        <section className="blog-scroller">
+          <div className="blog-selection">
+            <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
+            <a className="go_back" onClick={() => router.push("/blogs")}> ← All blogs </a>
+          </div>
+        </section>
+
+        <Footer />
+      </Transition>
+    </>
   );
 }
 

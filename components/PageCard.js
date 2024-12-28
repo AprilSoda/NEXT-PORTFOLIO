@@ -42,7 +42,11 @@ export default function PageCard({ blogs, selectedCategory }) {
     });
   }, { scope: container, revertOnUpdate: true, dependencies: [filteredBlogs] });
 
-
+  const getCoverUrl = (cover) => {
+    if (cover.type === "external") return cover.external.url;
+    if (cover.type === "file") return cover.file.url;
+    return "";
+  };
 
   return (
     <>
@@ -56,7 +60,6 @@ export default function PageCard({ blogs, selectedCategory }) {
               <div className="card"
                 key={index + 1}
               >
-                {console.log(blog)}
                 <div className="card-inner">
                   <a
                     className="thumnail"
@@ -64,7 +67,7 @@ export default function PageCard({ blogs, selectedCategory }) {
                     onMouseEnter={() => handleCursorChange("hover")}
                     onMouseLeave={() => handleCursorChange("off")}
                   >
-                    <img loading="lazy" src={blog.cover.type == "external" ? blog.cover.external.url : ""} />
+                    <img loading="lazy" src={getCoverUrl(blog.cover)} />
                   </a>
                   <div className="title-subtitle-date">
                     <div className="title"><a href={`blogs/${blog.id}`}>{blog.properties.title.title[0].plain_text}</a></div>
