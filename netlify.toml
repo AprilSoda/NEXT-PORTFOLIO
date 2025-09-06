@@ -1,0 +1,4 @@
+# netlify.toml
+[build.environment]
+  NODE_VERSION = "20.11.1"   # LTS 권장 (20.x 또는 22.x도 OK)
+  NPM_FLAGS = "--no-audit --no-fund"
