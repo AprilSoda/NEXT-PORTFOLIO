@@ -120,7 +120,7 @@ const Works = ({ posts }) => {
                                 variants={item}
                             >
                                 <Link href={`works/${post.id}`}>
-                                    <a className="card__inner">
+                                    <div className="card__inner">
                                         <Button type="pic">
                                             <div
                                                 className="thumb_title"
@@ -149,13 +149,13 @@ const Works = ({ posts }) => {
                                                 <Image
                                                     src={post.cover ? post.cover.external.url : ""}
                                                     alt="Work Thumbnail"
-                                                    layout="fill"
-                                                    objectFit="cover"
-                                                    priority="true"
+                                                    fill
+                                                    style={{ objectFit: 'cover' }}
+                                                    priority
                                                 />
                                             </div>
                                         </Button>
-                                    </a>
+                                    </div>
                                 </Link>
                             </motion.li>
                         ) : null

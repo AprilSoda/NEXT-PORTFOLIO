@@ -2,6 +2,7 @@
   "name": "kimtaekyun-hompage",
   "version": "1.0.0",
   "description": "Kim Tae Kyun's website",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
@@ -11,7 +12,6 @@
   },
   "keywords": [],
   "author": "Kim Tae Kyun",
-  "license": "MIT",
   "dependencies": {
     "@gsap/react": "^2.1.1",
     "@notionhq/client": "^0.4.4",
@@ -21,11 +21,11 @@
     "framer-motion": "^7.5.3",
     "gsap": "^3.12.5",
     "moment": "^2.29.4",
-    "next": "13",
+    "next": "^15.4.5",
     "nodemailer": "^6.8.0",
     "notion-client": "^6.16.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.38.0",
     "react-notion-x": "^6.16.0",
     "react-player": "^2.16.0",
@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
-    "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "15.0.0",
     "prettier": "2.7.1",
     "redux-devtools-extension": "^2.13.9"
   }

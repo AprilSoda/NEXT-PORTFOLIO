@@ -186,6 +186,45 @@
     }
 }
 
+.s-awards {
+    margin: 0 7vw;
+    position: relative;
+    .award {
+        top: 0;
+        left: 0;
+        position: absolute;
+        &::after {
+            background: white;
+            height: 1px;
+            width: 0.833vw;
+            content: "";
+            display: block;
+            margin-top: 1.181vw;
+        }
+    }
+    .awards-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 5vw;
+        .award-item {
+            flex: 1 1 30%;
+            width: 50%;
+            padding: 0 1vw;
+            margin-bottom: 2vw;
+            h4 {
+                font-size: clamp(18px, 3vw, 24px);
+                font-weight: 600;
+                color: $text-color-alt;
+                margin-bottom: 0.5vw;
+            }
+            p {
+                font-size: clamp(14px, 2vw, 18px);
+                color: $text-color;
+            }
+        }
+    }
+}
+
 .s-skill {
     margin: 0 7vw;
     position: relative;

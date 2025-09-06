@@ -9,7 +9,7 @@ import ModalShowreel from './modal-showreel'
 const HeroTitle = [
     { count: 1, h1s: ['VFX', 'GENERALIST'] },
     { count: 3, h1s: ['KIM', 'TAE', 'KYUN,', 'SOUTH', 'KOREA'] },
-    { count: 8, h1s: ['CURRENTLY', 'AT', 'M83', 'STUDIO'] },
+    { count: 8, h1s: ['CURRENTLY', 'AVAILABLE', 'FOR', 'FREELANCE'] },
     { count: 11, h1s: ['FEEL', 'FREE', 'TO', 'CONTACT'] },
 ]
 

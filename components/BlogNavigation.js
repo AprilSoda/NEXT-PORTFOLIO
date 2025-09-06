@@ -12,22 +12,24 @@ const NavigationButton = ({ post, direction }) => {
         {direction === 'prev' && 'Previous'}
         {direction === 'next' && 'Next'}
       </p>
-      <Link href={`/blogs/${post.id}`} passHref>
-        <div className={`nav-button ${direction}`}>
-          {coverImage && (
-            <Image
-              src={coverImage}
-              alt={`${direction} post cover`}
-              width={320}
-              height={180}
-              objectFit="cover"
-              className="nav-button-cover"
-            />
-          )}
-          <div className="nav-button-title">
-            {post.properties.title.title[0].plain_text}
+      <Link href={`/blogs/${post.id}`} legacyBehavior>
+        <a>
+          <div className={`nav-button ${direction}`}>
+            {coverImage && (
+              <Image
+                src={coverImage}
+                alt={`${direction} post cover`}
+                width={320}
+                height={180}
+                objectFit="cover"
+                className="nav-button-cover"
+              />
+            )}
+            <div className="nav-button-title">
+              {post.properties.title.title[0].plain_text}
+            </div>
           </div>
-        </div>
+        </a>
       </Link>
     </div>
   );

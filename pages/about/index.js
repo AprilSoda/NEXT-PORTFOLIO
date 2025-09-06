@@ -109,6 +109,39 @@ const About = () => {
                         </li>
                     </ul>
                 </section>
+                {/* <section className='s-awards'>
+
+                    <div className='awards'>
+                        <span> AWARDS </span>
+                    </div>
+                    <div className='awards-wrapper'>
+                        <div className='awards-inner'>
+                            <div className='awards-inner-item'>
+                                <h2> 2023</h2>
+                                <br />
+                                <h3> South Korea</h3>
+                                <br />
+                                <p> The 4th Suryeohan Hapcheon Film Festival, Korean Competition Section  </p>
+                                <p> The 1st Eunpyeong Youth Film Festival, Competition Section </p>
+                                <p> The 15th Seoul Yeongdeungpo International Extreme-Short Image & Film Festival, Official Invitation </p>
+                                <p> The 9th Seoul International Food Film Festival, Korean Short Competition </p>
+                                <p> The 18th Korea University Film Festival, Special Jury Prize by the Executive Committee </p>
+                                <p> The 7th Meonae Village Film Festival, Comma Award </p>
+                                <br />
+                                <h3> France </h3>
+                                <br />
+                                <p> The 29th Nancy International Film Festival, International Short Film Section </p>
+                                <br />
+                                <h3> Canada </h3>
+                                <p> The 27th Vancouver Asian Film Festival, International Short Film Section </p>
+                                <h3> Japan </h3>
+                                <p> The 26th Kyoto International Student Film Festival, Executive Committee Award </p>
+                                <h3> Spain </h3>
+                                <p> 8th Galician Freaky Film Festival, International Short Film Section </p>
+                            </div>
+                        </div>
+                    </div>
+                </section> */}
                 <section className='s-skill'>
                     <div className='skill'>
                         <span> SKILL </span>

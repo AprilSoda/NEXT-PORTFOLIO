@@ -18,10 +18,10 @@ const nextConfig = {
 
     return config;
   },
-  swcMinify: true,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  serverExternalPackages: ['@notionhq/client'],
 }
 
 module.exports = nextConfig

@@ -213,8 +213,8 @@ const renderBlock = (block) => {
                 <figure>
                     <div className={styles.file}>
                         📎{" "}
-                        <Link href={src_file} passHref>
-                            {lastElementInArray.split("?")[0]}
+                        <Link href={src_file} legacyBehavior>
+                            <a>View Project</a>
                         </Link>
                     </div>
                     {caption_file && <figcaption>{caption_file}</figcaption>}
