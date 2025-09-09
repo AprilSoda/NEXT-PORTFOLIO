@@ -4,7 +4,7 @@
   "description": "Kim Tae Kyun's website",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0 -p 5000",
     "build": "next build",
     "prettier": "prettier -write .",
     "lint": "next lint",
