@@ -1,9 +1,10 @@
-footer{
+footer {
     position: relative;
     padding: 300px 3vw 3vh 3vw;
     color: rgb(197, 197, 197);
     text-transform: uppercase;
-    div{
+
+    div {
         position: absolute;
         display: flex;
         justify-content: space-between;
@@ -12,20 +13,25 @@ footer{
         right: 2.4rem;
         z-index: 1500;
         padding-top: 1rem;
-        .social_link{
+        font-family: var(--font-custom);
+
+        .social_link {
             width: 1rem;
             height: 1rem;
             fill: white;
-            svg{
+
+            svg {
                 width: 0.8rem;
                 height: 0.8rem;
                 transition: all 0.4s cubic-bezier(0.8, 0, 0, 1) 0s;
             }
-            & a:hover svg{
+
+            & a:hover svg {
                 fill: $secondary-color;
             }
         }
-        &::before{
+
+        &::before {
             content: "";
             position: absolute;
             top: 0px;
@@ -37,13 +43,14 @@ footer{
     }
 }
 
-@media screen and (max-width: 768px){
-    footer{
-        div{
+@media screen and (max-width: 768px) {
+    footer {
+        div {
             flex-direction: column;
-            .social_link{
+
+            .social_link {
                 margin: 0.8rem 0;
+            }
         }
     }
-}
 }

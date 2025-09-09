@@ -103,10 +103,10 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   const databaseId_blog = process.env.NOTION_DATABASE_ID2;
   const blogs = await getDatabase(databaseId_blog);
-  
+
   // Find blog by slug
   const currentBlog = findBlogBySlug(blogs, params.id);
-  
+
   if (!currentBlog) {
     return {
       notFound: true,

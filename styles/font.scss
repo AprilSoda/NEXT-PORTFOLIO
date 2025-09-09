@@ -1,58 +1,118 @@
+// next/font를 사용하더라도, 기존 SCSS에서 지정한 폰트 이름으로 동작하도록
+// 필요한 최소 @font-face 및 CDN import를 유지합니다.
+
 @font-face {
-    font-family: "Custom_font";
-    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_Monoplex-kr@1.0/MonoplexKR-Regular.woff2")
-        format("woff2");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Custom_font";
+  src: url("font/ProFontWindows.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: "Custom_font";
-    font-style: normal;
-    font-weight: normal;
-    src: local("ProFontWindows"), url("font/ProFontWindows.woff") format("woff");
-    unicode-range: U+0041-005A, U+0061-007A, U+0030-0039;
+  font-family: "Canyon";
+  src: url("font/Canyon-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
 }
 
 @import url("https://fonts.cdnfonts.com/css/exo-3");
-
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
+/* Helvetica Now Display - SCSS에서 직접 참조되는 이름 보존 */
 @font-face {
-    font-family: "Canyon";
-    src: url("font/Canyon-Black.woff2") format("woff2");
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
 }
 
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-Regular.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
 
-// Helvetica Now Display Import
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-Medium.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
 
-@mixin font-face($name, $file, $format, $weight: normal, $style: normal) {
-    @font-face {
-      font-family: "#{$name}";
-      src: url("font/" + $file + "." + $format) format("#{$format}");
-      font-weight: $weight;
-      font-style: $style;
-    }
-  }
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
 
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Hairline", woff, 100);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Thin", woff, 200);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtLt", woff, 300);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Light", woff, 400);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Regular", woff, 500);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Medium", woff, 600);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Bold", woff, 700);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtraBold", woff, 800);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Black", woff, 900);
-  
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-HairlineI", woff, 100, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ThinIta", woff, 200, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-ExtLtIta", woff, 300, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-Light", woff, 400, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-RegIta", woff, 500, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-MedIta", woff, 600, italic);
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-BoldIta", woff, 700, italic);
-  
-  @include font-face("Helvetica Now Display", "HelveticaNowDisplay-BlackIta", woff, 900, italic);
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-ExtraBold.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-HairlineI.woff") format("woff");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-ThinIta.woff") format("woff");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-ExtLtIta.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-LightIta.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-RegIta.woff") format("woff");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-MedIta.woff") format("woff");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-BoldIta.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Now Display";
+  src: url("font/HelveticaNowDisplay-BlackIta.woff") format("woff");
+  font-weight: 900;
+  font-style: italic;
+}

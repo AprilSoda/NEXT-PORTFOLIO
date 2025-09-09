@@ -1,39 +1,49 @@
-.about-title{
+.about-title {
     padding: 15vh 0 30vh 0;
     margin: 0 7vw;
+
     .about-title-wrapper {
         display: flex;
         position: relative;
+
         .title {
             position: absolute;
             z-index: 3;
             margin-top: 10vw;
             width: 100%;
+
             div {
                 overflow: hidden;
+
                 h1 {
                     font-size: clamp(38px, 5vw, 120px);
                 }
+
                 h6 {
                     color: $text-color;
                     font-size: clamp(16px, 1vw, 24px);
                     font-weight: 500;
                     text-transform: none;
+
                     span {
                         font-size: clamp(8px, 0.7vw, 16px);
                     }
                 }
             }
         }
+
         .img-wrapper {
             width: 100%;
             margin-top: 50px;
+
             // visibility: hidden;
             .img-inner {
                 width: 50%;
                 float: right;
                 position: relative;
                 overflow: hidden;
+                min-height: 300px;
+
                 &::before {
                     content: "";
                     position: absolute;
@@ -44,6 +54,7 @@
                     height: 100%;
                     background: rgba(0, 0, 0, 0.1);
                 }
+
                 &:after {
                     content: "";
                     position: absolute;
@@ -54,8 +65,10 @@
                     z-index: 2;
                     background: $body-color;
                 }
+
                 figure {
                     width: 100%;
+                    height: 100%;
                     position: relative;
                     filter: saturate(60%) contrast(110%);
                 }
@@ -67,10 +80,12 @@
 .s-story {
     margin: 0 7vw;
     position: relative;
+
     .about {
         top: 0;
         left: 0;
         position: absolute;
+
         &::after {
             background: white;
             height: 1px;
@@ -88,20 +103,26 @@
         display: flex;
         margin: 10.417vw 0;
         margin-left: 14.792vw;
+
         .img {
             margin-right: 1.389vw;
             overflow: hidden;
+
             figure {
                 width: 28.264vw;
             }
+
             p {
                 margin-top: 0.694vw;
             }
         }
+
         .paragraph {
             width: 19.472vw;
+
             div {
                 overflow: hidden;
+
                 div {
                     position: relative;
                     will-change: transform;
@@ -122,20 +143,26 @@
         display: flex;
         margin: 10.417vw 0;
         margin-left: 37.014vw;
+
         .img {
             margin-right: 1.389vw;
             overflow: hidden;
+
             figure {
                 width: 28.194vw;
             }
+
             p {
                 margin-top: 0.694vw;
             }
         }
+
         .paragraph {
             width: 19.403vw;
+
             div {
                 overflow: hidden;
+
                 div {
                     position: relative;
                     will-change: transform;
@@ -156,22 +183,28 @@
         display: flex;
         margin: 10.417vw 0;
         margin-left: 14.722vw;
+
         .img {
             order: 2;
             margin-left: 1.389vw;
             overflow: hidden;
+
             figure {
                 width: 28.264vw;
             }
+
             p {
                 margin-top: 0.694vw;
             }
         }
+
         .paragraph {
             width: 16.703vw;
             text-align: right;
+
             div {
                 overflow: hidden;
+
                 div {
                     position: relative;
                     will-change: transform;
@@ -189,10 +222,12 @@
 .s-awards {
     margin: 0 7vw;
     position: relative;
+
     .award {
         top: 0;
         left: 0;
         position: absolute;
+
         &::after {
             background: white;
             height: 1px;
@@ -202,21 +237,25 @@
             margin-top: 1.181vw;
         }
     }
+
     .awards-wrapper {
         display: flex;
         flex-wrap: wrap;
         margin-top: 5vw;
+
         .award-item {
             flex: 1 1 30%;
             width: 50%;
             padding: 0 1vw;
             margin-bottom: 2vw;
+
             h4 {
                 font-size: clamp(18px, 3vw, 24px);
                 font-weight: 600;
                 color: $text-color-alt;
                 margin-bottom: 0.5vw;
             }
+
             p {
                 font-size: clamp(14px, 2vw, 18px);
                 color: $text-color;
@@ -228,10 +267,12 @@
 .s-skill {
     margin: 0 7vw;
     position: relative;
+
     .skill {
         top: 0;
         left: 0;
         position: absolute;
+
         &::after {
             background: white;
             height: 1px;
@@ -247,27 +288,31 @@
     .tryhard {
         position: relative;
         padding-top: 5vw;
+
         h4 {
             font-size: clamp(18px, 5vw, 42px);
         }
     }
+
     .tryhardgrid {
         margin: 4vw 0 10vw;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2vw;
-        
+
         // Desktop layout (3 columns for wide screens)
         @media screen and (min-width: 1200px) {
             grid-template-columns: 1fr 1fr 1fr;
+
             .three_general {
                 grid-column: 1 / -1; // Span all columns
             }
         }
-        
+
         // Large tablet layout (2 columns)
         @media screen and (max-width: 1199px) and (min-width: 769px) {
             grid-template-columns: 1fr 1fr;
+
             .three_general {
                 grid-column: 1 / -1; // Span all columns
             }
@@ -282,11 +327,13 @@
         color: $text-color-alt;
         margin-bottom: 2.5vw;
     }
+
     .tile.excep {
         width: 100%;
         height: 100%;
         min-height: 150px;
     }
+
     .tile {
         width: 100%;
         display: flex;
@@ -295,12 +342,13 @@
         height: auto;
         flex-wrap: wrap;
         padding: 1vw;
-        
+
         div {
             font-size: clamp(16px, 2.5vw, 20px);
             text-transform: none;
             padding: 0.5vw 0 1vw 1vw;
             line-height: 1.4;
+
             span {
                 font-size: clamp(8px, 0.7vw, 14px);
                 color: $secondary-color;
@@ -308,39 +356,40 @@
             }
         }
     }
-    
+
     // Special responsive layout for program section (three_general)
     .three_general .tile {
+
         // Desktop: 3 columns
         @media screen and (min-width: 1200px) {
             column-count: 3;
             column-gap: 2vw;
             height: auto;
-            
+
             div {
                 break-inside: avoid;
                 margin-bottom: 0.5vw;
                 padding: 0.8vw 1vw;
             }
         }
-        
+
         // Large tablet: 2 columns
         @media screen and (max-width: 1199px) and (min-width: 769px) {
             column-count: 2;
             column-gap: 2vw;
             height: auto;
-            
+
             div {
                 break-inside: avoid;
                 margin-bottom: 0.5vw;
                 padding: 0.8vw 1vw;
             }
         }
-        
+
         // Small tablet and mobile: single column (default)
         @media screen and (max-width: 768px) {
             column-count: 1;
-            
+
             div {
                 padding: 1vw 0 2vw 2vw;
             }
@@ -354,12 +403,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     div div {
         font-size: clamp(24px, 7vw, 48px);
         font-weight: 500;
         text-transform: none;
         line-height: clamp(28px, 8vw, 62px);
     }
+
     div div div {
         display: inline;
         color: $secondary-color;
@@ -371,46 +422,56 @@
         padding: 15vh 0 30vh 0;
         margin: 0 7vw;
     }
+
     .about-title .about-title-wrapper .img-wrapper {
         margin-top: 290px;
     }
+
     .about-title .about-title-wrapper .img-wrapper .img-inner {
         width: 100%;
     }
+
     .quote {
         height: 40vh;
     }
+
     .s-story .about,
     .s-skill .skill {
         top: unset;
         left: unset;
         position: relative;
         margin-bottom: 8.333vw;
+
         span {
             font-size: 3.889vw;
             line-height: 3.889vw;
         }
     }
+
     .s-story {
         .row3 {
             .paragraph {
                 text-align: left;
             }
         }
+
         .row1,
         .row2,
         .row3 {
             display: block;
             margin-left: 0;
             text-align: left;
-            & > div:nth-child(1) {
+
+            &>div:nth-child(1) {
                 margin: 0;
                 display: flex;
                 flex-wrap: wrap;
             }
-            & > div:nth-child(2) {
+
+            &>div:nth-child(2) {
                 width: auto;
             }
+
             .img {
                 figure {
                     order: 2;
@@ -418,6 +479,7 @@
                     margin: 4.167vw 0;
                 }
             }
+
             .paragraph div div {
                 font-weight: 500;
                 color: $text-color;
@@ -426,36 +488,39 @@
             }
         }
     }
+
     .s-skill .tryhardgrid {
         grid-template-columns: 1fr !important;
         gap: 3vw;
         margin: 6vw 0 15vw;
-        
+
         .s-9 {
             margin-bottom: 4vh;
             font-size: clamp(20px, 4vw, 28px);
         }
-        
-        > div {
+
+        >div {
             margin-top: 6vh;
         }
-        
-        .service, .editing, .three_general {
+
+        .service,
+        .editing,
+        .three_general {
             grid-column: unset;
             grid-row: unset;
         }
     }
-    
+
     .tryhardgrid .tile {
         height: auto !important;
         min-height: auto !important;
         padding: 4vw 2vw;
-        
+
         div {
             padding: 1vw 0 2vw 2vw;
             line-height: 1.6;
             font-size: clamp(18px, 4vw, 22px);
-            
+
             span {
                 font-size: clamp(12px, 2.5vw, 16px);
             }

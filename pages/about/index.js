@@ -13,7 +13,7 @@ const About = () => {
 
     return (
         <Transition>
-            <div style={{ fontFamily: "Helvetica Now Display" }}>
+            <div>
                 <section className="about-title">
                     <div className="about-title-wrapper">
                         <div className="title">
@@ -104,10 +104,14 @@ const About = () => {
                         <div className="img-wrapper">
                             <div className="img-inner">
                                 <figure>
-                                    <img
+                                    <Image
                                         src="/about-1.webp"
                                         alt="TaeKyun Kim"
-                                        layout="fill"
+                                        width={600}
+                                        height={300}
+                                        style={{ objectFit: 'cover' }}
+                                        priority
+                                        quality={100}
                                     />
                                 </figure>
                             </div>
@@ -122,9 +126,13 @@ const About = () => {
                         <li className="row1">
                             <div className="img">
                                 <figure>
-                                    <img
+                                    <Image
                                         src="/about-2.jpg"
                                         alt="Seoul Institute Of The Art Film Shoot"
+                                        width={1200}
+                                        height={800}
+                                        style={{ objectFit: 'cover' }}
+                                        quality={90}
                                     />
                                 </figure>
                                 <p> Seoul Institute Of The Art Film Shoot </p>
@@ -181,9 +189,13 @@ const About = () => {
                         <li className="row2">
                             <div className="img">
                                 <figure>
-                                    <img
+                                    <Image
                                         src="/about-3.jpg"
                                         alt="Short Oh hako Shoot"
+                                        width={1200}
+                                        height={800}
+                                        style={{ objectFit: 'cover' }}
+                                        quality={90}
                                     />
                                 </figure>
                                 <p> Short Oh hako Shoot </p>
@@ -244,9 +256,13 @@ const About = () => {
                         <li className="row3">
                             <div className="img">
                                 <figure>
-                                    <img
-                                        src="about-4.jpg"
+                                    <Image
+                                        src="/about-4.jpg"
                                         alt="Vancouver Travel"
+                                        width={1200}
+                                        height={800}
+                                        style={{ objectFit: 'cover' }}
+                                        quality={90}
                                     />
                                 </figure>
                                 <p> Vancouver travel </p>

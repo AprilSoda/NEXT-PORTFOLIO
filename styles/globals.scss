@@ -1,5 +1,5 @@
 @import 'variable.scss';
-@import 'font.scss';
+// next/font만 사용
 @import 'CustomGSAP.scss';
 @import 'hero.scss';
 @import 'Basic.scss';
@@ -9,6 +9,13 @@
 @import 'work.scss';
 @import 'Contact.scss';
 @import 'About.scss';
-@import 'withImageLoading.scss';
 @import 'blogs.scss';
 @import 'notion.scss';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  /* next/font 변수만 사용 */
+  font-family: var(--font-helvetica-now-display), var(--font-roboto), var(--font-canyon), var(--font-custom), var(--font-exo), sans-serif;
+}

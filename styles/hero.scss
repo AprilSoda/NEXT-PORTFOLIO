@@ -3,7 +3,8 @@
   height: 100%;
   overflow: hidden;
   width: 100%;
-  .centering{
+
+  .centering {
     position: absolute;
     width: 100%;
     top: 50%;
@@ -13,34 +14,42 @@
     z-index: 2;
     transform-origin: right;
     transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
-    .outter{
+
+    .outter {
       float: right;
       width: 100%;
       transform: translateX(50%);
       transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
-      .inner{
+
+      .inner {
         display: inline-block;
         transform: translateX(-50%);
         transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
-        h1{
+
+        h1 {
+          font-family: 'Custom_font';
           display: inline-block;
           margin: 0 0.3rem;
           line-height: 1;
           font-size: clamp(12px, 6vw, 46px);
+          font-family: var(--font-custom);
         }
       }
     }
   }
-  .centering.right .outter{
+
+  .centering.right .outter {
     transform: translateX(100%);
   }
-  .centering.right .inner{
+
+  .centering.right .inner {
     transform: translateX(-100%);
   }
-  .centering.right{
+
+  .centering.right {
     transform: translateY(-70%) scale(0.7);
   }
-  
+
 
   .bg-area {
     height: 100%;
@@ -50,7 +59,8 @@
     width: 100%;
     z-index: 0;
     overflow: hidden;
-    &::before{
+
+    &::before {
       background: rgba(0, 0, 0, 0.5);
       content: "";
       height: 100%;
@@ -60,7 +70,9 @@
       width: 100%;
       z-index: 1;
     }
-    .video, .bg-area img {
+
+    .video,
+    .bg-area img {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       height: 100%;
@@ -72,7 +84,7 @@
     }
   }
 
-  .copy-area{
+  .copy-area {
     position: absolute;
     z-index: 12;
     width: 100%;
@@ -82,49 +94,56 @@
     font-size: $normal-font-size;
     color: $title-color-alt;
     opacity: 1;
-    .social{
+    font-family: var(--font-custom);
+
+    .social {
       position: absolute;
       right: 0px;
       display: flex;
       align-items: center;
       padding: 0 max(3vw, 25px);
-      a{
+
+      a {
         padding: 0 1rem;
         display: inline-block;
-        svg{
+
+        svg {
           fill: white;
           width: 1rem;
           height: 1rem;
           transition: all 0.4s cubic-bezier(0.8, 0, 0, 1) 0s;
-      }
+        }
       }
     }
   }
 }
+
 @media (max-width: 800px) {
-  .hero-comp .copy-area{
+  .hero-comp .copy-area {
     text-align: center;
     padding: 0 calc(3vw + 1rem);
   }
+
   .hero-comp .copy-area .social {
     bottom: 30px;
   }
 }
+
 .youtube-container {
-	overflow: hidden;
-	width: 100%;
+  overflow: hidden;
+  width: 100%;
   height: 100%;
-	/* No clicking/hover effects */
-	pointer-events: none;
-	
-	iframe{
-		/* Extend it beyond the viewport... */
-		width: 300%;
-		height: 100%;
-		/* ...and bring it back again */
-		margin-left: -100%;
+  /* No clicking/hover effects */
+  pointer-events: none;
+
+  iframe {
+    /* Extend it beyond the viewport... */
+    width: 300%;
+    height: 100%;
+    /* ...and bring it back again */
+    margin-left: -100%;
     object-fit: cover;
-	}
+  }
 }
 
 /*=============== modal ===============*/
@@ -134,7 +153,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.9); /* 반투명한 배경 */
+  background-color: rgba(0, 0, 0, 0.9);
+  /* 반투명한 배경 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -145,12 +165,15 @@
   max-width: 1280px;
   margin: 0 auto;
   width: 90vw;
-  .videoWrapper{
+
+  .videoWrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 비율을 유지하기 위해 설정 */
+    padding-bottom: 56.25%;
+    /* 16:9 비율을 유지하기 위해 설정 */
     // overflow: hidden;
     height: 0;
-    iframe{
+
+    iframe {
       position: absolute;
       top: 0;
       left: 0;

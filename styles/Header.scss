@@ -1,58 +1,61 @@
 /*=============== HEADER ===============*/
 .header-comp {
-    height: $header-height;
-    left: 0;
-    min-width: 300px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1); /* Add transition for a smooth slide effect */
-    transform: translateY(0);
-  }
+  height: $header-height;
+  left: 0;
+  min-width: 300px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+  /* Add transition for a smooth slide effect */
+  transform: translateY(0);
+}
 
-  .header-comp.hidden {
-    transform: translateY(-100px);
-    pointer-events: none; /* Optional: Disable pointer events when hidden */
-  }
-  
-  .header-comp .header-inner {
-    height: 100%;
-    padding: 0 max(3vw, 25px);
-    position: relative;
-    width: 100%;
-    align-items: center;
-    display: inline-flex;
-    justify-content: space-between;
-    z-index: 11;
-  }
-  
-  .header-comp .logo {
-    font-size: 0;
-    padding-right: 20px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-  
-  .header-comp .logo button {
-    height: 100%;
-    background-color: transparent;
-  }
-  
-  .header-comp .sub-menu-area {
-    font-size: 1.2rem;
-    display: flex;
-    height: 100%;
-    align-items: center;
-  }
+.header-comp.hidden {
+  transform: translateY(-100px);
+  pointer-events: none;
+  /* Optional: Disable pointer events when hidden */
+}
 
-  .header-comp .sub-menu-area li{
+.header-comp .header-inner {
+  height: 100%;
+  padding: 0 max(3vw, 25px);
+  position: relative;
+  width: 100%;
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-between;
+  z-index: 11;
+}
+
+.header-comp .logo {
+  font-size: 0;
+  padding-right: 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.header-comp .logo button {
+  height: 100%;
+  background-color: transparent;
+}
+
+.header-comp .sub-menu-area {
+  font-size: 1.2rem;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  font-family: var(--font-custom);
+}
+
+.header-comp .sub-menu-area li {
   height: 100%;
   width: 100%;
-  
-  }
 
-  .header-comp .sub-menu-area a{
-    margin: 0 2vw;
-  }
+}
+
+.header-comp .sub-menu-area a {
+  margin: 0 2vw;
+}
