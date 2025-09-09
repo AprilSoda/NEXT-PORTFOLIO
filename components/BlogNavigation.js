@@ -13,7 +13,7 @@ const NavigationButton = ({ post, direction }) => {
         {direction === 'prev' && 'Previous'}
         {direction === 'next' && 'Next'}
       </p>
-      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '')}`} legacyBehavior>
+      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '', post.id)}`} legacyBehavior>
         <a>
           <div className={`nav-button ${direction}`}>
             {coverImage && (

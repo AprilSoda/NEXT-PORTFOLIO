@@ -92,7 +92,7 @@ export const getStaticPaths = async () => {
   const blogs = await getDatabase(databaseId_blog);
   const paths = blogs.map((blog) => {
     const title = blog.properties.title.title[0]?.plain_text || '';
-    const slug = createSlug(title);
+    const slug = createSlug(title, blog.id);
     return {
       params: { id: slug },
     };
