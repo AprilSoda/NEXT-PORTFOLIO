@@ -5,6 +5,7 @@ import Link from "next/link";
 import { NotionAPI } from "notion-client";
 
 import { getDatabase } from "../../lib/notion";
+import { createSlug, findBlogBySlug } from "../../lib/slugify";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import BlogNavigation from "../../components/BlogNavigation";
@@ -89,19 +90,32 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
 export const getStaticPaths = async () => {
   const databaseId_blog = process.env.NOTION_DATABASE_ID2;
   const blogs = await getDatabase(databaseId_blog);
-  const paths = blogs.map((blog) => ({
-    params: { id: blog.id },
-  }));
+  const paths = blogs.map((blog) => {
+    const title = blog.properties.title.title[0]?.plain_text || '';
+    const slug = createSlug(title);
+    return {
+      params: { id: slug },
+    };
+  });
   return { paths, fallback: false };
 };
 
 export const getStaticProps = async ({ params }) => {
-  const recordMap = await notion.getPage(params.id);
-
   const databaseId_blog = process.env.NOTION_DATABASE_ID2;
   const blogs = await getDatabase(databaseId_blog);
+  
+  // Find blog by slug
+  const currentBlog = findBlogBySlug(blogs, params.id);
+  
+  if (!currentBlog) {
+    return {
+      notFound: true,
+    };
+  }
 
-  const currentIndex = blogs.findIndex(blog => blog.id === params.id);
+  const recordMap = await notion.getPage(currentBlog.id);
+
+  const currentIndex = blogs.findIndex(blog => blog.id === currentBlog.id);
   const prevPost = currentIndex > 0 ? blogs[currentIndex - 1] : null;
   const nextPost = currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import PageTime from '../components/PageTime';
 import gsap from 'gsap';
 import { useGSAP } from "@gsap/react";
+import { createSlug } from "../lib/slugify";
 gsap.registerPlugin(useGSAP);
 
 gsap.config({
@@ -63,14 +64,14 @@ export default function PageCard({ blogs, selectedCategory }) {
                 <div className="card-inner">
                   <a
                     className="thumnail"
-                    href={`blogs/${blog.id}`}
+                    href={`blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '')}`}
                     onMouseEnter={() => handleCursorChange("hover")}
                     onMouseLeave={() => handleCursorChange("off")}
                   >
                     <img loading="lazy" src={getCoverUrl(blog.cover)} />
                   </a>
                   <div className="title-subtitle-date">
-                    <div className="title"><a href={`blogs/${blog.id}`}>{blog.properties.title.title[0].plain_text}</a></div>
+                    <div className="title"><a href={`blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '')}`}>{blog.properties.title.title[0].plain_text}</a></div>
                     {/* <div className="subtitle"><span>수원대학교 졸업작품 오하꼬의 조명감독의 입장에서 적은 블로그입니다.</span></div> */}
                     <div className="date">
                       <span> {PageTime(blog.created_time)} </span>

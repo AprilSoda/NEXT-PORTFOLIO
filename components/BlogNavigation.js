@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createSlug } from '../lib/slugify';
 
 const NavigationButton = ({ post, direction }) => {
   if (!post) return null;
@@ -12,7 +13,7 @@ const NavigationButton = ({ post, direction }) => {
         {direction === 'prev' && 'Previous'}
         {direction === 'next' && 'Next'}
       </p>
-      <Link href={`/blogs/${post.id}`} legacyBehavior>
+      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '')}`} legacyBehavior>
         <a>
           <div className={`nav-button ${direction}`}>
             {coverImage && (
