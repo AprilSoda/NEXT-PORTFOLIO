@@ -253,12 +253,24 @@
     }
     .tryhardgrid {
         margin: 4vw 0 10vw;
-
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1vw;
-        .three_general{
-            grid-area: 2 / span 2;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2vw;
+        
+        // Desktop layout (3 columns for wide screens)
+        @media screen and (min-width: 1200px) {
+            grid-template-columns: 1fr 1fr 1fr;
+            .three_general {
+                grid-column: 1 / -1; // Span all columns
+            }
+        }
+        
+        // Large tablet layout (2 columns)
+        @media screen and (max-width: 1199px) and (min-width: 769px) {
+            grid-template-columns: 1fr 1fr;
+            .three_general {
+                grid-column: 1 / -1; // Span all columns
+            }
         }
     }
 }
@@ -273,19 +285,24 @@
     .tile.excep {
         width: 100%;
         height: 100%;
+        min-height: 150px;
     }
     .tile {
         width: 100%;
         display: flex;
         flex-direction: column;
-        height: 15vw;
+        min-height: 150px;
+        height: auto;
         flex-wrap: wrap;
+        padding: 1vw;
+        
         div {
-            font-size: clamp(22px, 3vw, 20px);
+            font-size: clamp(16px, 2.5vw, 20px);
             text-transform: none;
-            padding: 0 0 1.5vw 1.5vw;
+            padding: 0.5vw 0 1vw 1vw;
+            line-height: 1.4;
             span {
-                font-size: clamp(8px, 0.7vw, 16px);
+                font-size: clamp(8px, 0.7vw, 14px);
                 color: $secondary-color;
                 margin-left: 0.3vw;
             }
@@ -372,30 +389,38 @@
         }
     }
     .s-skill .tryhardgrid {
-        grid-template-columns: auto;
-        grid-template-rows: auto;
+        grid-template-columns: 1fr !important;
+        gap: 3vw;
+        margin: 6vw 0 15vw;
+        
         .s-9 {
             margin-bottom: 4vh;
+            font-size: clamp(20px, 4vw, 28px);
         }
+        
         > div {
-            margin-top: 5vh;
+            margin-top: 6vh;
         }
-        .service {
-            grid-row: unset;
-        }
-        .three_general {
-            grid-column: unset;
-        }
-        .audio {
+        
+        .service, .editing, .three_general {
             grid-column: unset;
             grid-row: unset;
         }
     }
+    
     .tryhardgrid .tile {
-        height: 100%;
+        height: auto !important;
+        min-height: auto !important;
+        padding: 4vw 2vw;
+        
         div {
-            padding-bottom: 3vw;
-            line-height: 6vw;
+            padding: 1vw 0 2vw 2vw;
+            line-height: 1.6;
+            font-size: clamp(18px, 4vw, 22px);
+            
+            span {
+                font-size: clamp(12px, 2.5vw, 16px);
+            }
         }
     }
 }
