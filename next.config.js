@@ -10,6 +10,9 @@ const nextConfig = {
       },
     ],
   },
+  allowedDevOrigins: [
+    "4145e2af-bbcf-4176-9d56-3cf4f469af11-00-2patx4ijputhr.pike.replit.dev"
+  ],
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
