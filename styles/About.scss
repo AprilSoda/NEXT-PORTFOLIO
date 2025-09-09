@@ -308,6 +308,44 @@
             }
         }
     }
+    
+    // Special responsive layout for program section (three_general)
+    .three_general .tile {
+        // Desktop: 3 columns
+        @media screen and (min-width: 1200px) {
+            column-count: 3;
+            column-gap: 2vw;
+            height: auto;
+            
+            div {
+                break-inside: avoid;
+                margin-bottom: 0.5vw;
+                padding: 0.8vw 1vw;
+            }
+        }
+        
+        // Large tablet: 2 columns
+        @media screen and (max-width: 1199px) and (min-width: 769px) {
+            column-count: 2;
+            column-gap: 2vw;
+            height: auto;
+            
+            div {
+                break-inside: avoid;
+                margin-bottom: 0.5vw;
+                padding: 0.8vw 1vw;
+            }
+        }
+        
+        // Small tablet and mobile: single column (default)
+        @media screen and (max-width: 768px) {
+            column-count: 1;
+            
+            div {
+                padding: 1vw 0 2vw 2vw;
+            }
+        }
+    }
 }
 
 .quote {
