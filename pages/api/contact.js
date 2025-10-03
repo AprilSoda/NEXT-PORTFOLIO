@@ -3,7 +3,9 @@ import moment from "moment/moment"
 
 export default async (req, res) => {
   const { name, email, text } = JSON.parse(req.body)
-  console.log(req.body.name)
+  if (process.env.NODE_ENV === 'development') {
+    console.log(req.body.name)
+  }
 
   const transport = nodemailer.createTransport({
     host: "smtp.hiworks.com",

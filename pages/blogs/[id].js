@@ -35,7 +35,7 @@ const notion = new NotionAPI({
 
 
 // Master Index
-export default function Blog({ blog_id, prevPost, nextPost }) {
+const Blog = ({ blog_id, prevPost, nextPost }) => {
   const router = useRouter();
 
   const keys = Object.keys(blog_id?.block || {})
@@ -47,7 +47,9 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
   const showTableOfContents = !!isBlogPost
   const minTableOfContentsItems = 3
 
-  console.log(blog_id);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(blog_id);
+  }
 
   return (
     <>
@@ -84,8 +86,9 @@ export default function Blog({ blog_id, prevPost, nextPost }) {
       </Transition>
     </>
   );
-}
+};
 
+export default Blog;
 
 export const getStaticPaths = async () => {
   const databaseId_blog = process.env.NOTION_DATABASE_ID2;

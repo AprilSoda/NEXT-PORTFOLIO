@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 
 const databaseId_blog = process.env.NOTION_DATABASE_ID2;
 
-export default function Blogs({ blogs }) {
+const Blogs = ({ blogs }) => {
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
 
@@ -63,7 +63,9 @@ export default function Blogs({ blogs }) {
       <Footer />
     </Transition>
   );
-}
+};
+
+export default Blogs;
 
 export const getStaticProps = async () => {
   const blogs = await getDatabase(databaseId_blog);
@@ -71,6 +73,6 @@ export const getStaticProps = async () => {
     props: {
       blogs,
     },
-    revalidate: 1,
+    revalidate: 300, // Revalidate every 5 minutes
   };
 };

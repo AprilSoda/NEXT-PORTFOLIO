@@ -1,4 +1,5 @@
-
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
@@ -66,27 +67,65 @@ const exo = Exo({
 })
 
 function MyApp({ Component, pageProps, router }) {
+  const nextRouter = useRouter();
+
+  useEffect(() => {
+    // Google Analytics pageview tracking
+    const handleRouteChange = (url) => {
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('config', process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-MQNWFS6P74', {
+          page_path: url,
+        });
+      }
+    };
+
+    // Track page views on route change
+    nextRouter.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      nextRouter.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [nextRouter.events]);
 
   return (
-    <div className={`${helveticaNowDisplay.variable} ${canyon.variable} ${customFont.variable} ${roboto.variable} ${exo.variable}`}>
-      <MouseContextProvider>
-        <CustomCursor />
-        <Layout router={router} >
-          <AnimatePresence
-            mode='wait'
-            initial={true}
-            onExitComplete={() => {
-              if (typeof window !== 'undefined') {
-                window.scrollTo({ top: 0 })
-              }
-            }}
-          >
-            <Component {...pageProps} key={router.route} />
-          </AnimatePresence>
-        </Layout>
-      </MouseContextProvider>
-    </div>
-
+    <>
+      {/* Google Analytics */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-MQNWFS6P74'}`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || 'G-MQNWFS6P74'}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
+      <div className={`${helveticaNowDisplay.variable} ${canyon.variable} ${customFont.variable} ${roboto.variable} ${exo.variable}`}>
+        <MouseContextProvider>
+          <CustomCursor />
+          <Layout router={router} >
+            <AnimatePresence
+              mode='wait'
+              initial={true}
+              onExitComplete={() => {
+                if (typeof window !== 'undefined') {
+                  window.scrollTo({ top: 0 })
+                }
+              }}
+            >
+              <Component {...pageProps} key={router.route} />
+            </AnimatePresence>
+          </Layout>
+        </MouseContextProvider>
+      </div>
+    </>
   );
 }
 

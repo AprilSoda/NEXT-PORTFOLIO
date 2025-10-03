@@ -169,12 +169,14 @@ const Works = ({ posts }) => {
 
 export const getStaticProps = async () => {
     const database = await getDatabase(databaseId);
-    // console.log(database)
+    if (process.env.NODE_ENV === 'development') {
+        console.log(database);
+    }
     return {
         props: {
             posts: database,
         },
-        revalidate: 1,
+        revalidate: 300, // Revalidate every 5 minutes
     };
 };
 

@@ -213,8 +213,8 @@ const renderBlock = (block) => {
                 <figure>
                     <div className={styles.file}>
                         📎{" "}
-                        <Link href={src_file} legacyBehavior>
-                            <a>View Project</a>
+                        <Link href={src_file}>
+                            View Project
                         </Link>
                     </div>
                     {caption_file && <figcaption>{caption_file}</figcaption>}
@@ -244,7 +244,9 @@ export default function Post({ page, blocks }) {
         .filter(block => block.type === 'image')
         .map(block => block.image.external.url);
     imageUrls.push(page.cover.external.url);
-    // console.log("imageUrls", imageUrls.length);
+    if (process.env.NODE_ENV === 'development') {
+        console.log("imageUrls", imageUrls.length);
+    }
 
 
     // 이미지 로드 상태를 추적하는 상태
@@ -255,7 +257,9 @@ export default function Post({ page, blocks }) {
     // 이미지가 로드될 때마다 해당 이미지의 로드 상태를 업데이트
     const handleImageLoad = url => {
         setImageLoadStatus(prevStatus => ({ ...prevStatus, [url]: true }));
-        // console.log("imagesLoaded", imagesLoaded);
+        if (process.env.NODE_ENV === 'development') {
+            console.log("imagesLoaded", imagesLoaded);
+        }
     };
 
     useEffect(() => {
@@ -360,7 +364,9 @@ export const getStaticProps = async (context) => {
     const { id } = context.params;
     const page = await getPage(id);
     const blocks = await getBlocks(id);
-    // console.log(blocks);
+    if (process.env.NODE_ENV === 'development') {
+        console.log(blocks);
+    }
     // Retrieve block children for nested blocks (one level deep), for example toggle blocks
     // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
     const childBlocks = await Promise.all(
@@ -387,6 +393,6 @@ export const getStaticProps = async (context) => {
             page,
             blocks: blocksWithChildren,
         },
-        revalidate: 1000,
+        revalidate: 300, // Revalidate every 5 minutes
     };
 };

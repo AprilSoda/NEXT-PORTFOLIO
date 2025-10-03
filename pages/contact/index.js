@@ -27,12 +27,16 @@ const Contact = () => {
 
         try {
             const response = await axios(config);
-            console.log(response);
+            if (process.env.NODE_ENV === 'development') {
+                console.log(response);
+            }
             if (response.status === 200) {
                 setSent(true);
             }
         } catch (err) {
-            console.log(err)
+            if (process.env.NODE_ENV === 'development') {
+                console.log(err);
+            }
             setUnexpectedError("Unexpected error. Try again later.");
         }
     }
