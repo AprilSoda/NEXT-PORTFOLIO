@@ -29,8 +29,8 @@ const Modal = dynamic(() => import('react-notion-x/build/third-party/modal').the
 
 // 이 토큰이 뭔지 알려면 -> https://github.com/NotionX/react-notion-x?tab=readme-ov-file#private-pages
 const notion = new NotionAPI({
-  activeUser: "016869ec-923f-4d79-b2b5-31f01fa5cd11",
-  authToken: "v02%3Auser_token_or_cookies%3A-R71zlNOrF9GS1mViFQU36SEanWU8IT5WVTO4tiTWYVijxRaITbRf_jzPlmatkeblOtW7pgkhCpTY8_Y0uu_bf4yEU55Df7eLa4dVfJywVRIcVwhTwmOPBLHwW-obyUfCYFp",
+  activeUser: process.env.NOTION_ACTIVE_USER,
+  authToken: process.env.NOTION_AUTH_TOKEN,
 });
 
 
