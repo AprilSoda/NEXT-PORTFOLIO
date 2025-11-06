@@ -2,7 +2,28 @@
   "permissions": {
     "allow": [
       "Bash(taskkill:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(git add:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(del \"styles\\font.scss\")",
+      "Bash(npm run build:*)",
+      "Bash(claude mcp get:*)",
+      "Bash(npm search:*)",
+      "Bash(npm run dev:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_console_messages",
+      "Bash(cat:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(git push:*)",
+      "Bash(del nul)",
+      "Bash(if exist nul del nul)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
