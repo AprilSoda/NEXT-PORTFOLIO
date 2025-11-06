@@ -38,6 +38,15 @@ const notion = new NotionAPI({
 const Blog = ({ blog_id, prevPost, nextPost }) => {
   const router = useRouter();
 
+  // Show loading state when Next.js is generating the page on-demand
+  if (router.isFallback) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   const keys = Object.keys(blog_id?.block || {})
   const block = blog_id?.block?.[keys[0]]?.value
 
@@ -97,7 +106,7 @@ export const getStaticPaths = async () => {
       params: { id: slug },
     };
   });
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 };
 
 export const getStaticProps = async ({ params }) => {

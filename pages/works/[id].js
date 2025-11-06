@@ -285,6 +285,15 @@ export default function Post({ page, blocks }) {
     const router = useRouter();
     const [imagesLoaded, setImagesLoaded] = useState(false);
 
+    // Show loading state when Next.js is generating the page on-demand
+    if (router.isFallback) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
     // 이미지 URL들을 상태로 관리
     const imageUrls = blocks
         .filter(block => block.type === 'image')
@@ -421,7 +430,7 @@ export const getStaticPaths = async () => {
     const database = await getDatabase(databaseId);
     return {
         paths: database.map((page) => ({ params: { id: page.id } })),
-        fallback: false,
+        fallback: 'blocking',
     };
 };
 
