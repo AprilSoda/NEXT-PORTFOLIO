@@ -283,34 +283,28 @@ const renderBlock = (block) => {
 //Master index
 export default function Post({ page, blocks }) {
     const router = useRouter();
-    const [imagesLoaded, setImagesLoaded] = useState(false);
 
-    // Show loading state when Next.js is generating the page on-demand
-    if (router.isFallback) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <p>Loading...</p>
-            </div>
-        );
-    }
+    // All hooks must be called before any conditional returns
+    const [imagesLoaded, setImagesLoaded] = useState(false);
 
     // 이미지 URL들을 상태로 관리
     const imageUrls = blocks
-        .filter(block => block.type === 'image')
-        .map(block => {
-            const imageBlock = block.image;
-            return imageBlock.type === 'external'
-                ? imageBlock.external?.url
-                : imageBlock.file?.url;
-        })
-        .filter(url => url); // undefined 값 제거
+        ? blocks
+            .filter(block => block.type === 'image')
+            .map(block => {
+                const imageBlock = block.image;
+                return imageBlock.type === 'external'
+                    ? imageBlock.external?.url
+                    : imageBlock.file?.url;
+            })
+            .filter(url => url) // undefined 값 제거
+        : [];
 
     // Cover 이미지가 있는 경우 추가 (external 또는 file 타입 모두 처리)
-    const coverUrl = page.cover?.external?.url || page.cover?.file?.url;
-    if (coverUrl) {
+    const coverUrl = page?.cover?.external?.url || page?.cover?.file?.url;
+    if (coverUrl && imageUrls.length > 0) {
         imageUrls.push(coverUrl);
     }
-
 
     // 이미지 로드 상태를 추적하는 상태
     const [imageLoadStatus, setImageLoadStatus] = useState(
@@ -327,6 +321,16 @@ export default function Post({ page, blocks }) {
         const allImagesLoaded = Object.values(imageLoadStatus).every(status => status);
         setImagesLoaded(allImagesLoaded);
     }, [imageLoadStatus]);
+
+    // Show loading state when Next.js is generating the page on-demand
+    // This conditional return comes AFTER all hooks
+    if (router.isFallback) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
 
 
 

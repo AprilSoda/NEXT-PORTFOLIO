@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer"
 import moment from "moment/moment"
 
-export default async (req, res) => {
+const handler = async (req, res) => {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -54,3 +54,5 @@ export default async (req, res) => {
     res.status(500).json({ error: 'Failed to send email. Please try again later.' })
   }
 }
+
+export default handler

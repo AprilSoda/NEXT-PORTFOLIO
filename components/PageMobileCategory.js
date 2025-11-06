@@ -11,7 +11,7 @@ const PageMobileCategory = ({ handleMobileCateogry, setHandleMobileCateogry, Cat
     if (!handleMobileCateogry) {
       setHandleMobileCateogry(false);
     }
-  }, [handleMobileCateogry]);
+  }, [handleMobileCateogry, setHandleMobileCateogry]);
 
   const handleClick = () => {
     setHandleMobileCateogry(false)
