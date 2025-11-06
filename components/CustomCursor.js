@@ -15,6 +15,7 @@ const CustomCursor = () => {
     const xTo = useRef();
     const yTo = useRef();
     const app = useRef();
+    const cursorRef = useRef();
     const isMobile = useIsMobile();
     const { cursorType } = useContext(MouseContext);
 
@@ -32,6 +33,10 @@ const CustomCursor = () => {
 
     const { contextSafe } = useGSAP(() => {
         if (isMobile) return;
+
+        // 초기에 커서 숨김
+        gsap.set(".main-cursor", { opacity: 0 });
+
         xTo.current = gsap.quickTo(".main-cursor", "x", { duration: 0.5, ease: "expo.out" });
         yTo.current = gsap.quickTo(".main-cursor", "y", { duration: 0.5, ease: "expo.out" });
     }, { scope: app });
@@ -70,14 +75,28 @@ const CustomCursor = () => {
         if (isMobile) return;
 
         const onMouseMove = contextSafe((e) => {
+            // 첫 마우스 이동 시 커서 표시
+            gsap.to(".main-cursor", { opacity: 1, duration: 0.3 });
             xTo.current(e.clientX);
             yTo.current(e.clientY);
         });
 
+        const onMouseEnter = contextSafe(() => {
+            gsap.to(".main-cursor", { opacity: 1, duration: 0.3 });
+        });
+
+        const onMouseLeave = contextSafe(() => {
+            gsap.to(".main-cursor", { opacity: 0, duration: 0.3 });
+        });
+
         window.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseenter", onMouseEnter);
+        document.addEventListener("mouseleave", onMouseLeave);
 
         return () => {
             window.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseenter", onMouseEnter);
+            document.removeEventListener("mouseleave", onMouseLeave);
         };
     }, [contextSafe, isMobile]);
 

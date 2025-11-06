@@ -15,10 +15,12 @@ const Contact = () => {
     const [unexpectedError, setUnexpectedError] = useState("")
     async function onSubmitForm(values) {
         clearErrors("name", "email", "text")
+        setUnexpectedError("")
 
+        // Always use relative URL - works in both dev and production
         let config = {
             method: 'post',
-            url: `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+            url: '/api/contact',
             headers: {
                 'Content-type': 'application/json',
             },
@@ -27,17 +29,13 @@ const Contact = () => {
 
         try {
             const response = await axios(config);
-            if (process.env.NODE_ENV === 'development') {
-                console.log(response);
-            }
             if (response.status === 200) {
                 setSent(true);
             }
         } catch (err) {
-            if (process.env.NODE_ENV === 'development') {
-                console.log(err);
-            }
-            setUnexpectedError("Unexpected error. Try again later.");
+            console.error('Contact form error:', err)
+            const errorMessage = err.response?.data?.error || "Unexpected error. Try again later."
+            setUnexpectedError(errorMessage);
         }
     }
 

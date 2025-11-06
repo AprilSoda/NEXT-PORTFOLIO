@@ -134,7 +134,13 @@ const renderBlock = (block) => {
             const caption = value.caption ? value.caption[0]?.plain_text : "";
             return (
                 <figure>
-                    <img src={src} alt={caption} style={{ borderRadius: '18px', marginTop: '25px' }} />
+                    <Image
+                        src={src}
+                        alt={caption || 'Work image'}
+                        width={800}
+                        height={600}
+                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                    />
                     {caption && <figcaption>{caption}</figcaption>}
                 </figure>
             );
@@ -143,23 +149,63 @@ const renderBlock = (block) => {
                 value.url
             return (
                 <figure>
-                    <img src={embed} referrerPolicy="no-referrer" style={{ borderRadius: '18px', marginTop: '25px' }} />
+                    <Image
+                        src={embed}
+                        alt="Embedded content"
+                        width={800}
+                        height={600}
+                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                    />
                 </figure>
             );
         case "link_preview":
             const link_preview = value.url;
             return (
                 <figure>
-                    <img src={link_preview} referrerPolicy="no-referrer" style={{ borderRadius: '18px', marginTop: '25px' }} />
+                    <Image
+                        src={link_preview}
+                        alt="Link preview"
+                        width={800}
+                        height={600}
+                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                    />
                 </figure>
             );
         case "video":
             const video =
                 value.type === "external" ? value.external.url : value.file.url;
+
+            // Convert YouTube URL to embed format
+            const getYouTubeEmbedUrl = (url) => {
+                if (!url) return url;
+
+                // Check if it's already an embed URL
+                if (url.includes('youtube.com/embed/')) return url;
+
+                // Extract video ID from various YouTube URL formats
+                let videoId = null;
+
+                // Format: https://www.youtube.com/watch?v=VIDEO_ID
+                if (url.includes('youtube.com/watch?v=')) {
+                    videoId = url.split('watch?v=')[1]?.split('&')[0];
+                }
+                // Format: https://youtu.be/VIDEO_ID
+                else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1]?.split('?')[0];
+                }
+
+                // Return embed URL if video ID found, otherwise return original URL
+                return videoId
+                    ? `https://www.youtube.com/embed/${videoId}`
+                    : url;
+            };
+
+            const embedUrl = value.type === "external" ? getYouTubeEmbedUrl(video) : video;
+
             return value.type === "external" ? (
                 <div style={{ width: "100%", padding: "62% 0 0 0", position: "relative", overflow: "hidden" }}>
                     <iframe
-                        src={video + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
+                        src={embedUrl + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         style={{
                             position: "absolute",
@@ -242,10 +288,18 @@ export default function Post({ page, blocks }) {
     // 이미지 URL들을 상태로 관리
     const imageUrls = blocks
         .filter(block => block.type === 'image')
-        .map(block => block.image.external.url);
-    imageUrls.push(page.cover.external.url);
-    if (process.env.NODE_ENV === 'development') {
-        console.log("imageUrls", imageUrls.length);
+        .map(block => {
+            const imageBlock = block.image;
+            return imageBlock.type === 'external'
+                ? imageBlock.external?.url
+                : imageBlock.file?.url;
+        })
+        .filter(url => url); // undefined 값 제거
+
+    // Cover 이미지가 있는 경우 추가 (external 또는 file 타입 모두 처리)
+    const coverUrl = page.cover?.external?.url || page.cover?.file?.url;
+    if (coverUrl) {
+        imageUrls.push(coverUrl);
     }
 
 
@@ -257,9 +311,6 @@ export default function Post({ page, blocks }) {
     // 이미지가 로드될 때마다 해당 이미지의 로드 상태를 업데이트
     const handleImageLoad = url => {
         setImageLoadStatus(prevStatus => ({ ...prevStatus, [url]: true }));
-        if (process.env.NODE_ENV === 'development') {
-            console.log("imagesLoaded", imagesLoaded);
-        }
     };
 
     useEffect(() => {
@@ -282,7 +333,15 @@ export default function Post({ page, blocks }) {
     return (
         <>
             {imageUrls.map((url, index) => (
-                <img key={index} src={url} style={{ display: 'none' }} onLoad={() => handleImageLoad(url)} />
+                <Image
+                    key={index}
+                    src={url}
+                    alt="Preload image"
+                    width={1}
+                    height={1}
+                    style={{ display: 'none' }}
+                    onLoad={() => handleImageLoad(url)}
+                />
             ))}
             {/* {!imagesLoaded ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: "white", color: "black" }}>
@@ -300,7 +359,13 @@ export default function Post({ page, blocks }) {
                 <div className="w_title_container">
                     <div className="w_title">
                         <div className="thumb">
-                            <img src={page.cover.external.url} />
+                            <Image
+                                src={page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
+                                alt={page.properties.title.title[0].plain_text}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                priority
+                            />
                         </div>
                         <div className="title">
                             <h1> {page.properties.title.title[0].plain_text} </h1>
@@ -364,9 +429,6 @@ export const getStaticProps = async (context) => {
     const { id } = context.params;
     const page = await getPage(id);
     const blocks = await getBlocks(id);
-    if (process.env.NODE_ENV === 'development') {
-        console.log(blocks);
-    }
     // Retrieve block children for nested blocks (one level deep), for example toggle blocks
     // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
     const childBlocks = await Promise.all(

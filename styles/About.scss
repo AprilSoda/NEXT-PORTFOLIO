@@ -42,7 +42,6 @@
                 float: right;
                 position: relative;
                 overflow: hidden;
-                min-height: 300px;
 
                 &::before {
                     content: "";
@@ -71,6 +70,10 @@
                     height: 100%;
                     position: relative;
                     filter: saturate(60%) contrast(110%);
+
+                    img{
+                        position: relative !important;
+                    }
                 }
             }
         }

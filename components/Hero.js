@@ -9,7 +9,7 @@ import ModalShowreel from './modal-showreel'
 const HeroTitle = [
     { count: 1, h1s: ['VFX', 'GENERALIST'] },
     { count: 3, h1s: ['KIM', 'TAE', 'KYUN,', 'SOUTH', 'KOREA'] },
-    { count: 8, h1s: ['CURRENTLY', 'AVAILABLE', 'FOR', 'FREELANCE'] },
+    { count: 8, h1s: ['TAKING', 'ON', 'NEW', 'PROJECTS'] },
     { count: 11, h1s: ['FEEL', 'FREE', 'TO', 'CONTACT'] },
 ]
 
@@ -32,10 +32,11 @@ export default function Hero() {
     }, [videoRef])
 
     useEffect(() => {
-        setTimeout(function () {
+        const timer = setTimeout(() => {
             setalign('right');
         }, 5000);
-    })
+        return () => clearTimeout(timer);
+    }, []);
 
     const videoOptions = {
         playerVars: {
@@ -53,9 +54,16 @@ export default function Hero() {
         <>
             <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
             <section className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
-                <div className={'centering ' + align}
-                    style={{ cursor: 'pointer' }}
-                >
+                <div
+                    className="hero-clickable-area"
+                    onMouseEnter={() => handleCursorChange("showreel")}
+                    onMouseLeave={() => handleCursorChange("off")}
+                    onClick={() => {
+                        setIsOpen(true);
+                        handleCursorChange("off");
+                    }}
+                />
+                <div className={'centering ' + align}>
                     {HeroTitle.map((HeroTitle, i) => {
                         const indexs = HeroTitle.count
                         return (
@@ -77,16 +85,6 @@ export default function Hero() {
                                                 </a>
                                             ) : (
                                                 <motion.h1
-                                                    onMouseEnter={() =>
-                                                        handleCursorChange("showreel")
-                                                    }
-                                                    onMouseLeave={() =>
-                                                        handleCursorChange("off")
-                                                    }
-                                                    onClick={() => {
-                                                        setIsOpen(true);
-                                                        handleCursorChange("off");
-                                                    }}
                                                     key={indexing}
                                                     initial={{ opacity: 0, translateY: -30 }}
                                                     animate={{ opacity: 1, translateY: 0 }}

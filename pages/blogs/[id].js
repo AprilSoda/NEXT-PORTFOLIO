@@ -47,9 +47,6 @@ const Blog = ({ blog_id, prevPost, nextPost }) => {
   const showTableOfContents = !!isBlogPost
   const minTableOfContentsItems = 3
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log(blog_id);
-  }
 
   return (
     <>
@@ -111,22 +108,36 @@ export const getStaticProps = async ({ params }) => {
   const currentBlog = findBlogBySlug(blogs, params.id);
 
   if (!currentBlog) {
+    console.error(`Blog not found for slug: ${params.id}`);
+    console.error(`Available blogs:`, blogs.map(b => ({
+      title: b.properties.title.title[0]?.plain_text,
+      slug: createSlug(b.properties.title.title[0]?.plain_text || '', b.id)
+    })));
     return {
       notFound: true,
     };
   }
 
-  const recordMap = await notion.getPage(currentBlog.id);
+  try {
+    const recordMap = await notion.getPage(currentBlog.id);
 
-  const currentIndex = blogs.findIndex(blog => blog.id === currentBlog.id);
-  const prevPost = currentIndex > 0 ? blogs[currentIndex - 1] : null;
-  const nextPost = currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
+    const currentIndex = blogs.findIndex(blog => blog.id === currentBlog.id);
+    const prevPost = currentIndex > 0 ? blogs[currentIndex - 1] : null;
+    const nextPost = currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
 
-  return {
-    props: {
-      blog_id: recordMap,
-      prevPost,
-      nextPost,
-    },
-  };
+    return {
+      props: {
+        blog_id: recordMap,
+        prevPost,
+        nextPost,
+      },
+    };
+  } catch (error) {
+    const blogTitle = currentBlog.properties.title.title[0]?.plain_text || 'Unknown';
+    console.error(`Error fetching blog "${blogTitle}" (${currentBlog.id}):`, error.message);
+    console.error(`Slug: ${params.id}`);
+    return {
+      notFound: true,
+    };
+  }
 }

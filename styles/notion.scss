@@ -516,34 +516,49 @@ pre {
    TABLE OF CONTENTS STYLING IMPROVEMENTS
    ======================================== */
 
+/* Hide the outer Notion TOC wrapper to avoid double boxes */
+.notion-aside-table-of-contents {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.notion-aside-table-of-contents-header {
+  display: none !important;
+}
+
 .notion-table-of-contents {
   position: sticky;
   top: 2rem;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 12px;
+  background: rgba(10, 12, 16, 0.6);
+  border-radius: 16px;
   padding: 1.5rem;
-  margin: 2rem 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  margin: 3rem 2rem 3rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
   max-height: 70vh;
   overflow-y: auto;
-  
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+
   &:before {
-    content: "📖 Table of Contents";
+    content: "TABLE OF CONTENTS";
     display: block;
     font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    color: var(--fg-color);
-    padding-bottom: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    margin: 0 0 1rem 0;
+    color: rgba(255, 255, 255, 0.5);
+    padding-bottom: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-custom), monospace;
   }
 }
 
 .dark-mode .notion-table-of-contents {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  
+  background: rgba(10, 12, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
   &:before {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -551,64 +566,97 @@ pre {
 
 .notion-table-of-contents-item {
   display: block;
-  padding: 0.5rem 0;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  transition: all 0.15s ease;
   text-decoration: none;
-  border-left: 3px solid transparent;
-  padding-left: 1rem;
-  margin: 0.2rem 0;
-  
+  border-left: 2px solid transparent;
+  margin: 0.25rem 0;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: $secondary-color;
+    transform: scaleY(0);
+    transition: transform 0.15s ease;
+    border-radius: 2px 0 0 2px;
+  }
+
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-left-color: #0ea5e9;
-    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.03);
+
+    &:before {
+      transform: scaleY(1);
+    }
   }
 }
 
 .dark-mode .notion-table-of-contents-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .notion-table-of-contents-item-body {
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--fg-color-2);
-  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  transition: color 0.15s ease;
+}
+
+.notion-table-of-contents-item:hover .notion-table-of-contents-item-body {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Different indentation levels for TOC hierarchy */
 .notion-table-of-contents-item[data-level="1"] {
   padding-left: 1rem;
-  font-weight: 600;
+  font-weight: 500;
+
+  .notion-table-of-contents-item-body {
+    font-size: 0.875rem;
+  }
 }
 
 .notion-table-of-contents-item[data-level="2"] {
-  padding-left: 1.5rem;
-  font-size: 0.85rem;
+  padding-left: 1.75rem;
+
+  .notion-table-of-contents-item-body {
+    font-size: 0.813rem;
+    opacity: 0.85;
+  }
 }
 
 .notion-table-of-contents-item[data-level="3"] {
-  padding-left: 2rem;
-  font-size: 0.8rem;
-  opacity: 0.8;
+  padding-left: 2.5rem;
+
+  .notion-table-of-contents-item-body {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
 }
 
 /* Active state for current section */
 .notion-table-of-contents-item.notion-table-of-contents-active-item {
-  background: rgba(14, 165, 233, 0.1);
-  border-left-color: #0ea5e9;
-  color: #0ea5e9;
-  
+  background: rgba(238, 52, 74, 0.08);
+
+  &:before {
+    transform: scaleY(1);
+  }
+
   .notion-table-of-contents-item-body {
-    color: #0ea5e9;
-    font-weight: 600;
+    color: $secondary-color;
+    font-weight: 500;
   }
 }
 
 /* Scrollbar styling for TOC */
 .notion-table-of-contents::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 .notion-table-of-contents::-webkit-scrollbar-track {
@@ -616,34 +664,40 @@ pre {
 }
 
 .notion-table-of-contents::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
+  background: rgba(238, 52, 74, 0.3);
+  border-radius: 0;
 }
 
 .dark-mode .notion-table-of-contents::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(238, 52, 74, 0.3);
+}
+
+.notion-table-of-contents::-webkit-scrollbar-thumb:hover {
+  background: rgba(238, 52, 74, 0.5);
 }
 
 /* Mobile responsive adjustments */
+@media only screen and (max-width: 1200px) {
+  .notion-table-of-contents {
+    margin: 2rem 1rem;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .notion-table-of-contents {
     position: relative;
     top: auto;
     max-height: 300px;
-    margin: 1rem 0;
-    padding: 1rem;
-    
-    &:before {
-      font-size: 1rem;
-    }
+    margin: 2rem 0;
+    padding: 1.25rem;
   }
-  
+
   .notion-table-of-contents-item {
-    padding: 0.4rem 0;
-    
-    &[data-level="1"] { padding-left: 0.5rem; }
-    &[data-level="2"] { padding-left: 1rem; }
-    &[data-level="3"] { padding-left: 1.5rem; }
+    padding: 0.5rem 1rem;
+
+    &[data-level="1"] { padding-left: 1rem; }
+    &[data-level="2"] { padding-left: 1.5rem; }
+    &[data-level="3"] { padding-left: 2rem; }
   }
 }
 

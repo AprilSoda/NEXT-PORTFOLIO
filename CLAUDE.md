@@ -23,22 +23,12 @@ This is a **Next.js 15 (Pages Router)** portfolio website for a VFX artist, inte
 
 ### Key Architectural Patterns
 
-#### Dual Notion Client Setup
-The project uses **two different Notion client libraries** for different purposes:
+#### Notion Integration
+The project uses **two Notion client libraries**:
+- **`@notionhq/client`** - Official SDK for database queries/filtering
+- **`notion-client`** - NotionX client for full page rendering with `react-notion-x`
 
-1. **`@notionhq/client`** (in `lib/notion.js`) - Official Notion API SDK
-   - Used for fetching database queries and metadata
-   - Queries Notion databases with filters (e.g., `pub: true`)
-   - Environment variable: `NOTION_TOKEN`
-   - Functions: `getDatabase()`, `getPage()`, `getBlocks()`
-
-2. **`notion-client`** (in `pages/blogs/[id].js`) - Unofficial NotionX client
-   - Used for rendering full Notion pages with `react-notion-x`
-   - Requires authentication for private pages via `activeUser` and `authToken`
-   - Environment variables: `NOTION_ACTIVE_USER`, `NOTION_AUTH_TOKEN`
-   - Provides `recordMap` for complete page rendering
-
-**Why both?** The official API doesn't provide enough data for rich page rendering, while NotionX client (`notion-client`) supports private pages and full page exports with all blocks preserved.
+This dual setup is the standard pattern for Notion-based sites, as the official API alone cannot render pages with full fidelity.
 
 #### Content Structure
 - **Two Notion databases** power the site:
@@ -221,3 +211,74 @@ export default function Page({ recordMap }) {
 4. **Legacy Link syntax** - Some components use deprecated `legacyBehavior` prop
 5. **Mixed component patterns** - Inconsistent use of function declarations vs arrow functions
 6. **Google Analytics in _document.js** - Won't track SPA navigation, should move to _app.js with router events
+
+## Complexity & Technical Debt Considerations
+
+### Current Pain Points for Solo Maintenance
+
+#### Styling Complexity
+- **14 separate SCSS files** all imported globally via `globals.scss`
+- Mix of SCSS modules and global styles
+- `styled-components` in dependencies but unused
+- No consistent styling pattern across components
+
+#### Font Loading Overhead
+- **17 Helvetica Now Display variants** (weights 100-900 + italics)
+- **5 total font families** loading on every page
+- Significant initial page load impact
+- Most variants likely unused in production
+
+#### Animation Library Redundancy
+- **Framer Motion** - Used for page transitions
+- **GSAP** - Also present with @gsap/react
+- Both libraries serve similar purposes, only one needed
+
+#### Unused Dependencies
+```javascript
+@reduxjs/toolkit          // Not used anywhere
+redux-devtools-extension  // No Redux implementation
+styled-components         // Not actively used
+save-dev                  // Unknown purpose
+```
+
+#### Deployment Configuration Cruft
+- Replit-specific settings in `next.config.js` (`allowedDevOrigins`)
+- Overly permissive image hostname patterns (`hostname: "**"`)
+- 9 environment variables to manage across environments
+
+#### Email Infrastructure
+- Direct SMTP management via nodemailer
+- Requires credential management and server configuration
+- Could be replaced with form service (Formspree, Web3Forms, etc.)
+
+### Simplification Opportunities
+
+#### Quick Wins (Low Risk)
+1. Remove unused npm packages (Redux, styled-components)
+2. Consolidate SCSS files (14 → 3-5 files)
+3. Reduce font variants (17 → 3-5 variants)
+4. Remove one animation library
+5. Clean up console.logs and debug code
+6. Fix prettier script typo (`-write` → `--write`)
+
+#### Medium-Term Improvements
+1. Consider Tailwind CSS migration (eliminate SCSS complexity)
+2. Replace SMTP email with external service (reduce env vars)
+3. Simplify Notion auth (remove private page support if unused)
+4. Optimize ISR revalidation times
+5. Restrict image remote patterns to specific domains
+
+#### Long-Term Considerations
+1. TypeScript migration for better maintainability
+2. Migrate to App Router (Next.js 13+) when stable
+3. Consider Markdown-based content (eliminate Notion dependency)
+4. Standardize component patterns (function declarations vs arrows)
+5. Add proper error boundaries and fallbacks
+
+### Recommended Approach for Solo Developer
+Focus on **reducing cognitive load** rather than adding features:
+- Fewer files to navigate
+- Single source of truth for styles
+- Minimize external dependencies
+- Automate deployment concerns
+- Document what remains

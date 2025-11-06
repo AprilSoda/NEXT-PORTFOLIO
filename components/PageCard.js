@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
+import Image from 'next/image';
 import PageTime from '../components/PageTime';
 import gsap from 'gsap';
 import { useGSAP } from "@gsap/react";
@@ -68,7 +69,14 @@ export default function PageCard({ blogs, selectedCategory }) {
                     onMouseEnter={() => handleCursorChange("hover")}
                     onMouseLeave={() => handleCursorChange("off")}
                   >
-                    <img loading="lazy" src={getCoverUrl(blog.cover)} />
+                    <Image
+                      src={getCoverUrl(blog.cover)}
+                      alt={blog.properties.title.title[0]?.plain_text || 'Blog thumbnail'}
+                      width={400}
+                      height={300}
+                      style={{ width: '100%', height: 'auto' }}
+                      loading="lazy"
+                    />
                   </a>
                   <div className="title-subtitle-date">
                     <div className="title"><a href={`blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}>{blog.properties.title.title[0].plain_text}</a></div>

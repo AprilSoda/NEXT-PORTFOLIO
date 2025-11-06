@@ -36,11 +36,15 @@ function Transition({ children }) {
         variants={variantsExit}
         transition={{ duration: 0.5, ease: [0.95, 0.05, 0.795, 0.035] }}
       />
-      <div
+      <motion.div
         className='transition_children'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
       >
         {children}
-      </div>
+      </motion.div>
     </>
 
   )

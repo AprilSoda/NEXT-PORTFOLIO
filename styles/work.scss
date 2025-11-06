@@ -18,12 +18,14 @@
         }
 
         .thumb {
+            position: relative;
             overflow: hidden;
+            width: 100%;
+            aspect-ratio: 2.35 / 1;
 
             img {
                 width: 100%;
                 object-fit: cover;
-                aspect-ratio: 2.35 / 1;
             }
         }
 
@@ -32,11 +34,14 @@
             left: -7vw;
             bottom: -6vh;
             z-index: 2;
+            max-width: calc(100% + 14vw);
 
             h1 {
                 font-size: clamp(24px, 7vw, 126px);
                 font-family: var(--font-helvetica-now-display);
                 font-weight: 700;
+                word-break: keep-all;
+                overflow-wrap: break-word;
             }
         }
     }
@@ -100,9 +105,7 @@
             margin: 0 0 5vh;
 
             .thumb {
-                img {
-                    aspect-ratio: 16 / 9;
-                }
+                aspect-ratio: 16 / 9;
             }
 
             .title {

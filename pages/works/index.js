@@ -147,7 +147,7 @@ const Works = ({ posts }) => {
 
                                             <div className="card-img">
                                                 <Image
-                                                    src={post.cover ? post.cover.external.url : ""}
+                                                    src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
                                                     alt="Work Thumbnail"
                                                     fill
                                                     style={{ objectFit: 'cover' }}
@@ -169,9 +169,6 @@ const Works = ({ posts }) => {
 
 export const getStaticProps = async () => {
     const database = await getDatabase(databaseId);
-    if (process.env.NODE_ENV === 'development') {
-        console.log(database);
-    }
     return {
         props: {
             posts: database,

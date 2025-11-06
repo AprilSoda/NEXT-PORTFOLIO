@@ -107,11 +107,11 @@ const About = () => {
                                     <Image
                                         src="/about-1.webp"
                                         alt="TaeKyun Kim"
-                                        width={600}
-                                        height={300}
+                                        fill
                                         style={{ objectFit: 'cover' }}
                                         priority
                                         quality={100}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </figure>
                             </div>

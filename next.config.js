@@ -23,6 +23,7 @@ const nextConfig = {
   },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
+    silenceDeprecations: ['legacy-js-api', 'import'],
   },
   serverExternalPackages: ['@notionhq/client'],
 }

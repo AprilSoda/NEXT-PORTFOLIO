@@ -7,8 +7,8 @@ $black-color: hsl($hue-color, 10%, 4%);
 $black-color-alt: hsl($hue-color, 10%, 8%);
 $title-color: hsl($hue-color, 10%, 95%);
 $title-color-alt: hsl($hue-color, 10%, 75%);
-$text-color: hsl($hue-color, 10%, 65%);
-$text-color-alt: hsl($hue-color, 10%, 45%);
+$text-color: hsl($hue-color, 10%, 75%); /* Updated from 65% to 75% for WCAG AA compliance */
+$text-color-alt: hsl($hue-color, 10%, 60%); /* Updated from 45% to 60% for better readability */
 $white-color: #fff;
 $body-color: hsl($hue-color, 10%, 6%);
 $container-color: hsl($hue-color, 10%, 10%);
