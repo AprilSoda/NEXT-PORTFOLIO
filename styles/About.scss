@@ -13,7 +13,7 @@
             width: 100%;
 
             div {
-                overflow: hidden;
+                // overflow: hidden;
 
                 h1 {
                     font-size: clamp(38px, 5vw, 120px);
@@ -77,6 +77,23 @@
                 }
             }
         }
+    }
+}
+
+.cv-download-btn {
+    display: inline-block;
+    text-decoration: none;
+
+    .target_box {
+        padding: 0.8rem 2rem;
+        background-color: $secondary-color;
+        color: white;
+        font-size: clamp(14px, 1vw, 18px);
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 }
 
@@ -527,6 +544,13 @@
             span {
                 font-size: clamp(12px, 2.5vw, 16px);
             }
+        }
+    }
+
+    .cv-download-btn {
+        .target_box {
+            padding: 0.5rem 1rem;
+            font-size: clamp(16px, 4vw, 18px);
         }
     }
 }

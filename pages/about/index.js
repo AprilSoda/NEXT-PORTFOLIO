@@ -1,15 +1,25 @@
-import React, { useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import Image from "next/image";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
+import Button from "../../components/Button";
 import moment from "moment";
 
 const About = () => {
+    const [isMounted, setIsMounted] = useState(false);
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     let currentlYear = moment().year();
     let difference = currentlYear - 2014;
+
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <Transition>
@@ -37,6 +47,13 @@ const About = () => {
                                             Seoul, South Korea{" "}
                                             <span> (UTC+9) </span>
                                         </h6>
+                                    </div>
+                                    <div style={{ marginTop: "2rem" }}>
+                                        <a href="/cv.pdf" download className="cv-download-btn">
+                                            <Button>
+                                                Download CV
+                                            </Button>
+                                        </a>
                                     </div>
                                 </>
                             ) : (
@@ -97,6 +114,13 @@ const About = () => {
                                             Seoul, South Korea{" "}
                                             <span> (UTC+9) </span>
                                         </h6>
+                                    </div>
+                                    <div style={{ marginTop: "3vh" }}>
+                                        <a href="/cv.pdf" download className="cv-download-btn">
+                                            <Button>
+                                                Download CV
+                                            </Button>
+                                        </a>
                                     </div>
                                 </>
                             )}
