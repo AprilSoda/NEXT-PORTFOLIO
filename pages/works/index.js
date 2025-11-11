@@ -151,7 +151,11 @@ const Works = ({ posts }) => {
                                                     alt="Work Thumbnail"
                                                     fill
                                                     style={{ objectFit: 'cover' }}
-                                                    priority
+                                                    priority={index < 4}
+                                                    loading={index < 4 ? 'eager' : 'lazy'}
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                                                 />
                                             </div>
                                         </Button>

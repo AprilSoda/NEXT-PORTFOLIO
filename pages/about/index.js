@@ -131,8 +131,9 @@ const About = () => {
                                     <Image
                                         src="/about-1.webp"
                                         alt="TaeKyun Kim"
-                                        fill
-                                        style={{ objectFit: 'cover' }}
+                                        width={800}
+                                        height={1000}
+                                        style={{ width: '100%', height: 'auto' }}
                                         priority
                                         quality={100}
                                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -155,8 +156,9 @@ const About = () => {
                                         alt="Seoul Institute Of The Art Film Shoot"
                                         width={1200}
                                         height={800}
-                                        style={{ objectFit: 'cover' }}
+                                        style={{ width: '100%', height: 'auto' }}
                                         quality={90}
+                                        loading="lazy"
                                     />
                                 </figure>
                                 <p> Seoul Institute Of The Art Film Shoot </p>
@@ -218,8 +220,9 @@ const About = () => {
                                         alt="Short Oh hako Shoot"
                                         width={1200}
                                         height={800}
-                                        style={{ objectFit: 'cover' }}
+                                        style={{ width: '100%', height: 'auto' }}
                                         quality={90}
+                                        loading="lazy"
                                     />
                                 </figure>
                                 <p> Short Oh hako Shoot </p>
@@ -285,8 +288,9 @@ const About = () => {
                                         alt="Vancouver Travel"
                                         width={1200}
                                         height={800}
-                                        style={{ objectFit: 'cover' }}
+                                        style={{ width: '100%', height: 'auto' }}
                                         quality={90}
+                                        loading="lazy"
                                     />
                                 </figure>
                                 <p> Vancouver travel </p>
