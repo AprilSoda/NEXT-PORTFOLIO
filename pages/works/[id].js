@@ -137,8 +137,8 @@ const renderBlock = (block) => {
                     <Image
                         src={src}
                         alt={caption || 'Work image'}
-                        width={800}
-                        height={600}
+                        width={1300}
+                        height={900}
                         style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
                     />
                     {caption && <figcaption>{caption}</figcaption>}

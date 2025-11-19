@@ -1,0 +1,393 @@
+/*=============== HERO COMPONENT (hero.scss) ===============*/
+.hero-comp {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+
+  .hero-clickable-area {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 50%;
+    height: 60%;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .centering {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%) scale(1);
+    padding: 0 10.3vw;
+    overflow: hidden;
+    z-index: 2;
+    transform-origin: right;
+    transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+    pointer-events: none;
+
+    .outter {
+      float: right;
+      width: 100%;
+      transform: translateX(50%);
+      transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+
+      .inner {
+        display: inline-block;
+        transform: translateX(-50%);
+        transition: transform 2000ms cubic-bezier(0.645, 0.045, 0.355, 1);
+
+        h1 {
+          font-family: 'Custom_font';
+          display: inline-block;
+          margin: 0 0.3rem;
+          line-height: 1;
+          font-size: clamp(12px, 6vw, 46px);
+          font-family: var(--font-custom);
+          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        a {
+          pointer-events: auto;
+        }
+      }
+    }
+  }
+
+  .centering.right .outter {
+    transform: translateX(100%);
+  }
+
+  .centering.right .inner {
+    transform: translateX(-100%);
+  }
+
+  .centering.right {
+    transform: translateY(-70%) scale(0.7);
+  }
+
+
+  .bg-area {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+    overflow: hidden;
+
+    &::before {
+      background: rgba(0, 0, 0, 0.5);
+      content: "";
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .video,
+    .bg-area img {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      height: 100%;
+      -o-object-fit: cover;
+      object-fit: cover;
+      -o-object-position: center;
+      object-position: center;
+      width: 100%;
+    }
+  }
+
+  .copy-area {
+    position: absolute;
+    z-index: 12;
+    width: 100%;
+    bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: $normal-font-size;
+    color: $title-color-alt;
+    opacity: 1;
+    font-family: var(--font-custom);
+    pointer-events: none;
+
+    .social {
+      position: absolute;
+      right: 0px;
+      display: flex;
+      align-items: center;
+      padding: 0 max(3vw, 25px);
+      pointer-events: auto;
+
+      a {
+        padding: 0 1rem;
+        display: inline-block;
+
+        svg {
+          fill: white;
+          width: 1rem;
+          height: 1rem;
+          transition: all 0.4s cubic-bezier(0.8, 0, 0, 1) 0s;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .hero-comp .copy-area {
+    text-align: center;
+    padding: 0 calc(3vw + 1rem);
+  }
+
+  .hero-comp .copy-area .social {
+    bottom: 30px;
+  }
+}
+
+.youtube-container {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  /* No clicking/hover effects */
+  pointer-events: none;
+
+  iframe {
+    /* Extend it beyond the viewport... */
+    width: 300%;
+    height: 100%;
+    /* ...and bring it back again */
+    margin-left: -100%;
+    object-fit: cover;
+  }
+}
+
+/*=============== MODAL SHOWREEL ===============*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  /* 반투명한 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 80;
+}
+
+.modal-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 90vw;
+
+  .videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 비율을 유지하기 위해 설정 */
+    // overflow: hidden;
+    height: 0;
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.blur-effect {
+  filter: blur(5px);
+}
+
+/*=============== CUSTOM CURSOR & TRANSITIONS (CustomGSAP.scss) ===============*/
+// html {
+//     cursor: none !important;
+//   }
+
+.target_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  // border: 1px solid rgb(240, 240, 240);
+  border-radius: 1rem;
+}
+
+.target_pic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  // border: 1px solid rgb(240, 240, 240);
+  border-radius: 1rem;
+}
+
+.main-cursor {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.main-cursor-inner {
+  background-color: white;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.hover-cursor {
+  transform-origin: center;
+  position: absolute;
+  top: -46px;
+  left: -46px;
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  z-index: 1001;
+  pointer-events: none;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+}
+
+.showreel-cursor {
+  transform-origin: center;
+  position: absolute;
+  top: -47px;
+  left: -45px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid white;
+  z-index: 1001;
+  pointer-events: none;
+  text-shadow: 2px 2px 4px #000000;
+
+  svg {
+    position: absolute;
+    top: calc(50% + 2px);
+    left: calc(50% + 2px);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  p {
+    font-family: 'Helvetica Now Display', sans-serif;
+    position: absolute;
+    top: 100%;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+    pointer-events: none;
+  }
+}
+
+.transition_div {
+  position: fixed;
+  left: 0;
+  background-color: white;
+  height: 100vh;
+  width: 100%;
+  z-index: 999;
+}
+
+.transition_children {
+  position: absolute;
+  top: 0;
+  height: 100dvh;
+  width: 100%;
+  z-index: 9;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .main-cursor {
+    display: none;
+  }
+}
+
+/*=============== ARROW NAVIGATION (Arrow.module.scss) ===============*/
+.arrow-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1000;
+}
+
+.arrow-btn {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: none;
+  background: transparent;
+  z-index: 12;
+
+  bottom: 2.4rem;
+  left: 2.4rem;
+  transform: translateY(100px);
+  transition: transform 0.5s cubic-bezier(0.43, 0.195, 0.02, 1);
+  background-color: white;
+  border-radius: 0rem;
+
+  span {
+    z-index: 1;
+    width: 1.2rem;
+    height: 1.2rem;
+    transform: rotate(180deg);
+
+    svg {
+      z-index: 2;
+      width: 1.2rem;
+      height: 1.2rem;
+      fill: rgb(0, 0, 0);
+      animation-name: dieutq;
+      animation-fill-mode: both;
+      animation-duration: 1s;
+      animation-play-state: paused;
+    }
+  }
+}
+
+.arrow-show {
+  transform: translateY(0px);
+}
+
+.arrow-bottom {
+  transition: transform 1.2s cubic-bezier(0.43, 0.195, 0.02, 1);
+  transform: translateY(-50px);
+}
+
+@media screen and (max-width: 768px) {
+  .arrow-bottom {
+    transform: translateY(-90px);
+  }
+}

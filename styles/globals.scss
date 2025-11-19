@@ -1,15 +1,7 @@
 @import 'variable.scss';
-// next/font만 사용
-@import 'CustomGSAP.scss';
-@import 'hero.scss';
-@import 'Basic.scss';
-@import 'Header.scss';
-@import 'Footer.scss';
-@import 'works.scss';
-@import 'work.scss';
-@import 'Contact.scss';
-@import 'About.scss';
-@import 'blogs.scss';
+@import 'layout.scss';
+@import 'components.scss';
+@import 'pages.scss';
 @import 'notion.scss';
 
 html,

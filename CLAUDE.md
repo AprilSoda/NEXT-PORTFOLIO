@@ -233,13 +233,6 @@ export default function Page({ recordMap }) {
 - **GSAP** - Also present with @gsap/react
 - Both libraries serve similar purposes, only one needed
 
-#### Unused Dependencies
-```javascript
-@reduxjs/toolkit          // Not used anywhere
-redux-devtools-extension  // No Redux implementation
-styled-components         // Not actively used
-save-dev                  // Unknown purpose
-```
 
 #### Deployment Configuration Cruft
 - Replit-specific settings in `next.config.js` (`allowedDevOrigins`)
