@@ -91,7 +91,7 @@ const Works = ({ posts }) => {
                             I&apos;VE PUT TOGETHER A LIST OF MY FAVOURITE
                             PROJECTS I&apos;VE COMPLETED.
                             <br /> SOME WHEN I&apos;VE BEEN FREELACING OR FOR
-                            OTHER AGENCIES.{" "}
+                            OTHER STUDIO.{" "}
                         </motion.p>
                     </div>
                 </div>
@@ -144,7 +144,6 @@ const Works = ({ posts }) => {
                                                     }
                                                 </h6>
                                             </div>
-
                                             <div className="card-img">
                                                 <Image
                                                     src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
@@ -153,7 +152,7 @@ const Works = ({ posts }) => {
                                                     style={{ objectFit: 'cover' }}
                                                     priority={index < 4}
                                                     loading={index < 4 ? 'eager' : 'lazy'}
-                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    sizes="1280px"
                                                     placeholder="blur"
                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                                                 />
