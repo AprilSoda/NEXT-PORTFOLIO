@@ -130,6 +130,17 @@ export const getStaticProps = async ({ params }) => {
   try {
     const recordMap = await notion.getPage(currentBlog.id);
 
+    // Ensure every block value has an id field set, using the map key as fallback.
+    // notion-client can return blocks missing the id in their value object,
+    // which causes react-notion-x's uuidToId call to throw during SSR.
+    if (recordMap && recordMap.block) {
+      for (const [key, blockRecord] of Object.entries(recordMap.block)) {
+        if (blockRecord && blockRecord.value && !blockRecord.value.id) {
+          blockRecord.value.id = key;
+        }
+      }
+    }
+
     const currentIndex = blogs.findIndex(blog => blog.id === currentBlog.id);
     const prevPost = currentIndex > 0 ? blogs[currentIndex - 1] : null;
     const nextPost = currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
