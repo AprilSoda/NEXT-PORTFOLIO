@@ -4,18 +4,19 @@ import Image from "next/image";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
-import moment from "moment";
 
 const About = () => {
     const [isMounted, setIsMounted] = useState(false);
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
 
     useEffect(() => {
+        // 의도적 mount 가드: useMediaQuery의 SSR/CSR 하이드레이션 불일치 방지
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
     }, []);
 
-    let currentlYear = moment().year();
-    let difference = currentlYear - 2014;
+    const currentYear = new Date().getFullYear();
+    let difference = currentYear - 2014;
 
     if (!isMounted) {
         return null;

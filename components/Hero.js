@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useContext } from 'react'
 import { motion } from 'framer-motion'
 import Button from './Button'
-import MouseContextProvider, { MouseContext } from './MouseContext'
+import { MouseContext } from './MouseContext'
 import ModalShowreel from './modal-showreel'
 
 
@@ -16,7 +16,7 @@ const HeroTitle = [
 
 export default function Hero() {
     const videoRef = useRef(null)
-    const [align, setalign] = useState("");
+    const [align, setAlign] = useState("");
     const { handleCursorChange } = useContext(MouseContext);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +33,7 @@ export default function Hero() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setalign('right');
+            setAlign('right');
         }, 5000);
         return () => clearTimeout(timer);
     }, []);

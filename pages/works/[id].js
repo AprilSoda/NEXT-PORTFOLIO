@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -69,36 +69,36 @@ const renderBlock = (block) => {
         case "paragraph":
             return (
                 <p>
-                    {value.text.length === 0 ? (
+                    {value.rich_text.length === 0 ? (
                         <br />
                     ) : (
-                        <Text text={value.text} />
+                        <Text text={value.rich_text} />
                     )}
                 </p>
             );
         case "heading_1":
             return (
                 <h1>
-                    <Text text={value.text} />
+                    <Text text={value.rich_text} />
                 </h1>
             );
         case "heading_2":
             return (
                 <h2>
-                    <Text text={value.text} />
+                    <Text text={value.rich_text} />
                 </h2>
             );
         case "heading_3":
             return (
                 <h3>
-                    <Text text={value.text} />
+                    <Text text={value.rich_text} />
                 </h3>
             );
         case "bulleted_list_item":
         case "numbered_list_item":
             return (
                 <li>
-                    <Text text={value.text} />
+                    <Text text={value.rich_text} />
                     {!!value.children && renderNestedList(block)}
                 </li>
             );
@@ -111,7 +111,7 @@ const renderBlock = (block) => {
                             id={id}
                             defaultChecked={value.checked}
                         />{" "}
-                        <Text text={value.text} />
+                        <Text text={value.rich_text} />
                     </label>
                 </div>
             );
@@ -119,7 +119,7 @@ const renderBlock = (block) => {
             return (
                 <details>
                     <summary>
-                        <Text text={value.text} />
+                        <Text text={value.rich_text} />
                     </summary>
                     {value.children?.map((block) => (
                         <Fragment key={block.id}>{renderBlock(block)}</Fragment>
@@ -139,6 +139,7 @@ const renderBlock = (block) => {
                         alt={caption || 'Work image'}
                         width={1300}
                         height={900}
+                        sizes="(max-width: 1100px) 100vw, 1080px"
                         style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
                     />
                     {caption && <figcaption>{caption}</figcaption>}
@@ -237,12 +238,12 @@ const renderBlock = (block) => {
         case "divider":
             return <hr key={id} />;
         case "quote":
-            return <blockquote key={id}>{value.text[0].plain_text}</blockquote>;
+            return <blockquote key={id}>{value.rich_text[0].plain_text}</blockquote>;
         case "code":
             return (
                 <pre className={styles.pre}>
                     <code className={styles.code_block} key={id}>
-                        {value.text[0].plain_text}
+                        {value.rich_text[0].plain_text}
                     </code>
                 </pre>
             );
@@ -284,46 +285,7 @@ const renderBlock = (block) => {
 export default function Post({ page, blocks }) {
     const router = useRouter();
 
-    // All hooks must be called before any conditional returns
-    const [imagesLoaded, setImagesLoaded] = useState(false);
-
-    // 이미지 URL들을 상태로 관리
-    const imageUrls = blocks
-        ? blocks
-            .filter(block => block.type === 'image')
-            .map(block => {
-                const imageBlock = block.image;
-                return imageBlock.type === 'external'
-                    ? imageBlock.external?.url
-                    : imageBlock.file?.url;
-            })
-            .filter(url => url) // undefined 값 제거
-        : [];
-
-    // Cover 이미지가 있는 경우 추가 (external 또는 file 타입 모두 처리)
-    const coverUrl = page?.cover?.external?.url || page?.cover?.file?.url;
-    if (coverUrl && imageUrls.length > 0) {
-        imageUrls.push(coverUrl);
-    }
-
-    // 이미지 로드 상태를 추적하는 상태
-    const [imageLoadStatus, setImageLoadStatus] = useState(
-        imageUrls.reduce((status, url) => ({ ...status, [url]: false }), {})
-    );
-
-    // 이미지가 로드될 때마다 해당 이미지의 로드 상태를 업데이트
-    const handleImageLoad = url => {
-        setImageLoadStatus(prevStatus => ({ ...prevStatus, [url]: true }));
-    };
-
-    useEffect(() => {
-        // 모든 이미지의 로드 상태가 '로드 완료' 상태인지 확인
-        const allImagesLoaded = Object.values(imageLoadStatus).every(status => status);
-        setImagesLoaded(allImagesLoaded);
-    }, [imageLoadStatus]);
-
     // Show loading state when Next.js is generating the page on-demand
-    // This conditional return comes AFTER all hooks
     if (router.isFallback) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -344,23 +306,6 @@ export default function Post({ page, blocks }) {
         return <div />;
     }
     return (
-        <>
-            {imageUrls.map((url, index) => (
-                <Image
-                    key={index}
-                    src={url}
-                    alt="Preload image"
-                    width={1}
-                    height={1}
-                    style={{ display: 'none' }}
-                    onLoad={() => handleImageLoad(url)}
-                />
-            ))}
-            {/* {!imagesLoaded ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: "white", color: "black" }}>
-                    <p>Loading...</p>
-                </div>
-            ) : ( */}
             <Transition>
                 <Head>
                     <title>
@@ -425,8 +370,6 @@ export default function Post({ page, blocks }) {
                 </article>
                 <Footer />
             </Transition>
-            {/* )} */}
-        </>
     );
 }
 

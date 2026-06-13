@@ -1,12 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import gsap from "gsap";
+import React, { useEffect } from "react";
 
 import { AnimatePresence, motion } from "framer-motion"; // Framer Motion for handling presence
 import SVG_CLOSE from "../public/SVG_CLOSE.svg";
 
 const PageMobileCategory = ({ handleMobileCateogry, setHandleMobileCateogry, Categories, setSelectedCategory, selectedCategory }) => {
-  const container = useRef(null);
-
   useEffect(() => {
     if (!handleMobileCateogry) {
       setHandleMobileCateogry(false);

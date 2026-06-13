@@ -1658,10 +1658,12 @@
   float: left;
 }
 
-.card-inner .tag_category a {
+.card-inner .tag_category a,
+.card-inner .tag_category button {
   color: var(--text-color-alt);
   font-size: var(--smaller-font-size);
   font-weight: 400;
+  font-family: inherit;
   float: left;
   margin-right: 10px;
   transition: all 0.15s;
@@ -1669,9 +1671,12 @@
   padding: 5px 10px;
   border: 1px solid var(--scroll-thumb-color);
   border-radius: 1rem;
+  background: transparent;
+  cursor: pointer;
 }
 
-.card-inner .tag_category a:hover {
+.card-inner .tag_category a:hover,
+.card-inner .tag_category button:hover {
   color: var(--text-color);
   border-color: var(--text-color);
 }

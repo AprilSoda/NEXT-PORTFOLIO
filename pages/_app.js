@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
 import CustomCursor from '../components/CustomCursor'
+import Intro from '../components/Intro'
 import MouseContextProvider from "../components/MouseContext";
 import Script from 'next/script';
 import localFont from 'next/font/local'
@@ -88,6 +89,7 @@ function MyApp({ Component, pageProps, router }) {
         }}
       />
       <div className={`${helveticaNowDisplay.variable} ${canyon.variable} ${customFont.variable} ${roboto.variable}`}>
+        <Intro />
         <MouseContextProvider>
           <CustomCursor />
           <Layout router={router} >

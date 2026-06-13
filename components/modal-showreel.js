@@ -1,4 +1,3 @@
-import { useState, useContext, useRef } from "react"
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function ModalShowreel({ isOpen, onClose }) {

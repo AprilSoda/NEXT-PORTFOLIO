@@ -56,6 +56,7 @@ const Blogs = ({ blogs }) => {
           <PageCard
             blogs={blogs}
             selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         </div>
       </section>
