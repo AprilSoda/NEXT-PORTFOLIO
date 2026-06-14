@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getDatabase, getFilterdDatabase } from "../../lib/notion";
+import { getDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
-import MouseContextProvider, { MouseContext } from "../../components/MouseContext";
+import { MouseContext } from "../../components/MouseContext";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 //Create Context
@@ -152,7 +152,7 @@ const Works = ({ posts }) => {
                                                     style={{ objectFit: 'cover' }}
                                                     priority={index < 4}
                                                     loading={index < 4 ? 'eager' : 'lazy'}
-                                                    sizes="1280px"
+                                                    sizes="(max-width: 768px) 100vw, 50vw"
                                                     placeholder="blur"
                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                                                 />

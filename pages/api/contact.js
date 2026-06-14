@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer"
-import moment from "moment/moment"
 
 const handler = async (req, res) => {
   // Only allow POST requests
@@ -39,7 +38,7 @@ const handler = async (req, res) => {
       html: `
         <div className="email" style="max-width:1080px; width:100%;">
           <p style="margin-bottom: 16px"><strong>VFX DEV LOG CONTACT CALL</strong></p>
-          <p> SentTime : ${moment().format('MMMM Do YYYY, h:mm:ss a')} </p>
+          <p> SentTime : ${new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'medium' })} </p>
           <p> Email : ${email} </p>
           <p> Name : ${name} </p>
           <p> Description : </p>

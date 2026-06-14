@@ -16,27 +16,26 @@ const NavigationButton = ({ post, direction }) => {
         {direction === 'prev' && 'Previous'}
         {direction === 'next' && 'Next'}
       </p>
-      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '', post.id)}`} scroll={false} legacyBehavior>
-        <a>
-          <div className={`nav-button ${direction}`}>
-            <div className="nav-button-cover-wrapper">
-              {coverImage ? (
-                <Image
-                  src={coverImage}
-                  alt={`${direction} post cover`}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="nav-button-cover"
-                />
-              ) : (
-                <div className="nav-button-cover-placeholder" />
-              )}
-            </div>
-            <div className="nav-button-title">
-              {post.properties.title.title[0].plain_text}
-            </div>
+      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '', post.id)}`} scroll={false}>
+        <div className={`nav-button ${direction}`}>
+          <div className="nav-button-cover-wrapper">
+            {coverImage ? (
+              <Image
+                src={coverImage}
+                alt={`${direction} post cover`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: 'cover' }}
+                className="nav-button-cover"
+              />
+            ) : (
+              <div className="nav-button-cover-placeholder" />
+            )}
           </div>
-        </a>
+          <div className="nav-button-title">
+            {post.properties.title.title[0].plain_text}
+          </div>
+        </div>
       </Link>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import Image from 'next/image';
 import PageTime from '../components/PageTime';
 import gsap from 'gsap';
@@ -13,21 +13,17 @@ gsap.config({
 
 import { MouseContext } from '../components/MouseContext';
 
-export default function PageCard({ blogs, selectedCategory }) {
-  const [filteredBlogs, setFilteredBlogs] = useState([]);
+export default function PageCard({ blogs, selectedCategory, setSelectedCategory }) {
   const { handleCursorChange } = useContext(MouseContext);
 
   const container = useRef(null);
 
-  useEffect(() => {
-    // 카테고리 필터링
-    const updatedBlogs = blogs.filter(blog => {
-      // multi_select는 배열 형태로 되어 있음
-      const categories = blog.properties.cateogry.multi_select.map(item => item.name);
-      return selectedCategory === 'ALL' || categories.includes(selectedCategory);
-    });
-    setFilteredBlogs(updatedBlogs);
-  }, [selectedCategory, blogs]);
+  // 카테고리 필터링 (파생 상태 — 렌더 시 직접 계산)
+  const filteredBlogs = blogs.filter(blog => {
+    // multi_select는 배열 형태로 되어 있음
+    const categories = blog.properties.cateogry?.multi_select?.map(item => item.name) || [];
+    return selectedCategory === 'ALL' || categories.includes(selectedCategory);
+  });
 
   //Animation
   useGSAP(() => {
@@ -42,7 +38,7 @@ export default function PageCard({ blogs, selectedCategory }) {
       ease: "power3.out",
       stagger: 0.1,
     });
-  }, { scope: container, revertOnUpdate: true, dependencies: [filteredBlogs] });
+  }, { scope: container, revertOnUpdate: true, dependencies: [selectedCategory] });
 
   const getCoverUrl = (cover) => {
     if (cover.type === "external") return cover.external.url;
@@ -74,6 +70,7 @@ export default function PageCard({ blogs, selectedCategory }) {
                       alt={blog.properties.title.title[0]?.plain_text || 'Blog thumbnail'}
                       width={400}
                       height={300}
+                      sizes="(max-width: 768px) 100vw, 400px"
                       style={{ width: '100%', height: 'auto' }}
                       loading="lazy"
                     />
@@ -86,8 +83,14 @@ export default function PageCard({ blogs, selectedCategory }) {
                     </div>
                   </div>
                   <div className="tag_category">
-                    {blog.properties.cateogry.multi_select.slice(0, 2).map((item, index) => (
-                      <a key={index} href="#">{item.name}</a>
+                    {(blog.properties.cateogry?.multi_select || []).slice(0, 2).map((item, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => setSelectedCategory?.(item.name)}
+                      >
+                        {item.name}
+                      </button>
                     ))}
                   </div>
                 </div>

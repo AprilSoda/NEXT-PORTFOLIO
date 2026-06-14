@@ -31,7 +31,7 @@ const Button = ({ children, type }) => {
     });
   };
 
-  const handelMouseEnter = (e) => {
+  const handleMouseEnter = (e) => {
     gsap.to(target.current, {
       duration: 0.5,
       color: "rgb(200, 200, 200)",
@@ -65,7 +65,7 @@ const Button = ({ children, type }) => {
       ref={target}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onMouseEnter={handelMouseEnter}
+      onMouseEnter={handleMouseEnter}
     >
       {children}
     </div>
