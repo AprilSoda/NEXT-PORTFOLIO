@@ -207,7 +207,7 @@ const renderBlock = (block) => {
                 <div style={{ width: "100%", padding: "62% 0 0 0", position: "relative", overflow: "hidden" }}>
                     <iframe
                         src={embedUrl + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
                         style={{
                             position: "absolute",
                             width: "100%",
@@ -270,7 +270,7 @@ const renderBlock = (block) => {
         case "bookmark":
             const href = value.url;
             return (
-                <a href={href} target="_brank" className={styles.bookmark}>
+                <a href={href} target="_blank" rel="noopener noreferrer" className={styles.bookmark}>
                     {href}
                 </a>
             );
