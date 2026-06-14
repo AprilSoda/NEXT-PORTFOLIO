@@ -140,6 +140,7 @@ export const getStaticProps = async ({ params }) => {
         prevPost,
         nextPost,
       },
+      revalidate: 600, // refresh Notion image signed URLs (~1h expiry) periodically
     };
   } catch (error) {
     const blogTitle = currentBlog.properties.title.title[0]?.plain_text || 'Unknown';

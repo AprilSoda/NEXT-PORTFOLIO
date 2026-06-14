@@ -136,7 +136,7 @@ const About = () => {
                                         height={1000}
                                         style={{ width: '100%', height: 'auto' }}
                                         priority
-                                        quality={100}
+                                        quality={90}
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </figure>
@@ -157,8 +157,9 @@ const About = () => {
                                         alt="Seoul Institute Of The Art Film Shoot"
                                         width={1200}
                                         height={800}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         style={{ width: '100%', height: 'auto' }}
-                                        quality={90}
+                                        quality={85}
                                         loading="lazy"
                                     />
                                 </figure>
@@ -221,8 +222,9 @@ const About = () => {
                                         alt="Short Oh hako Shoot"
                                         width={1200}
                                         height={800}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         style={{ width: '100%', height: 'auto' }}
-                                        quality={90}
+                                        quality={85}
                                         loading="lazy"
                                     />
                                 </figure>
@@ -289,8 +291,9 @@ const About = () => {
                                         alt="Vancouver Travel"
                                         width={1200}
                                         height={800}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         style={{ width: '100%', height: 'auto' }}
-                                        quality={90}
+                                        quality={85}
                                         loading="lazy"
                                     />
                                 </figure>
