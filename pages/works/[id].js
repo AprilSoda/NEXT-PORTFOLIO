@@ -270,7 +270,7 @@ const renderBlock = (block) => {
         case "bookmark":
             const href = value.url;
             return (
-                <a href={href} target="_brank" className={styles.bookmark}>
+                <a href={href} target="_blank" rel="noopener noreferrer" className={styles.bookmark}>
                     {href}
                 </a>
             );
