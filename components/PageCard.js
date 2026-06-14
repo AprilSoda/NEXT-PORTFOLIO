@@ -1,5 +1,6 @@
 import React, { useRef, useContext } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import PageTime from '../components/PageTime';
 import gsap from 'gsap';
 import { useGSAP } from "@gsap/react";
@@ -59,9 +60,9 @@ export default function PageCard({ blogs, selectedCategory, setSelectedCategory 
                 key={index + 1}
               >
                 <div className="card-inner">
-                  <a
+                  <Link
                     className="thumnail"
-                    href={`blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}
+                    href={`/blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}
                     onMouseEnter={() => handleCursorChange("hover")}
                     onMouseLeave={() => handleCursorChange("off")}
                   >
@@ -74,9 +75,9 @@ export default function PageCard({ blogs, selectedCategory, setSelectedCategory 
                       style={{ width: '100%', height: 'auto' }}
                       loading="lazy"
                     />
-                  </a>
+                  </Link>
                   <div className="title-subtitle-date">
-                    <div className="title"><a href={`blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}>{blog.properties.title.title[0].plain_text}</a></div>
+                    <div className="title"><Link href={`/blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}>{blog.properties.title.title[0].plain_text}</Link></div>
                     {/* <div className="subtitle"><span>수원대학교 졸업작품 오하꼬의 조명감독의 입장에서 적은 블로그입니다.</span></div> */}
                     <div className="date">
                       <span> {PageTime(blog.created_time)} </span>
