@@ -1354,8 +1354,11 @@
 
     h1 {
       margin: 66px 0 10px;
-      font-size: 64px;
+      font-size: clamp(40px, 11vw, 64px);
       font-family: "Canyon";
+      text-align: center;
+      line-height: 1.1;
+      padding: 0 16px;
     }
 
     h6 {
