@@ -24,7 +24,7 @@ export default function ModalShowreel({ isOpen, onClose }) {
             <div className="videoWrapper">
               {/* 유튜브 Embed */}
               <iframe width="560" height="315"
-                src="https://www.youtube.com/embed/odseADJDpwA?si=E-gk0il0Xq4tcFPU?vol=0&autoplay=1&loop=1&color=white&controls=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                src="https://www.youtube.com/embed/odseADJDpwA?si=E-gk0il0Xq4tcFPU?vol=0&autoplay=1&loop=1&color=white&controls=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
               ></iframe>
             </div>
           </motion.div>

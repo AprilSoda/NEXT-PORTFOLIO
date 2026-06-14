@@ -6,6 +6,7 @@ import { AnimatePresence } from 'framer-motion'
 import CustomCursor from '../components/CustomCursor'
 import MouseContextProvider from "../components/MouseContext";
 import Script from 'next/script';
+import Head from 'next/head';
 import localFont from 'next/font/local'
 import { Roboto } from 'next/font/google'
 if (typeof window !== 'undefined') {
@@ -46,6 +47,14 @@ const roboto = Roboto({
   display: 'swap',
 })
 
+const PAGE_TITLES = {
+  '/': 'Kim Tae Kyun — VFX Generalist',
+  '/works': 'Works — Kim Tae Kyun',
+  '/blogs': 'Blog — Kim Tae Kyun',
+  '/about': 'About — Kim Tae Kyun',
+  '/contact': 'Contact — Kim Tae Kyun',
+}
+
 function MyApp({ Component, pageProps, router }) {
   const nextRouter = useRouter();
 
@@ -66,8 +75,12 @@ function MyApp({ Component, pageProps, router }) {
     };
   }, [nextRouter.events]);
 
+  const pageTitle = PAGE_TITLES[nextRouter.pathname] || 'Kim Tae Kyun — VFX Generalist'
   return (
     <>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
       {/* Google Analytics */}
       <Script
         strategy="afterInteractive"

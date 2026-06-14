@@ -20,7 +20,6 @@ const Layout = ({ children, router }) => {
                 <meta name="og:title" content="Kim Tae Kyun" />
                 <meta property="og:type" content="website" />
                 <meta property="og:image" content="https://www.kimtaekyun.dev/card.png" />
-                <title>Kim Tae Kyun - Homepage</title>
             </Head>
 
 
