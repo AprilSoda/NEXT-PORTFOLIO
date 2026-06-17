@@ -1,6 +1,7 @@
 import React, { useRef, useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import coverManifest from '../lib/coverManifest.json';
 import PageTime from '../components/PageTime';
 import gsap from 'gsap';
 import { useGSAP } from "@gsap/react";
@@ -67,7 +68,7 @@ export default function PageCard({ blogs, selectedCategory, setSelectedCategory 
                     onMouseLeave={() => handleCursorChange("off")}
                   >
                     <Image
-                      src={getCoverUrl(blog.cover)}
+                      src={coverManifest[blog.id] || getCoverUrl(blog.cover)}
                       alt={blog.properties.title.title[0]?.plain_text || 'Blog thumbnail'}
                       width={400}
                       height={300}

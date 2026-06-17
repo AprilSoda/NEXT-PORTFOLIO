@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 5000 --webpack",
+    "prebuild": "node scripts/localize-cover-images.mjs",
     "build": "next build --webpack",
     "prettier": "prettier --write .",
     "lint": "eslint .",
