@@ -9,6 +9,7 @@ import Footer from "../../components/Footer";
 import { getDatabase, getPage, getBlocks } from "../../lib/notion";
 import styles from "./post.module.css";
 import { databaseId } from "./index.js";
+import coverManifest from "../../lib/coverManifest.json";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -318,7 +319,7 @@ export default function Post({ page, blocks }) {
                     <div className="w_title">
                         <div className="thumb">
                             <Image
-                                src={page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
+                                src={coverManifest[page.id] || page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
                                 alt={page.properties.title.title[0].plain_text}
                                 fill
                                 style={{ objectFit: 'cover' }}
