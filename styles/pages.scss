@@ -211,6 +211,11 @@
         position: relative;
         width: 1280px;
         height: 410px;
+        background: var(--container-color);
+
+        img {
+          color: transparent;
+        }
       }
 
       .thumb_title {
@@ -1590,6 +1595,7 @@
 }
 
 .card .card-inner .thumnail img {
+  color: transparent;
   object-position: center;
   display: block;
   -webkit-backface-visibility: hidden;

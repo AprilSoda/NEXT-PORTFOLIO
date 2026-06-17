@@ -147,7 +147,7 @@ const Works = ({ posts }) => {
                                             <div className="card-img">
                                                 <Image
                                                     src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                                    alt="Work Thumbnail"
+                                                    alt={post.properties.title.title[0].plain_text}
                                                     fill
                                                     style={{ objectFit: 'cover' }}
                                                     priority={index < 4}
