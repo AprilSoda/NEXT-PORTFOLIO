@@ -14,6 +14,8 @@ import Head from "next/head";
 
 // notion-x 관련 스타일시트
 import { NotionRenderer } from 'react-notion-x'
+import { defaultMapImageUrl } from 'notion-utils'
+import imageManifest from '../../lib/imageManifest.json'
 import 'react-notion-x/src/styles.css' // notion 테마 스타일링 (필수)
 import 'prismjs/themes/prism-tomorrow.css' // 코드 하이라이트 스타일용 (선택)
 import 'katex/dist/katex.min.css' // 공식등 수학적 기호 스타일용 (선택)
@@ -75,6 +77,7 @@ const Blog = ({ blog_id, prevPost, nextPost }) => {
             nextLink: Link, // Next 링크 사용하고 싶을 경우 해당 컴포넌트 전달
           }}
           recordMap={blog_id} // 블로그 데이터
+          mapImageUrl={(url, block) => imageManifest[block?.id] || defaultMapImageUrl(url, block)}
           fullPage={true} // 전체 페이지 설정
           darkMode={true} // 다크모드 설정
           showCollectionViewDropdown={false}

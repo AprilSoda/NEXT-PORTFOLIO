@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 import { getDatabase, getPage, getBlocks } from "../../lib/notion";
 import styles from "./post.module.css";
 import { databaseId } from "./index.js";
-import coverManifest from "../../lib/coverManifest.json";
+import r2Image from "../../lib/r2Image";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -130,8 +130,8 @@ const renderBlock = (block) => {
         case "child_page":
             return <p>{value.title}</p>;
         case "image":
-            const src =
-                value.type === "external" ? value.external.url : value.file.url;
+            const src = r2Image(id,
+                value.type === "external" ? value.external.url : value.file.url);
             const caption = value.caption ? value.caption[0]?.plain_text : "";
             return (
                 <figure>
@@ -319,7 +319,7 @@ export default function Post({ page, blocks }) {
                     <div className="w_title">
                         <div className="thumb">
                             <Image
-                                src={coverManifest[page.id] || page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
+                                src={r2Image(page.id, page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg')}
                                 alt={page.properties.title.title[0].plain_text}
                                 fill
                                 style={{ objectFit: 'cover' }}

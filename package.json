@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 5000 --webpack",
-    "prebuild": "node scripts/localize-cover-images.mjs",
     "build": "next build --webpack",
     "prettier": "prettier --write .",
     "lint": "eslint .",
@@ -23,6 +22,7 @@
     "next": "^16.2.9",
     "nodemailer": "^6.8.0",
     "notion-client": "^7.10.0",
+    "notion-utils": "^7.10.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.79.0",
@@ -33,6 +33,7 @@
     "sharp": "^0.35.1"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1073.0",
     "@svgr/webpack": "^8.1.0",
     "eslint": "^9.39.0",
     "eslint-config-next": "^16.2.9",
