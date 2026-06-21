@@ -7,7 +7,7 @@ import Transition from "../../components/Transition";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
 import { MouseContext } from "../../components/MouseContext";
-import coverManifest from "../../lib/coverManifest.json";
+import r2Image from "../../lib/r2Image";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 //Create Context
@@ -147,7 +147,7 @@ const Works = ({ posts }) => {
                                             </div>
                                             <div className="card-img">
                                                 <Image
-                                                    src={coverManifest[post.id] || post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
+                                                    src={r2Image(post.id, post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg")}
                                                     alt={post.properties.title.title[0].plain_text}
                                                     fill
                                                     style={{ objectFit: 'cover' }}
