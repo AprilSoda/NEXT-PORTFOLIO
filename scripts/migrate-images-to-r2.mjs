@@ -17,6 +17,7 @@ import 'dotenv/config'
 import { Client } from '@notionhq/client'
 import { NotionAPI } from 'notion-client'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import sharp from 'sharp'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
@@ -99,11 +100,22 @@ async function main() {
     try {
       const res = await fetch(r.url)
       if (!res.ok) { failed++; console.log(`  fetch ${res.status}: ${r.url.slice(0, 70)}`); continue }
-      const type = res.headers.get('content-type') || ''
-      const r2key = `${r.prefix}/${r.key}.${extFromType(type)}`
+      const srcType = res.headers.get('content-type') || ''
+      let body = Buffer.from(await res.arrayBuffer())
+      let type = srcType
+      let ext = extFromType(srcType)
+      // Pre-resize raster images to a web-friendly webp so the host optimizer
+      // (and first-visit load) is fast. Leave svg/gif untouched.
+      if (!/svg|gif/.test(srcType)) {
+        try {
+          body = await sharp(body).rotate().resize({ width: 1920, withoutEnlargement: true }).webp({ quality: 82 }).toBuffer()
+          type = 'image/webp'; ext = 'webp'
+        } catch (e) { console.log(`  resize fallback (${r.key}): ${e.message}`) }
+      }
+      const r2key = `${r.prefix}/${r.key}.${ext}`
       await s3.send(new PutObjectCommand({
         Bucket: env.R2_BUCKET, Key: r2key,
-        Body: Buffer.from(await res.arrayBuffer()),
+        Body: body,
         ContentType: type || 'application/octet-stream',
         CacheControl: 'public, max-age=31536000, immutable',
       }))
