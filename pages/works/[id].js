@@ -139,7 +139,7 @@ const renderBlock = (block) => {
                         width={1300}
                         height={900}
                         sizes="(max-width: 1100px) 100vw, 1080px"
-                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
                     />
                     {caption && <figcaption>{caption}</figcaption>}
                 </figure>
@@ -154,7 +154,7 @@ const renderBlock = (block) => {
                         alt="Embedded content"
                         width={800}
                         height={600}
-                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
                     />
                 </figure>
             );
@@ -167,7 +167,7 @@ const renderBlock = (block) => {
                         alt="Link preview"
                         width={800}
                         height={600}
-                        style={{ borderRadius: '18px', marginTop: '25px', width: '100%', height: 'auto' }}
+                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
                     />
                 </figure>
             );
