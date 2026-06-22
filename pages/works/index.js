@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { getDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
-import Button from "../../components/Button";
 import Footer from "../../components/Footer";
 import { MouseContext } from "../../components/MouseContext";
 export const databaseId = process.env.NOTION_DATABASE_ID;
@@ -12,158 +11,131 @@ export const databaseId = process.env.NOTION_DATABASE_ID;
 //Create Context
 export const MovieContext = React.createContext();
 
+const yearOf = (post) => {
+    const d = post.properties?.date?.date?.start;
+    return d ? new Date(d).getFullYear() : "";
+};
+
 const Works = ({ posts }) => {
     const { handleCursorChange } = useContext(MouseContext);
     const [selectedfilter, setSelectedfilter] = useState("ALL");
-    const [filterdItems, setFilterdItems] = useState(posts);
 
-    let filters = ["ALL", ...new Set(posts.map(post => post.properties.sort.select.name))];
+    const filters = ["ALL", ...new Set(posts.map((post) => post.properties.sort.select.name))];
+    const visible = posts.filter(
+        (post) => selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter
+    );
 
-
-    //Amimation
+    //Animation
     const container = {
         hidden: { opacity: 0 },
         show: {
             opacity: 1,
-            transition: {
-                delayChildren: 0.2,
-                staggerChildren: 0.2,
-            },
+            transition: { delayChildren: 0.15, staggerChildren: 0.08 },
         },
     };
     const item = {
-        hidden: { opacity: 0, y: 100 },
+        hidden: { opacity: 0, y: 60 },
         show: {
             opacity: 1,
             y: 0,
             transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
         },
     };
-    //Amimation End
 
     return (
         <Transition>
             <section className="works">
-                <div className="work-container">
-                    <div className="heading">
-                        <div className="heading-h1">
-                            <motion.h1
-                                initial={{ opacity: 0, translateY: "10vh" }}
-                                animate={{ opacity: 1, translateY: "0vh" }}
-                                transition={{
-                                    default: {
-                                        duration: 1,
-                                        ease: [0.19, 1, 0.22, 1],
-                                    },
-                                    delay: 0.3,
-                                }}
-                            >
-                                {" "}
-                                SELECTED{" "}
-                            </motion.h1>
-                            <motion.h1
-                                initial={{ opacity: 0, translateY: "10vh" }}
-                                animate={{ opacity: 1, translateY: "0vh" }}
-                                transition={{
-                                    default: {
-                                        duration: 1,
-                                        ease: [0.19, 1, 0.22, 1],
-                                    },
-                                    delay: 0.4,
-                                }}
-                            >
-                                {" "}
-                                WORKS{" "}
-                            </motion.h1>
-                        </div>
-                        <motion.p
-                            initial={{ opacity: 0, translateY: "5vh" }}
-                            animate={{ opacity: 1, translateY: "0vh" }}
-                            transition={{
-                                default: {
-                                    duration: 1,
-                                    ease: [0.19, 1, 0.22, 1],
-                                },
-                                delay: 0.5,
-                            }}
+                <div className="ds-container">
+                    <div className="work-head">
+                        <motion.span
+                            className="work-head__eyebrow u-mono"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.2 }}
                         >
-                            {" "}
-                            I&apos;VE PUT TOGETHER A LIST OF MY FAVOURITE
-                            PROJECTS I&apos;VE COMPLETED.
-                            <br /> SOME WHEN I&apos;VE BEEN FREELACING OR FOR
-                            OTHER STUDIO.{" "}
+                            Selected Works — {String(posts.length).padStart(2, "0")}
+                        </motion.span>
+                        <h1 className="work-head__title">
+                            <motion.span
+                                initial={{ opacity: 0, y: "20%" }}
+                                animate={{ opacity: 1, y: "0%" }}
+                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.3 }}
+                            >
+                                SELECTED
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: "20%" }}
+                                animate={{ opacity: 1, y: "0%" }}
+                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.38 }}
+                            >
+                                WORKS
+                            </motion.span>
+                        </h1>
+                        <motion.p
+                            className="work-head__intro"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                        >
+                            A selection of my favourite projects — some made while freelancing,
+                            others for studios I&apos;ve worked with.
                         </motion.p>
                     </div>
-                </div>
-                <div className="work-sort">
-                    {filters.map((Filter, index) => (
-                        <button
-                            className={Filter === selectedfilter ? "filter_item active" : "filter_item"}
-                            key={index}
-                            onClick={() => setSelectedfilter(Filter)}>
-                            {Filter}
-                        </button>
-                    ))}
-                </div>
-                <motion.ul
-                    key={selectedfilter}
-                    className="cards"
-                    variants={container}
-                    initial="hidden"
-                    animate="show"
-                >
-                    {filterdItems.map((post, index) => (
-                        selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter ? (
-                            <motion.li
-                                key={selectedfilter + index} // key prop 변경
-                                className="card__item"
-                                variants={item}
+
+                    <div className="work-sort u-mono">
+                        {filters.map((filter, index) => (
+                            <button
+                                className={filter === selectedfilter ? "filter_item active" : "filter_item"}
+                                key={index}
+                                onClick={() => setSelectedfilter(filter)}
                             >
-                                <Link href={`works/${post.id}`}>
-                                    <div className="card__inner">
-                                        <Button type="pic">
-                                            <div
-                                                className="thumb_title"
-                                                onMouseEnter={() =>
-                                                    handleCursorChange("hover")
-                                                }
-                                                onMouseLeave={() =>
-                                                    handleCursorChange("off")
-                                                }
-                                            >
-                                                <h4 className="text">
-                                                    {
-                                                        post.properties.title
-                                                            .title[0].plain_text
-                                                    }
-                                                </h4>
-                                                <h6 className="sort">
-                                                    {
-                                                        post.properties.sort.select
-                                                            .name
-                                                    }
-                                                </h6>
-                                            </div>
-                                            <div className="card-img">
-                                                <Image
-                                                    src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                                    alt={post.properties.title.title[0].plain_text}
-                                                    fill
-                                                    style={{ objectFit: 'cover' }}
-                                                    priority={index < 4}
-                                                    loading={index < 4 ? 'eager' : 'lazy'}
-                                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                                    placeholder="blur"
-                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
-                                                />
-                                            </div>
-                                        </Button>
+                                {filter}
+                            </button>
+                        ))}
+                    </div>
+
+                    <motion.ul
+                        key={selectedfilter}
+                        className="work-grid"
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                    >
+                        {visible.map((post, index) => (
+                            <motion.li key={selectedfilter + post.id} className="work-card" variants={item}>
+                                <Link
+                                    href={`works/${post.id}`}
+                                    onMouseEnter={() => handleCursorChange("hover")}
+                                    onMouseLeave={() => handleCursorChange("off")}
+                                >
+                                    <div className="work-card__media">
+                                        <Image
+                                            src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
+                                            alt={post.properties.title.title[0].plain_text}
+                                            fill
+                                            style={{ objectFit: "cover" }}
+                                            priority={index < 4}
+                                            loading={index < 4 ? "eager" : "lazy"}
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                        />
+                                    </div>
+                                    <div className="work-card__meta u-mono">
+                                        <span className="work-card__index">
+                                            {String(index + 1).padStart(2, "0")}
+                                        </span>
+                                        <span className="work-card__title">
+                                            {post.properties.title.title[0].plain_text}
+                                        </span>
+                                        <span className="work-card__cat">
+                                            {post.properties.sort.select.name}
+                                        </span>
+                                        <span className="work-card__year">{yearOf(post)}</span>
                                     </div>
                                 </Link>
                             </motion.li>
-                        ) : null
-                    ))}
-                </motion.ul>
+                        ))}
+                    </motion.ul>
+                </div>
             </section>
             <Footer />
         </Transition>

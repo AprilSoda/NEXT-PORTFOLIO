@@ -1,0 +1,64 @@
+/*===============================================================
+  DESIGN SYSTEM TOKENS  (additive — single source of truth)
+  Introduced for the design-language upgrade. Existing SCSS vars in
+  variable.scss still work; new work references these CSS custom props.
+================================================================*/
+:root {
+  /*========== Color (identity preserved: dark + red accent) ==========*/
+  --bg: hsl(206 10% 5%);
+  --surface: hsl(206 10% 9%);
+  --surface-2: hsl(206 10% 13%);
+  --text: hsl(206 10% 96%);
+  --text-dim: hsl(206 8% 64%);
+  --text-faint: hsl(206 8% 44%);
+  --line: hsla(0 0% 100% / 0.12);
+  --accent: #ee344a;
+
+  /*========== Fluid type scale (real clamp, one scale everywhere) ==========*/
+  --fs-display: clamp(3rem, 9vw, 9rem);
+  --fs-h1: clamp(2.25rem, 6vw, 5.5rem);
+  --fs-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --fs-body: clamp(1rem, 1.05vw, 1.125rem);
+  --fs-small: clamp(0.82rem, 0.95vw, 0.95rem);
+  --fs-label: clamp(0.66rem, 0.78vw, 0.78rem); /* mono meta labels */
+
+  /*========== Spacing (4/8 based) ==========*/
+  --sp-1: 0.5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2rem;
+  --sp-6: 3rem;
+  --sp-8: 4rem;
+  --sp-12: 6rem;
+
+  /*========== Layout (one shared container + gutter) ==========*/
+  --page-max: 1440px;
+  --gutter: clamp(20px, 5vw, 80px);
+
+  /*========== Motion ==========*/
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --dur: 0.6s;
+
+  /* --font-mono is provided by next/font (see pages/_app.js) */
+}
+
+/*===============================================================
+  SHARED PRIMITIVES
+================================================================*/
+/* Shared page container. Named .ds-container to avoid collision with the
+   legacy work-detail `.container` (margin: 0 10vw) until the full rollout. */
+.ds-container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Monospace meta label — the editorial signature */
+.u-mono {
+  font-family: var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: var(--fs-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

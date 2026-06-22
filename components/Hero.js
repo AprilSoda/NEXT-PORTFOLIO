@@ -63,6 +63,18 @@ export default function Hero() {
                         handleCursorChange("off");
                     }}
                 />
+                <motion.div
+                    className="hero-meta u-mono"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 2.5 }}
+                >
+                    <span className="hero-meta__role">VFX Generalist</span>
+                    <span className="hero-meta__status">
+                        <i /> Available for work
+                    </span>
+                    <span className="hero-meta__loc">Seoul, KR — {thisYear()}</span>
+                </motion.div>
                 <div className={'centering ' + align}>
                     {HeroTitle.map((HeroTitle, i) => {
                         const indexs = HeroTitle.count
