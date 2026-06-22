@@ -1,13 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 const About = () => {
     const [isMounted, setIsMounted] = useState(false);
     const smallsizeweb = useMediaQuery({ query: `(max-width: 768px)` });
+    const container = useRef(null);
 
     useEffect(() => {
         // 의도적 mount 가드: useMediaQuery의 SSR/CSR 하이드레이션 불일치 방지
@@ -18,13 +24,65 @@ const About = () => {
     const currentYear = new Date().getFullYear();
     let difference = currentYear - 2014;
 
+    // Scroll-triggered reveals, reusing the existing line-mask markup. Lenis
+    // scrolls natively so reveal-on-enter triggers work without extra wiring.
+    useGSAP(() => {
+        if (!isMounted) return;
+        const ease = "expo.out";
+        const mm = gsap.matchMedia();
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+            // intro — title lines mask up + image clip reveal
+            gsap.from(".about-title .title > div > *", {
+                yPercent: 115, opacity: 0, duration: 1.1, ease, stagger: 0.08,
+                scrollTrigger: { trigger: ".about-title", start: "top 85%", once: true },
+            });
+            gsap.fromTo(".about-title .img-inner",
+                { clipPath: "inset(100% 0% 0% 0%)" },
+                {
+                    clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease,
+                    scrollTrigger: { trigger: ".about-title", start: "top 80%", once: true },
+                });
+            gsap.from(".about-title .img-inner figure img", {
+                scale: 1.25, duration: 1.7, ease,
+                scrollTrigger: { trigger: ".about-title", start: "top 80%", once: true },
+            });
+
+            // story rows — image reveal + caption + line-by-line paragraph
+            gsap.utils.toArray(".s-story li").forEach((row) => {
+                const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 78%", once: true } });
+                const fig = row.querySelector(".img figure");
+                if (fig) tl.fromTo(fig, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease }, 0);
+                const img = row.querySelector(".img figure img");
+                if (img) tl.from(img, { scale: 1.2, duration: 1.5, ease }, 0);
+                const cap = row.querySelector(".img p");
+                if (cap) tl.from(cap, { y: 18, opacity: 0, duration: 0.8, ease }, 0.3);
+                const lines = row.querySelectorAll(".paragraph > div > div");
+                if (lines.length) tl.from(lines, { yPercent: 100, duration: 0.9, ease, stagger: 0.05 }, 0.15);
+            });
+
+            // section labels
+            gsap.from(".s-story .about span, .s-skill .skill span", {
+                opacity: 0, y: 10, duration: 0.8, ease, stagger: 0.15,
+                scrollTrigger: { trigger: ".s-story", start: "top 85%", once: true },
+            });
+
+            // skill section
+            gsap.timeline({ scrollTrigger: { trigger: ".s-skill", start: "top 75%", once: true } })
+                .from(".s-skill .tryhard h4", { y: 40, opacity: 0, duration: 1, ease })
+                .from(".s-skill .tryhardgrid .s-9", { y: 24, opacity: 0, duration: 0.7, ease, stagger: 0.1 }, 0.1)
+                .from(".s-skill .tryhardgrid .tile > div", { y: 18, opacity: 0, duration: 0.6, ease, stagger: 0.03 }, 0.2);
+
+            ScrollTrigger.refresh();
+        });
+    }, { scope: container, dependencies: [isMounted] });
+
     if (!isMounted) {
         return null;
     }
 
     return (
         <Transition>
-            <div>
+            <div ref={container}>
                 <section className="about-title">
                     <div className="about-title-wrapper">
                         <div className="title">

@@ -721,7 +721,7 @@
       width: 100%;
 
       div {
-        // overflow: hidden;
+        overflow: hidden; // clip for the scroll-reveal line mask
 
         h1 {
           font-size: clamp(38px, 5vw, 120px);
