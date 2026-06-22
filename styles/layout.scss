@@ -98,9 +98,15 @@ div {
     transition: font-size 0.5s;
 }
 
+html {
+    /* base dark behind the fixed shader canvas (and the fallback when the
+       shader is disabled on mobile / reduced-motion) */
+    background: $body-color;
+}
+
 body {
     color: white;
-    background: $body-color;
+    background: transparent;
 }
 
 /*=============== HEADER ===============*/
