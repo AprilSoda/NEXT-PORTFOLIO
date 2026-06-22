@@ -350,23 +350,22 @@
   }
 }
 
-/*=============== WORK DETAIL (work.scss) ===============*/
+/*=============== WORK DETAIL (case-study redesign — design-system PoC) ===============*/
 .w_title_container {
   position: relative;
-  margin: $header-height 4vw 0 4vw;
+  margin-top: $header-height;
+  padding-inline: var(--gutter);
 
   .w_title {
-    margin: 0 7vw 10vh;
     position: relative;
+    margin-bottom: clamp(56px, 9vh, 130px); // room for the overlapping title
 
     &::before {
       content: "";
       position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg,
-          rgba(0, 0, 0, 0) 50%,
-          #0e1011 100%);
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(8, 9, 10, 0.85) 100%);
       z-index: 1;
     }
 
@@ -375,6 +374,8 @@
       overflow: hidden;
       width: 100%;
       aspect-ratio: 2.35 / 1;
+      border-radius: 14px;
+      background: var(--surface);
 
       img {
         width: 100%;
@@ -384,15 +385,17 @@
 
     .title {
       position: absolute;
-      left: -7vw;
-      bottom: -6vh;
+      left: 0;
+      right: 0;
+      bottom: clamp(-58px, -5vh, -34px);
       z-index: 2;
-      max-width: calc(100% + 14vw);
 
       h1 {
-        font-size: clamp(24px, 7vw, 126px);
-        font-family: var(--font-helvetica-now-display);
+        font-size: clamp(36px, 8vw, 132px);
+        font-family: var(--font-helvetica-now-display), sans-serif;
         font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: -0.01em;
         word-break: keep-all;
         overflow-wrap: break-word;
       }
@@ -402,103 +405,70 @@
 
 .container {
   position: relative;
-  margin: 0 10vw 0 10vw;
-  font-family: "Exo", sans-serif;
+  padding-inline: var(--gutter);
+  font-family: var(--font-helvetica-now-display), sans-serif;
 
   .content {
     margin: 0 auto;
-    max-width: 1300px;
-
-    .info {
-      margin-top: 30px;
-      display: flex;
-
-      .flexin {
-        width: 18vw;
-      }
-    }
-
-    .description {
-      margin-top: 20vh;
-      display: flex;
-      justify-content: space-between;
-
-      & * {
-        width: 40%;
-      }
-    }
+    max-width: 1100px; // comfortable case-study reading column
 
     .block {
-      margin: min(5vw, 150px) 0;
+      margin: clamp(48px, 6vw, 120px) 0;
       line-height: 1.7;
+      font-size: var(--fs-body);
     }
   }
 }
 
-.container {
-  .b6 {
-    color: $title-color;
-    margin-bottom: 0.65vh;
+// Mono meta row (Client · Discipline · Year) — ties detail to the list aesthetic.
+.work-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(24px, 5vw, 88px);
+  padding: clamp(28px, 4vh, 56px) 0;
+  border-bottom: 1px solid var(--line);
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  .b3 {
-    color: rgb(141, 141, 141);
+  &__label {
+    color: var(--text-faint);
   }
 
-  .onoffb {
-    display: block;
+  &__value {
+    color: var(--text);
+    font-size: var(--fs-body);
+  }
+}
+
+.container .go_back {
+  display: inline-block;
+  padding-top: clamp(40px, 6vh, 80px);
+  color: var(--text-dim);
+  transition: color var(--dur) var(--ease-out-expo);
+
+  &:hover {
+    color: var(--accent);
   }
 }
 
 @media screen and (max-width: 768px) {
-  .w_title_container {
-    margin: calc($header-height + 3vh) 0 0 0;
+  .w_title_container .w_title {
+    margin-bottom: clamp(40px, 7vh, 80px);
 
-    .w_title {
-      margin: 0 0 5vh;
-
-      .thumb {
-        aspect-ratio: 16 / 9;
-      }
-
-      .title {
-        left: 5vw;
-        bottom: -3vh;
-      }
+    .thumb {
+      aspect-ratio: 16 / 11;
     }
   }
 
-  .container {
-    margin: 0 3vw 0 3vw;
+  .work-meta {
+    gap: var(--sp-4);
 
-    .content {
-      .info {
-        display: inline-flex;
-        gap: 0;
-        width: 100%;
-
-        .flexin {
-          width: 100%;
-        }
-
-        .onoffb {
-          display: none;
-        }
-      }
-
-      .description {
-        flex-direction: column;
-        margin: 0 7vw;
-        margin-top: 20vh;
-
-        .b6 {
-          margin-bottom: 3vh;
-        }
-
-        & * {
-          width: 100%;
-        }
-      }
+    &__item {
+      flex: 1 1 40%;
     }
   }
 }

@@ -331,28 +331,20 @@ export default function Post({ page, blocks }) {
                 </div>
                 <article className="container">
                     <div className="content">
-                        <div className="info">
-                            <div className="flexin b6 onoffb"> INFO </div>
-                            <div className="flexin sort">
-                                <div className="b6"> SORT </div>
-                                <div className="b3">
-                                    {" "}
-                                    {page.properties.sort.select.name}{" "}
-                                </div>
+                        <div className="work-meta">
+                            <div className="work-meta__item">
+                                <span className="work-meta__label u-mono">Client</span>
+                                <span className="work-meta__value">{page.properties.client?.select?.name || "—"}</span>
                             </div>
-                            <div className="flexin date">
-                                <div className="b6"> DATE </div>
-                                <div className="b3">
-                                    {" "}
-                                    {formatDate(page.properties.date.date.start)}{" "}
-                                </div>
+                            <div className="work-meta__item">
+                                <span className="work-meta__label u-mono">Discipline</span>
+                                <span className="work-meta__value">{page.properties.sort?.select?.name || "—"}</span>
                             </div>
-                            <div className="flexin Client">
-                                <div className="b6"> CLIENT </div>
-                                <div className="b3">
-                                    {" "}
-                                    {page.properties.client.select.name}{" "}
-                                </div>
+                            <div className="work-meta__item">
+                                <span className="work-meta__label u-mono">Year</span>
+                                <span className="work-meta__value">
+                                    {page.properties.date?.date?.start ? formatDate(page.properties.date.date.start) : "—"}
+                                </span>
                             </div>
                         </div>
                         <section className="block">
@@ -362,8 +354,8 @@ export default function Post({ page, blocks }) {
                                 </Fragment>
                             ))}
                         </section>
-                        <a className="go_back" onClick={() => router.back()}>
-                            ← ALL PROJECTS
+                        <a className="go_back u-mono" onClick={() => router.back()}>
+                            ← All projects
                         </a>
                     </div>
                 </article>
