@@ -226,6 +226,18 @@
   flex-grow: 1.85;
 }
 
+// Odd count: a lone last card shouldn't stretch full-width — keep it a single
+// column (half width, left-aligned). Desktop only; on mobile rows are stacked.
+@media screen and (min-width: 769px) {
+  .work-card:only-child {
+    flex: 0 0 calc(50% - var(--sp-4) / 2);
+  }
+
+  .work-row:hover .work-card:only-child {
+    flex-grow: 0;
+  }
+}
+
 .work-card {
   flex: 1 1 0;
   min-width: 0;
