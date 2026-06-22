@@ -74,6 +74,6 @@ export const getStaticProps = async () => {
     props: {
       blogs,
     },
-    revalidate: 300, // Revalidate every 5 minutes
+    revalidate: 86400, // R2 urls are permanent; blog rarely changes — refresh daily
   };
 };

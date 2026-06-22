@@ -1,4 +1,11 @@
 # netlify.toml
+[build]
+  # Sync any new/dragged Notion images to R2 (idempotent, non-fatal) BEFORE the
+  # build, so the deploy never serves Notion-S3/imgbb images. Runs server-side
+  # on every Netlify deploy — no local command needed. `|| true` keeps a sync
+  # hiccup from ever breaking the build. Requires R2_* env vars set in Netlify.
+  command = "node scripts/notion-images-to-r2.mjs || true && npm run build"
+
 [build.environment]
   NODE_VERSION = "20.11.1"   # LTS 권장 (20.x 또는 22.x도 OK)
   NPM_FLAGS = "--no-audit --no-fund"
