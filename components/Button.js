@@ -11,13 +11,23 @@ const Button = ({ children, type }) => {
     const bounding = target.current.getBoundingClientRect();
     const { offsetWidth: width, offsetHeight: height } = target.current;
     const strength = type === 'pic' ? 50 : 20;
+    const nx = (cx - bounding.left) / width;   // 0 (left) .. 1 (right)
+    const ny = (cy - bounding.top) / height;   // 0 (top) .. 1 (bottom)
 
-    gsap.to(target.current, {
+    const tween = {
       duration: 0.5,
-      x: ((cx - bounding.left) / width - 0.5) * strength + "px",
-      y: ((cy - bounding.top) / height - 0.5) * strength + "px",
+      x: (nx - 0.5) * strength + "px",
+      y: (ny - 0.5) * strength + "px",
       ease: "Power4.out"
-    });
+    };
+
+    // Steelworks-style directional stretch: the scaled image grows from the
+    // cursor side (origin follows the pointer) so it "stretches" toward it.
+    if (type === 'pic') {
+      tween.transformOrigin = `${nx * 100}% ${ny * 100}%`;
+    }
+
+    gsap.to(target.current, tween);
   }
 
   const handleMouseLeave = (e) => {
@@ -27,6 +37,7 @@ const Button = ({ children, type }) => {
       y: 0,
       color: "rgb(256, 256, 256)",
       scale: 1,
+      transformOrigin: "50% 50%",
       ease: "expo.out"
     });
   };
@@ -48,6 +59,7 @@ const Button = ({ children, type }) => {
         y: 0,
         color: "rgb(256, 256, 256)",
         scale: 1,
+        transformOrigin: "50% 50%",
         ease: "expo.out"
       });
     };
