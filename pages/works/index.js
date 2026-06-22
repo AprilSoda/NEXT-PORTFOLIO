@@ -7,7 +7,6 @@ import Transition from "../../components/Transition";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
 import { MouseContext } from "../../components/MouseContext";
-import r2Image from "../../lib/r2Image";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 //Create Context
@@ -147,7 +146,7 @@ const Works = ({ posts }) => {
                                             </div>
                                             <div className="card-img">
                                                 <Image
-                                                    src={r2Image(post.id, post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg")}
+                                                    src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
                                                     alt={post.properties.title.title[0].plain_text}
                                                     fill
                                                     style={{ objectFit: 'cover' }}
@@ -177,7 +176,7 @@ export const getStaticProps = async () => {
         props: {
             posts: database,
         },
-        revalidate: 300, // Revalidate every 5 minutes
+        revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };
 };
 
