@@ -125,7 +125,7 @@ body {
 
 .header-comp .header-inner {
   height: 100%;
-  padding: 0 max(3vw, 25px);
+  padding: 0 var(--gutter);
   position: relative;
   width: 100%;
   align-items: center;
@@ -148,21 +148,28 @@ body {
 }
 
 .header-comp .sub-menu-area {
-  font-size: 1.2rem;
   display: flex;
   height: 100%;
   align-items: center;
-  font-family: var(--font-custom);
+  gap: clamp(14px, 2vw, 36px);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .header-comp .sub-menu-area li {
   height: 100%;
-  width: 100%;
-
 }
 
 .header-comp .sub-menu-area a {
-  margin: 0 2vw;
+  margin: 0;
+  color: var(--text-dim);
+  transition: color 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.header-comp .sub-menu-area a:hover {
+  color: var(--accent);
 }
 
 /* Mobile Menu Toggle Button */
