@@ -57,6 +57,9 @@ const Works = ({ posts }) => {
     const visible = posts.filter(
         (post) => selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter
     );
+    // group into rows of 2 so a hovered card can expand and its pair contract
+    const rows = [];
+    for (let i = 0; i < visible.length; i += 2) rows.push(visible.slice(i, i + 2));
 
     //Animation
     const container = {
@@ -128,49 +131,56 @@ const Works = ({ posts }) => {
                     </div>
 
                     <div className="work-grid-wrap" ref={gridRef}>
-                    <motion.ul
-                        key={selectedfilter}
-                        className="work-grid"
-                        variants={container}
-                        initial="hidden"
-                        animate="show"
-                    >
-                        {visible.map((post, index) => (
-                            <motion.li key={selectedfilter + post.id} className="work-card" variants={item}>
-                                <Link
-                                    href={`works/${post.id}`}
-                                    onMouseEnter={() => handleCursorChange("hover")}
-                                    onMouseLeave={() => handleCursorChange("off")}
-                                >
-                                    <div className="work-card__media">
-                                        <Button type="pic">
-                                            <Image
-                                                src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                                alt={post.properties.title.title[0].plain_text}
-                                                fill
-                                                style={{ objectFit: "cover" }}
-                                                priority={index < 4}
-                                                loading={index < 4 ? "eager" : "lazy"}
-                                                sizes="(max-width: 768px) 100vw, 50vw"
-                                            />
-                                        </Button>
-                                    </div>
-                                    <div className="work-card__meta u-mono">
-                                        <span className="work-card__index">
-                                            {String(index + 1).padStart(2, "0")}
-                                        </span>
-                                        <span className="work-card__title">
-                                            {post.properties.title.title[0].plain_text}
-                                        </span>
-                                        <span className="work-card__cat">
-                                            {post.properties.sort.select.name}
-                                        </span>
-                                        <span className="work-card__year">{yearOf(post)}</span>
-                                    </div>
-                                </Link>
-                            </motion.li>
-                        ))}
-                    </motion.ul>
+                        <motion.div
+                            key={selectedfilter}
+                            className="work-grid"
+                            variants={container}
+                            initial="hidden"
+                            animate="show"
+                        >
+                            {rows.map((row, ri) => (
+                                <motion.div className="work-row" variants={container} key={ri}>
+                                    {row.map((post, ci) => {
+                                        const index = ri * 2 + ci;
+                                        return (
+                                            <motion.div key={selectedfilter + post.id} className="work-card" variants={item}>
+                                                <Link
+                                                    href={`works/${post.id}`}
+                                                    onMouseEnter={() => handleCursorChange("hover")}
+                                                    onMouseLeave={() => handleCursorChange("off")}
+                                                >
+                                                    <div className="work-card__media">
+                                                        <Button type="pic">
+                                                            <Image
+                                                                src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
+                                                                alt={post.properties.title.title[0].plain_text}
+                                                                fill
+                                                                style={{ objectFit: "cover" }}
+                                                                priority={index < 4}
+                                                                loading={index < 4 ? "eager" : "lazy"}
+                                                                sizes="(max-width: 768px) 60vw, 50vw"
+                                                            />
+                                                        </Button>
+                                                    </div>
+                                                    <div className="work-card__meta u-mono">
+                                                        <span className="work-card__index">
+                                                            {String(index + 1).padStart(2, "0")}
+                                                        </span>
+                                                        <span className="work-card__title">
+                                                            {post.properties.title.title[0].plain_text}
+                                                        </span>
+                                                        <span className="work-card__cat">
+                                                            {post.properties.sort.select.name}
+                                                        </span>
+                                                        <span className="work-card__year">{yearOf(post)}</span>
+                                                    </div>
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </motion.div>
+                            ))}
+                        </motion.div>
                     </div>
                 </div>
             </section>

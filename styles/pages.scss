@@ -203,21 +203,45 @@
 }
 
 .work-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-8) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
   padding-bottom: var(--sp-12);
 }
 
+// A row of two cards at a fixed height; hovering one expands it and contracts
+// its pair (left-hover -> left grows, right-hover -> right grows).
+.work-row {
+  display: flex;
+  gap: var(--sp-4);
+  height: clamp(280px, 34vw, 720px);
+  align-items: stretch;
+}
+
+.work-row:hover .work-card {
+  flex-grow: 0.62;
+}
+
+.work-row:hover .work-card:hover {
+  flex-grow: 1.85;
+}
+
 .work-card {
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 0.6s var(--ease-out-expo);
+
   a {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   &__media {
     position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
     width: 100%;
-    aspect-ratio: 16 / 10;
     overflow: hidden;
     border-radius: 12px;
     background: var(--surface);
@@ -297,9 +321,16 @@
 }
 
 @media screen and (max-width: 768px) {
-  .work-grid {
-    grid-template-columns: minmax(0, 1fr);
+  // Stack each row's two cards; restore intrinsic media height (no hover expand).
+  .work-row {
+    flex-direction: column;
+    height: auto;
     gap: var(--sp-6);
+  }
+
+  .work-card__media {
+    flex: none;
+    aspect-ratio: 16 / 10;
   }
 
   .works .work-head {
