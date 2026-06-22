@@ -483,15 +483,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 0 7vw;
-  font-family: Helvetica Now Display;
+  min-height: 100vh;
+  padding: 0 var(--gutter);
+  font-family: var(--font-helvetica-now-display), sans-serif;
 
   .about-wrapper {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 1100px;
+    gap: clamp(32px, 5vw, 80px);
+    width: 100%;
+    max-width: 1100px;
 
     .about-text {
       position: relative;
@@ -552,6 +554,11 @@
           top: -1rem;
           left: 0;
           transition: opacity 0.5s ease;
+          font-family: var(--font-mono), ui-monospace, monospace;
+          font-size: var(--fs-label);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--text-faint);
         }
 
         input:focus~.contact__form-inner-text-s-name,
@@ -594,12 +601,17 @@
       }
 
       .send_button {
-        font-family: Helvetica Now Display;
+        font-family: var(--font-helvetica-now-display), sans-serif;
         text-transform: none;
         background: transparent;
-        color: $title-color;
+        color: var(--text);
         text-align: left;
         font-size: 24px;
+        transition: color var(--dur) var(--ease-out-expo);
+
+        &:hover {
+          color: var(--accent);
+        }
       }
     }
 
@@ -696,7 +708,7 @@
 /*=============== ABOUT (About.scss) ===============*/
 .about-title {
   padding: 15vh 0 30vh 0;
-  margin: 0 7vw;
+  margin-inline: var(--gutter);
 
   .about-title-wrapper {
     display: flex;
@@ -794,7 +806,7 @@
 }
 
 .s-story {
-  margin: 0 7vw;
+  margin-inline: var(--gutter);
   position: relative;
 
   .about {
@@ -936,7 +948,7 @@
 }
 
 .s-awards {
-  margin: 0 7vw;
+  margin-inline: var(--gutter);
   position: relative;
 
   .award {
@@ -981,7 +993,7 @@
 }
 
 .s-skill {
-  margin: 0 7vw;
+  margin-inline: var(--gutter);
   position: relative;
 
   .skill {
@@ -1114,7 +1126,7 @@
 }
 
 .quote {
-  margin: 0 7vw;
+  margin-inline: var(--gutter);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -1136,7 +1148,7 @@
 @media screen and (max-width: 768px) {
   .about-title {
     padding: 15vh 0 30vh 0;
-    margin: 0 7vw;
+    margin-inline: var(--gutter);
   }
 
   .about-title .about-title-wrapper .img-wrapper {
@@ -1499,13 +1511,16 @@
   z-index: 1;
   display: flex;
   justify-content: center;
-  padding: 0 20px;
+  padding: 0 var(--gutter);
   position: relative;
 }
 
 .content-comp .content-warpper {
   display: grid;
-  grid-template-columns: 320px auto;
+  grid-template-columns: 320px 1fr; // definite content track so the card grid can fill
+  gap: clamp(24px, 3vw, 56px);
+  width: 100%;
+  max-width: var(--page-max);
   position: relative;
   text-align: left;
 }
@@ -1547,15 +1562,15 @@
 
 .card-area {
   display: grid;
-  grid-template-columns: repeat(5, 330px);
-  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: clamp(16px, 1.6vw, 30px);
 }
 
 .card-area .card {
   background: var(--container-color);
   border-radius: 20px;
   height: 380px;
-  width: 330px;
+  width: 100%;
   transition: margin-top 0.15s;
   overflow: hidden;
   font-family: var(--body-font);
@@ -1926,34 +1941,18 @@
 
 /*=============== MEDIA QUERIES ===============*/
 
-@media screen and (max-width: 2170px) {
-  .card-area {
-    grid-template-columns: repeat(4, 330px);
-  }
-
-  .card-adver {
-    grid-column: 4;
-  }
-}
-
 @media screen and (max-width: 1810px) {
   .content-comp .content-warpper {
-    grid-template-columns: 260px auto;
+    grid-template-columns: 260px 1fr;
   }
 
   .content-comp .nav-area {
     width: 230px;
   }
 
-  .card-area {
-    grid-template-columns: repeat(4, 300px);
-    grid-gap: 25px;
-  }
-
   .card-area .card,
   .card-adver {
     height: 340px;
-    width: 300px;
   }
 
   .title-subtitle-date {
@@ -1966,21 +1965,7 @@
   }
 }
 
-@media screen and (max-width: 1600px) {
-  .card-area {
-    grid-template-columns: repeat(3, 300px);
-  }
-
-  .card-adver {
-    grid-column: 3;
-  }
-}
-
 @media screen and (max-width: 1260px) {
-  .card-area {
-    grid-template-columns: repeat(2, 300px);
-  }
-
   .card-adver {
     grid-column: 2;
     grid-row: 2;
