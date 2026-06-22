@@ -59,10 +59,10 @@ const Header = ({ workcount }) => {
                     </span>
                 </button>
                 <ul className={`sub-menu-area ${mobileMenuOpen ? 'is-open' : ''}`}>
-                    <li><Button><Link href="/works" data-testid="nav-works" onClick={() => setMobileMenuOpen(false)}>WORKS</Link></Button></li>
-                    <li><Button><Link href="/blogs" data-testid="nav-blogs" onClick={() => setMobileMenuOpen(false)}>BLOG</Link></Button></li>
-                    <li><Button><Link href="/about" data-testid="nav-about" onClick={() => setMobileMenuOpen(false)}>ABOUT</Link></Button></li>
-                    <li><Button><Link href="/contact" data-testid="nav-contact" onClick={() => setMobileMenuOpen(false)}>CONTACT</Link></Button></li>
+                    <li><Button><Link href="/works" data-testid="nav-works" className={router.pathname.startsWith('/works') ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>WORKS</Link></Button></li>
+                    <li><Button><Link href="/blogs" data-testid="nav-blogs" className={router.pathname.startsWith('/blogs') ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>BLOG</Link></Button></li>
+                    <li><Button><Link href="/about" data-testid="nav-about" className={router.pathname.startsWith('/about') ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>ABOUT</Link></Button></li>
+                    <li><Button><Link href="/contact" data-testid="nav-contact" className={router.pathname.startsWith('/contact') ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>CONTACT</Link></Button></li>
                 </ul>
             </motion.nav>
         </header>

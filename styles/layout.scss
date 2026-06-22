@@ -178,6 +178,10 @@ body {
   color: var(--accent);
 }
 
+.header-comp .sub-menu-area a.active {
+  color: var(--text);
+}
+
 /* Mobile Menu Toggle Button */
 .mobile-menu-toggle {
   display: none;
