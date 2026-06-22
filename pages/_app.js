@@ -70,8 +70,30 @@ function MyApp({ Component, pageProps, router }) {
     let raf;
     const loop = (time) => { lenis.raf(time); raf = requestAnimationFrame(loop); };
     raf = requestAnimationFrame(loop);
+
+    // Re-measure when the page height changes (images/fonts loading, route
+    // changes) so the scroll limit always matches the real content height —
+    // otherwise Lenis keeps its initial (too-short) measurement and can't reach
+    // the bottom of long pages.
+    let resizeRaf;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => lenis.resize());
+    });
+    ro.observe(document.body);
+
+    // Burst-remeasure after fonts/images settle (the ResizeObserver alone can
+    // miss late font-swap reflows, leaving the scroll limit short of the bottom).
+    const bumpTimers = [60, 200, 500, 1000, 1800].map((d) => setTimeout(() => lenis.resize(), d));
+    const onLoad = () => lenis.resize();
+    window.addEventListener("load", onLoad);
+
     return () => {
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(resizeRaf);
+      bumpTimers.forEach(clearTimeout);
+      window.removeEventListener("load", onLoad);
+      ro.disconnect();
       lenis.destroy();
       lenisRef.current = null;
     };
@@ -85,6 +107,9 @@ function MyApp({ Component, pageProps, router }) {
           page_path: url,
         });
       }
+      // new page just rendered — re-measure the smooth-scroll height as its
+      // content (images/fonts) settles so you can always scroll to the bottom.
+      [60, 200, 500, 1000].forEach((d) => setTimeout(() => lenisRef.current?.resize(), d));
     };
 
     // Track page views on route change

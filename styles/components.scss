@@ -1,6 +1,6 @@
 /*=============== HERO COMPONENT (hero.scss) ===============*/
 .hero-comp {
-  height: 100%;
+  height: 100dvh; // self-sufficient now that .transition_children is auto-height
   overflow: hidden;
   width: 100%;
   position: relative;
@@ -368,10 +368,9 @@
 }
 
 .transition_children {
-  position: absolute;
-  top: 0;
-  height: 100dvh;
+  position: relative;
   width: 100%;
+  min-height: 100dvh; // fill the viewport on short pages; grow with content on long ones
   z-index: 9;
 }
 
