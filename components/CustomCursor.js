@@ -28,7 +28,11 @@ const CustomCursor = () => {
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1000,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        // Blend the whole cursor layer against the page so the dot inverts what's
+        // beneath it. Must live on this top layer (not the inner dot) — the dot's
+        // own stacking context has no page content behind it to blend with.
+        mixBlendMode: "difference"
     };
 
     const { contextSafe } = useGSAP(() => {
