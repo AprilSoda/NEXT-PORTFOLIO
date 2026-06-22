@@ -1,11 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { gsap } from "gsap";
 import { getDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
+import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -20,6 +22,36 @@ const yearOf = (post) => {
 const Works = ({ posts }) => {
     const { handleCursorChange } = useContext(MouseContext);
     const [selectedfilter, setSelectedfilter] = useState("ALL");
+    const isMobile = useIsMobile();
+    const gridRef = useRef(null);
+    const headRef = useRef(null);
+
+    // Mouse parallax — the whole works layout drifts toward the cursor (layered:
+    // grid moves more than the heading for depth). Desktop only, reduced-motion safe.
+    useEffect(() => {
+        if (isMobile) return;
+        if (typeof window === "undefined") return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const grid = gridRef.current;
+        const head = headRef.current;
+        if (!grid) return;
+        const gx = gsap.quickTo(grid, "x", { duration: 0.7, ease: "power3.out" });
+        const gy = gsap.quickTo(grid, "y", { duration: 0.7, ease: "power3.out" });
+        const hx = head ? gsap.quickTo(head, "x", { duration: 0.9, ease: "power3.out" }) : null;
+        const hy = head ? gsap.quickTo(head, "y", { duration: 0.9, ease: "power3.out" }) : null;
+        const onMove = (e) => {
+            const nx = (e.clientX / window.innerWidth - 0.5) * 2;  // -1..1
+            const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+            gx(nx * 28); gy(ny * 20);
+            if (hx) { hx(nx * 11); hy(ny * 8); }
+        };
+        window.addEventListener("mousemove", onMove);
+        return () => {
+            window.removeEventListener("mousemove", onMove);
+            gsap.killTweensOf([grid, head].filter(Boolean));
+            gsap.set([grid, head].filter(Boolean), { x: 0, y: 0 });
+        };
+    }, [isMobile]);
 
     const filters = ["ALL", ...new Set(posts.map((post) => post.properties.sort.select.name))];
     const visible = posts.filter(
@@ -47,7 +79,7 @@ const Works = ({ posts }) => {
         <Transition>
             <section className="works">
                 <div className="ds-container">
-                    <div className="work-head">
+                    <div className="work-head" ref={headRef}>
                         <motion.span
                             className="work-head__eyebrow u-mono"
                             initial={{ opacity: 0 }}
@@ -95,6 +127,7 @@ const Works = ({ posts }) => {
                         ))}
                     </div>
 
+                    <div className="work-grid-wrap" ref={gridRef}>
                     <motion.ul
                         key={selectedfilter}
                         className="work-grid"
@@ -138,6 +171,7 @@ const Works = ({ posts }) => {
                             </motion.li>
                         ))}
                     </motion.ul>
+                    </div>
                 </div>
             </section>
             <Footer />
