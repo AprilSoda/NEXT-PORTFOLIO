@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Lenis from 'lenis';
 import Layout from '../components/Layout';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
@@ -64,6 +65,23 @@ const PAGE_TITLES = {
 
 function MyApp({ Component, pageProps, router }) {
   const nextRouter = useRouter();
+  const lenisRef = useRef(null);
+
+  // Reference-style smooth (inertia) scrolling, gated by reduced-motion.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenisRef.current = lenis;
+    let raf;
+    const loop = (time) => { lenis.raf(time); raf = requestAnimationFrame(loop); };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     // Google Analytics pageview tracking
@@ -116,7 +134,8 @@ function MyApp({ Component, pageProps, router }) {
               initial={true}
               onExitComplete={() => {
                 if (typeof window !== 'undefined') {
-                  window.scrollTo({ top: 0 })
+                  if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true })
+                  else window.scrollTo({ top: 0 })
                 }
               }}
             >

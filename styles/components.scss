@@ -302,6 +302,7 @@
   border-radius: 50%;
   z-index: 1000;
   pointer-events: none;
+  mix-blend-mode: difference;
 }
 
 .hover-cursor {
@@ -315,6 +316,7 @@
   border-radius: 50%;
   z-index: 1001;
   pointer-events: none;
+  mix-blend-mode: difference;
 
   svg {
     position: absolute;

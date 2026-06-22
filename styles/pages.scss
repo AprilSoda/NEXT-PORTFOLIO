@@ -125,12 +125,20 @@
   width: 100%;
   text-transform: none;
 
+  // Let imagery keep widening on ultrawide displays (e.g. 3440px) instead of
+  // being capped — the works grid uses the full viewport width minus gutter.
+  .ds-container {
+    max-width: none;
+  }
+
   .work-head {
     margin-top: $header-height;
     padding: var(--sp-12) 0 var(--sp-6);
     border-bottom: 1px solid var(--line);
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: var(--sp-3);
 
     &__eyebrow {
@@ -140,7 +148,8 @@
     &__title {
       display: flex;
       flex-wrap: wrap;
-      gap: 0 0.2em;
+      justify-content: center;
+      gap: 0 0.22em;
       margin: 0;
       font-family: var(--font-canyon), var(--font-custom), sans-serif;
       font-size: var(--fs-display);
@@ -150,10 +159,18 @@
       span {
         display: inline-block;
       }
+
+      // Second word in a contrasting serif — kept from the original heading.
+      span:nth-child(2) {
+        font-family: "Times New Roman", Times, serif;
+        font-weight: 400;
+        letter-spacing: 0;
+      }
     }
 
     &__intro {
       max-width: 48ch;
+      margin-inline: auto;
       color: var(--text-dim);
       font-size: var(--fs-body);
       line-height: 1.55;
@@ -164,6 +181,7 @@
   .work-sort {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--sp-3);
     padding: var(--sp-3) 0 var(--sp-6);
 
