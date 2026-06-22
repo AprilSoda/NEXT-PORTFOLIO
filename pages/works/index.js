@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { getDatabase } from "../../lib/notion";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
+import Button from "../../components/Button";
 import { MouseContext } from "../../components/MouseContext";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -109,15 +110,17 @@ const Works = ({ posts }) => {
                                     onMouseLeave={() => handleCursorChange("off")}
                                 >
                                     <div className="work-card__media">
-                                        <Image
-                                            src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                            alt={post.properties.title.title[0].plain_text}
-                                            fill
-                                            style={{ objectFit: "cover" }}
-                                            priority={index < 4}
-                                            loading={index < 4 ? "eager" : "lazy"}
-                                            sizes="(max-width: 768px) 100vw, 50vw"
-                                        />
+                                        <Button type="pic">
+                                            <Image
+                                                src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
+                                                alt={post.properties.title.title[0].plain_text}
+                                                fill
+                                                style={{ objectFit: "cover" }}
+                                                priority={index < 4}
+                                                loading={index < 4 ? "eager" : "lazy"}
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                            />
+                                        </Button>
                                     </div>
                                     <div className="work-card__meta u-mono">
                                         <span className="work-card__index">
