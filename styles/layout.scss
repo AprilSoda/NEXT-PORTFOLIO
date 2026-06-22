@@ -276,45 +276,44 @@ body {
 /*=============== FOOTER ===============*/
 footer {
     position: relative;
-    padding: 300px 3vw 3vh 3vw;
-    color: rgb(197, 197, 197);
-    text-transform: uppercase;
+    margin-top: clamp(120px, 20vh, 260px);
+    padding: var(--sp-3) var(--gutter) var(--sp-4);
+    color: var(--text-dim);
 
     div {
-        position: absolute;
+        position: relative;
         display: flex;
         justify-content: space-between;
-        bottom: 1.6rem;
-        left: 2.4rem;
-        right: 2.4rem;
-        z-index: 1500;
-        padding-top: 1rem;
-        font-family: var(--font-custom);
+        align-items: center;
+        gap: var(--sp-3);
+        padding-top: var(--sp-3);
+        font-family: var(--font-mono), ui-monospace, monospace;
+        font-size: var(--fs-label);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+
+        p {
+            margin: 0;
+        }
 
         .social_link {
             width: 1rem;
             height: 1rem;
-            fill: white;
+            fill: var(--text-dim);
+            transition: fill 0.4s var(--ease-out-expo);
+        }
 
-            svg {
-                width: 0.8rem;
-                height: 0.8rem;
-                transition: all 0.4s cubic-bezier(0.8, 0, 0, 1) 0s;
-            }
-
-            & a:hover svg {
-                fill: $secondary-color;
-            }
+        a:hover .social_link {
+            fill: var(--accent);
         }
 
         &::before {
             content: "";
             position: absolute;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            border-top: 1px solid rgb(255, 255, 255);
-            opacity: 0.12;
+            top: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid var(--line);
         }
     }
 }
@@ -323,10 +322,8 @@ footer {
     footer {
         div {
             flex-direction: column;
-
-            .social_link {
-                margin: 0.8rem 0;
-            }
+            align-items: flex-start;
+            gap: var(--sp-3);
         }
     }
 }
