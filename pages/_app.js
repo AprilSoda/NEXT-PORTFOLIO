@@ -9,7 +9,7 @@ import MouseContextProvider from "../components/MouseContext";
 import Script from 'next/script';
 import Head from 'next/head';
 import localFont from 'next/font/local'
-import { Roboto, JetBrains_Mono } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
 if (typeof window !== 'undefined') {
   window.history.scrollRestoration = 'manual'
 }
@@ -38,13 +38,6 @@ const customFont = localFont({
     { path: '../styles/font/ProFontWindows.woff', weight: '400', style: 'normal' },
   ],
   variable: '--font-custom',
-  display: 'swap',
-})
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-roboto',
   display: 'swap',
 })
 
@@ -125,7 +118,7 @@ function MyApp({ Component, pageProps, router }) {
           `,
         }}
       />
-      <div className={`${helveticaNowDisplay.variable} ${canyon.variable} ${customFont.variable} ${roboto.variable} ${jetbrainsMono.variable}`}>
+      <div className={`${helveticaNowDisplay.variable} ${canyon.variable} ${customFont.variable} ${jetbrainsMono.variable}`}>
         <MouseContextProvider>
           <CustomCursor />
           <Layout router={router} >
