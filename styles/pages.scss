@@ -214,7 +214,9 @@
 .work-row {
   display: flex;
   gap: var(--sp-4);
-  height: clamp(280px, 34vw, 720px);
+  // Cinematic ~1.85:1 media: row height = cardWidth/1.85 + ~36px (offsets the
+  // meta row below the media). calc() so Sass doesn't reject the vw+px mix.
+  height: clamp(240px, calc(24vw + 36px), 600px);
   align-items: stretch;
 }
 
@@ -342,7 +344,7 @@
 
   .work-card__media {
     flex: none;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 1.85 / 1;
   }
 
   .works .work-head {
