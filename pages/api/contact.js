@@ -22,19 +22,20 @@ const handler = async (req, res) => {
     }
 
     const transport = nodemailer.createTransport({
-      host: "smtp.hiworks.com",
+      host: "smtps.hiworks.com", // hiworks official SMTP host (note the trailing "s")
       port: 465,
       secure: true, // use SSL
       auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
+        pass: process.env.MAIL_PASS // hiworks: use the "mail-only password" if OTP login is on
       }
     })
 
     await transport.sendMail({
-      from: `${email}`,
+      from: process.env.MAIL_USER, // must be the authenticated mailbox or hiworks rejects the send
+      replyTo: email, // replies go to the visitor who submitted the form
       to: "hello@kimtaekyun.dev",
-      subject: "Kim Tea Kyun Website - Contact Call",
+      subject: "Kim Tae Kyun Website - Contact Call",
       html: `
         <div className="email" style="max-width:1080px; width:100%;">
           <p style="margin-bottom: 16px"><strong>VFX DEV LOG CONTACT CALL</strong></p>
