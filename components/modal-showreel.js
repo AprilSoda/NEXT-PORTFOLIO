@@ -6,20 +6,17 @@ import {
   MediaTimeRange,
   MediaTimeDisplay,
   MediaPlayButton,
-  MediaSeekBackwardButton,
-  MediaSeekForwardButton,
-  MediaMuteButton,
-  MediaVolumeRange,
-  MediaPipButton,
   MediaFullscreenButton,
 } from 'media-chrome/react';
 
-// Self-hosted showreel on Cloudflare R2 (no YouTube UI). Set
-// NEXT_PUBLIC_SHOWREEL_URL (and optionally _POSTER) to your R2 files. The
-// fallback sample keeps the player renderable in dev before the reel is uploaded.
+// ┌──────────────────────────────────────────────────────────────────────┐
+// │  CHANGE THE SHOWREEL VIDEO HERE                                        │
+// │  Self-hosted MP4 on Cloudflare R2 (no YouTube UI). Swap this URL to    │
+// │  change the reel — or set NEXT_PUBLIC_SHOWREEL_URL to override it.     │
+// └──────────────────────────────────────────────────────────────────────┘
 const SHOWREEL_SRC =
   process.env.NEXT_PUBLIC_SHOWREEL_URL ||
-  'https://download.samplelib.com/mp4/sample-5s.mp4'; // placeholder until the R2 reel URL is set
+  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/2026_SHOWREEL_%EA%B9%80%ED%83%9C%EA%B7%A0.mp4';
 const SHOWREEL_POSTER = process.env.NEXT_PUBLIC_SHOWREEL_POSTER || '';
 
 export default function ModalShowreel({ isOpen, onClose }) {
@@ -35,6 +32,17 @@ export default function ModalShowreel({ isOpen, onClose }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
 
+  // The modal opens from a click (user gesture), so play with sound is allowed.
+  useEffect(() => {
+    if (!isOpen) return;
+    const v = videoRef.current;
+    if (v) {
+      v.muted = false;
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    }
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -46,12 +54,6 @@ export default function ModalShowreel({ isOpen, onClose }) {
           transition={{ duration: 0.25 }}
           onClick={onClose}
         >
-          <button className="modal-close" aria-label="Close showreel" onClick={onClose}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
-
           <motion.div
             className="modal-content"
             initial={{ opacity: 0, scale: 0.96 }}
@@ -70,15 +72,11 @@ export default function ModalShowreel({ isOpen, onClose }) {
                 autoPlay
                 playsInline
               />
+              {/* Minimal controls: play/pause, scrubber, time, fullscreen only. */}
               <MediaControlBar>
                 <MediaPlayButton />
-                <MediaSeekBackwardButton seekOffset={10} />
-                <MediaSeekForwardButton seekOffset={10} />
                 <MediaTimeRange />
                 <MediaTimeDisplay showDuration />
-                <MediaMuteButton />
-                <MediaVolumeRange />
-                <MediaPipButton />
                 <MediaFullscreenButton />
               </MediaControlBar>
             </MediaController>

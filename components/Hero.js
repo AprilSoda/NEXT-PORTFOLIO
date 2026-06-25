@@ -1,8 +1,8 @@
-import { useRef, useEffect, useState, useContext } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Button from './Button'
-import { MouseContext } from './MouseContext'
+import ShowreelButton from './ShowreelButton'
 
 // Client-only + lazy: the media-chrome player (web components) must not run on
 // the server, and there's no need to ship it until the showreel is opened.
@@ -21,8 +21,10 @@ const HeroTitle = [
 export default function Hero() {
     const videoRef = useRef(null)
     const [align, setAlign] = useState("");
-    const { handleCursorChange } = useContext(MouseContext);
     const [isOpen, setIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setMounted(true); }, []);
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -57,16 +59,10 @@ export default function Hero() {
     return (
         <>
             <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
+            {mounted && (
+                <ShowreelButton isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
+            )}
             <section className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
-                <div
-                    className="hero-clickable-area"
-                    onMouseEnter={() => handleCursorChange("showreel")}
-                    onMouseLeave={() => handleCursorChange("off")}
-                    onClick={() => {
-                        setIsOpen(true);
-                        handleCursorChange("off");
-                    }}
-                />
                 <motion.div
                     className="hero-meta u-mono"
                     initial={{ opacity: 0 }}
