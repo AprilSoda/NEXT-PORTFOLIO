@@ -22,9 +22,7 @@ export default function Hero() {
     const videoRef = useRef(null)
     const [align, setAlign] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => { setMounted(true); }, []);
+    const [reelReady, setReelReady] = useState(false);
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -44,6 +42,14 @@ export default function Hero() {
         return () => clearTimeout(timer);
     }, []);
 
+    // Reveal the "Play Showreel" button only after the hero title has finished
+    // sliding right (align → 'right' at 5s, then its 2s CSS transition settles).
+    useEffect(() => {
+        if (align !== 'right') return undefined;
+        const t = setTimeout(() => setReelReady(true), 2000);
+        return () => clearTimeout(t);
+    }, [align]);
+
     const videoOptions = {
         playerVars: {
             autoplay: 1,
@@ -59,7 +65,7 @@ export default function Hero() {
     return (
         <>
             <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
-            {mounted && (
+            {reelReady && (
                 <ShowreelButton isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
             )}
             <section className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
