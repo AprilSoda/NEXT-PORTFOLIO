@@ -4,7 +4,6 @@ import {
   MediaController,
   MediaControlBar,
   MediaTimeRange,
-  MediaTimeDisplay,
   MediaPlayButton,
   MediaFullscreenButton,
 } from 'media-chrome/react';
@@ -76,7 +75,6 @@ export default function ModalShowreel({ isOpen, onClose }) {
               <MediaControlBar>
                 <MediaPlayButton />
                 <MediaTimeRange />
-                <MediaTimeDisplay showDuration />
                 <MediaFullscreenButton />
               </MediaControlBar>
             </MediaController>

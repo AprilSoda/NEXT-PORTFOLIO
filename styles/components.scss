@@ -227,7 +227,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: var(--gutter);
   z-index: 200; // above page chrome, below the custom cursor (1000)
 }
 
@@ -285,8 +285,7 @@
 }
 
 .modal-content {
-  // Largest 16:9 box that nearly fills the viewport (width- or height-limited).
-  width: min(96vw, calc(96vh * 16 / 9));
+  width: min(92vw, 1200px);
 }
 
 // media-chrome player → clean dark control bar with the site's red accent.
@@ -317,7 +316,11 @@ media-controller.showreel-player {
 
   media-control-bar {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    padding: 0 4px 4px;
+    padding: 0 8px 6px;
+  }
+
+  media-time-range {
+    margin: 0 12px; // breathing room from the play + fullscreen buttons
   }
 }
 
