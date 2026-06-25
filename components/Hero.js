@@ -13,7 +13,7 @@ const ModalShowreel = dynamic(() => import('./modal-showreel'), { ssr: false })
 // defaults to the showreel reel.
 const BG_VIDEO_SRC =
   process.env.NEXT_PUBLIC_HERO_BG_URL ||
-  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/2026_SHOWREEL_%EA%B9%80%ED%83%9C%EA%B7%A0.mp4'
+  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/hero-bg.mp4'
 
 
 // count for timing
