@@ -8,6 +8,13 @@ import ShowreelButton from './ShowreelButton'
 // the server, and there's no need to ship it until the showreel is opened.
 const ModalShowreel = dynamic(() => import('./modal-showreel'), { ssr: false })
 
+// Hero background loop — self-hosted on Cloudflare R2 (muted, looping), replacing
+// the YouTube embed. Swap this URL (or set NEXT_PUBLIC_HERO_BG_URL) to change it;
+// defaults to the showreel reel.
+const BG_VIDEO_SRC =
+  process.env.NEXT_PUBLIC_HERO_BG_URL ||
+  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/2026_SHOWREEL_%EA%B9%80%ED%83%9C%EA%B7%A0.mp4'
+
 
 // count for timing
 const HeroTitle = [
@@ -125,9 +132,16 @@ export default function Hero() {
                         animate={{ opacity: 1 }}
                         transition={{ default: { duration: 3, delay: 2 } }}
                     >
-                        <div className="youtube-container">
-                            <iframe src="https://www.youtube.com/embed/T_aDkRDeaJ4?vol=0&autoplay=1&mute=1&loop=1&color=white&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&playlist=T_aDkRDeaJ4" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure" allowFullScreen></iframe>
-                        </div>
+                        <video
+                            ref={videoRef}
+                            className="bg-video"
+                            src={BG_VIDEO_SRC}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="auto"
+                        />
                     </motion.div>
                 </div>
                 <motion.div
