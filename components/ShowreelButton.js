@@ -46,11 +46,12 @@ export default function ShowreelButton({ isOpen, onToggle }) {
 
   useEffect(() => {
     if (isOpen) {
-      // Fly to the top-right corner and stay put while the modal is open.
-      const margin = 40;
-      const half = 24;
-      xRaw.set(window.innerWidth - margin - half);
-      yRaw.set(margin + half);
+      // Fly to the bottom-right corner and stay put while the modal is open.
+      const margin = 36;
+      const halfW = 64;
+      const halfH = 26;
+      xRaw.set(window.innerWidth - margin - halfW);
+      yRaw.set(window.innerHeight - margin - halfH);
       return undefined;
     }
 

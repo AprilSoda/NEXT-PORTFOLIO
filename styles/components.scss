@@ -227,7 +227,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--gutter);
+  padding: 0;
   z-index: 200; // above page chrome, below the custom cursor (1000)
 }
 
@@ -247,10 +247,12 @@
   transform: translate(-50%, -50%); // center on the tracked point
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 13px 22px;
+  gap: 12px;
+  padding: 18px 32px; // roomier
   border-radius: 100px;
-  background: var(--accent);
+  background: rgba(8, 8, 8, 0.4); // dark + translucent by default (not bright)
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(6px);
   color: #fff;
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 12px;
@@ -259,11 +261,11 @@
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.45s var(--ease-out-expo);
+  transition: background 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
 
-  &.is-close {
-    background: rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(6px);
+  &:hover {
+    background: var(--accent); // red on hover
+    border-color: var(--accent);
   }
 }
 
@@ -283,7 +285,8 @@
 }
 
 .modal-content {
-  width: min(92vw, 1200px);
+  // Largest 16:9 box that nearly fills the viewport (width- or height-limited).
+  width: min(96vw, calc(96vh * 16 / 9));
 }
 
 // media-chrome player → clean dark control bar with the site's red accent.
