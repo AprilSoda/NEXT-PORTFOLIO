@@ -1,8 +1,12 @@
 import { useRef, useEffect, useState, useContext } from 'react'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import Button from './Button'
 import { MouseContext } from './MouseContext'
-import ModalShowreel from './modal-showreel'
+
+// Client-only + lazy: the media-chrome player (web components) must not run on
+// the server, and there's no need to ship it until the showreel is opened.
+const ModalShowreel = dynamic(() => import('./modal-showreel'), { ssr: false })
 
 
 // count for timing
