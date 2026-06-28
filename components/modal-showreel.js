@@ -15,7 +15,7 @@ import {
 // └──────────────────────────────────────────────────────────────────────┘
 const SHOWREEL_SRC =
   process.env.NEXT_PUBLIC_SHOWREEL_URL ||
-  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/2026_SHOWREEL_%EA%B9%80%ED%83%9C%EA%B7%A0.mp4';
+  'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/showreel-2026.mp4';
 const SHOWREEL_POSTER = process.env.NEXT_PUBLIC_SHOWREEL_POSTER || '';
 
 export default function ModalShowreel({ isOpen, onClose }) {
