@@ -13,6 +13,7 @@ const Contact = () => {
     const { register, handleSubmit, formState: { errors }, clearErrors } = useForm();
     const [sent, setSent] = useState(false);
     const [unexpectedError, setUnexpectedError] = useState("")
+    const mountedAt = React.useRef(Date.now()); // spam guard: reject near-instant submits
     async function onSubmitForm(values) {
         clearErrors("name", "email", "text")
         setUnexpectedError("")
@@ -24,7 +25,7 @@ const Contact = () => {
             headers: {
                 'Content-type': 'application/json',
             },
-            data: values,
+            data: { ...values, renderedAt: mountedAt.current },
         };
 
         try {
@@ -65,6 +66,15 @@ const Contact = () => {
                     </div>
                     {!sent ? (
                         <form className='contact__form' onSubmit={handleSubmit(onSubmitForm)}>
+                            {/* Honeypot: hidden from humans. If a bot fills it, the API silently drops the submission. */}
+                            <input
+                                {...register('website')}
+                                type="text"
+                                tabIndex={-1}
+                                autoComplete="off"
+                                aria-hidden="true"
+                                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+                            />
                             <div className="errorMsg contact__error">
                                 {errors?.name?.message || errors?.email?.message || errors?.text?.message || unexpectedError ?
                                     <div className="errorMsg__wrapper">

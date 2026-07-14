@@ -8,7 +8,18 @@ const handler = async (req, res) => {
 
   try {
     // req.body is already parsed by Next.js
-    const { name, email, text } = req.body
+    const { name, email, text, website, renderedAt } = req.body
+
+    // Spam guards — respond 200 "ok" but DON'T send, so bots think they
+    // succeeded and don't adapt/retry:
+    //  1) honeypot: a hidden field only bots fill
+    //  2) too-fast / missing render timestamp: bots post instantly (or skip it)
+    if (website) {
+      return res.status(200).json({ success: true, message: 'ok' })
+    }
+    if (!renderedAt || Date.now() - Number(renderedAt) < 3000) {
+      return res.status(200).json({ success: true, message: 'ok' })
+    }
 
     // Validate required fields
     if (!name || !email || !text) {
