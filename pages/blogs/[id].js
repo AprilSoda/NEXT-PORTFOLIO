@@ -27,10 +27,17 @@ const Pdf = dynamic(() => import('react-notion-x/build/third-party/pdf').then((n
 const Modal = dynamic(() => import('react-notion-x/build/third-party/modal').then((m) => m.Modal), { ssr: false });
 
 
-// 이 토큰이 뭔지 알려면 -> https://github.com/NotionX/react-notion-x?tab=readme-ov-file#private-pages
+// The blog pages are published to web (public), so no auth is needed — and the
+// old token_v2 expires, which actually made loadPageChunk return 403. Notion now
+// 403s the unofficial API unless the request carries a browser-like User-Agent,
+// so we set one here; that (not a token) is what fixes the blog 404s.
 const notion = new NotionAPI({
-  activeUser: process.env.NOTION_ACTIVE_USER,
-  authToken: process.env.NOTION_AUTH_TOKEN,
+  ofetchOptions: {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    },
+  },
 });
 
 
