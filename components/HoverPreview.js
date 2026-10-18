@@ -34,8 +34,13 @@ export default function HoverPreview({ cover, preview, alt, active, priority, si
 
   return (
     <>
-      {cover && (
+      {cover ? (
         <Image src={cover} alt={alt} fill style={{ objectFit: "cover" }} priority={priority} sizes={sizes} />
+      ) : (
+        // No cover yet: a title card instead of a stock placeholder
+        <span className="title-card" aria-hidden="true">
+          <span>{alt}</span>
+        </span>
       )}
       {allowed && (
         <video

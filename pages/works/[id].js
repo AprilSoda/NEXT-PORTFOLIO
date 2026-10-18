@@ -11,6 +11,7 @@ import styles from "./post.module.css";
 import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
 import CompareSlider from "../../components/CompareSlider";
+import HoverPreview from "../../components/HoverPreview";
 import { parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { toWorkSummary } from "../../lib/summaries";
@@ -364,11 +365,9 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     <Link href={`/works/${nextWork.id}`} className="next-work ds-container">
                         <span className="next-work__label u-mono">{t("work.next")}</span>
                         <span className="next-work__title">{nextWork.title}</span>
-                        {nextWork.cover && (
-                            <span className="next-work__media">
-                                <Image src={nextWork.cover} alt="" fill sizes="(max-width: 768px) 100vw, 40vw" style={{ objectFit: "cover" }} />
-                            </span>
-                        )}
+                        <span className="next-work__media">
+                            <HoverPreview cover={nextWork.cover} preview={null} alt={nextWork.title} sizes="(max-width: 768px) 100vw, 40vw" />
+                        </span>
                     </Link>
                 )}
                 <Footer />

@@ -47,7 +47,7 @@ function WorkGrid({ works }) {
                                     <div className="work-card__media">
                                         <Button type="pic">
                                             <HoverPreview
-                                                cover={work.cover || "/placeholder.jpg"}
+                                                cover={work.cover}
                                                 preview={work.preview}
                                                 alt={work.title}
                                                 active={hovered === work.id}
@@ -111,7 +111,7 @@ function WorkList({ works }) {
             {/* Portaled to <body>: transformed ancestors would otherwise offset a fixed element */}
             {hydrated && createPortal(
             <AnimatePresence>
-                {current?.cover && (
+                {current && (
                     <motion.div
                         className="work-list__float"
                         style={{ x: sx, y: sy }}
