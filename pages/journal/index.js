@@ -5,6 +5,7 @@ import { toJournalSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import { useT } from "../../lib/i18n";
+import { formatDate, yearOf } from "../../lib/dates";
 import { SITE_URL } from "../../components/Layout";
 
 const databaseId_blog = JOURNAL_DB;
@@ -23,15 +24,14 @@ const Journal = ({ entries }) => {
     const visible = category ? entries.filter((e) => e.categories.includes(category)) : entries;
     const byYear = new Map();
     for (const entry of visible) {
-      const year = entry.date ? new Date(entry.date).getFullYear() : "—";
+      const year = yearOf(entry.date) ?? "—";
       if (!byYear.has(year)) byYear.set(year, []);
       byYear.get(year).push(entry);
     }
     return [...byYear.entries()];
   }, [entries, category]);
 
-  const formatDate = (iso) =>
-    new Date(iso).toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", { month: "short", day: "numeric" });
+  const formatDay = (iso) => formatDate(iso, locale, { month: "short", day: "numeric" });
 
   return (
     <Transition>
@@ -65,7 +65,7 @@ const Journal = ({ entries }) => {
                   <Link href={`/journal/${e.slug}`} className="journal-list__item">
                     <span className="journal-list__title">{e.title}</span>
                     <span className="journal-list__meta u-mono">
-                      {[e.categories.join(", "), e.date && formatDate(e.date)].filter(Boolean).join(" · ")}
+                      {[e.categories.join(", "), e.date && formatDay(e.date)].filter(Boolean).join(" · ")}
                     </span>
                   </Link>
                 </li>

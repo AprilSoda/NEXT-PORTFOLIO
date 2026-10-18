@@ -6,6 +6,7 @@ import CreditList from "./CreditList"
 import HoverPreview from "./HoverPreview"
 import WorkBadges from "./WorkBadges"
 import { useT } from "../lib/i18n"
+import { formatDate } from "../lib/dates"
 
 const reveal = {
   initial: { opacity: 0, y: 40 },
@@ -14,13 +15,7 @@ const reveal = {
   transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
 }
 
-const formatDate = (iso, locale) =>
-  iso
-    ? new Date(iso).toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
-        year: "numeric",
-        month: "short",
-      })
-    : ""
+const formatMonth = (iso, locale) => formatDate(iso, locale, { year: "numeric", month: "short" })
 
 export default function HomeSections({ works = [], journal = [] }) {
   const { t, pick, locale } = useT()
@@ -86,7 +81,7 @@ export default function HomeSections({ works = [], journal = [] }) {
                 <Link href={`/journal/${j.slug}`} className="journal-list__item">
                   <span className="journal-list__title">{j.title}</span>
                   <span className="journal-list__meta u-mono">
-                    {[j.categories[0], formatDate(j.date, locale)].filter(Boolean).join(" · ")}
+                    {[j.categories[0], formatMonth(j.date, locale)].filter(Boolean).join(" · ")}
                   </span>
                 </Link>
               </li>

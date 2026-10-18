@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import SVG_LOGO from '../public/SVG_LOGO.svg'
 import Link from 'next/link'
+
+// Next's locale detection sends Korean browsers on "/" to "/ko"; the NEXT_LOCALE
+// cookie overrides it, so an explicit switch to English sticks.
+const rememberLocale = (locale) => {
+    document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`
+}
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 import Button from './Button'
@@ -72,7 +78,7 @@ const Header = ({ workcount }) => {
                     {NAV.map(({ href, key, testId }) => (
                         <li key={href}><Button><Link href={href} data-testid={testId} className={router.pathname.startsWith(href) ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>{t(key)}</Link></Button></li>
                     ))}
-                    <li className="lang-switch"><Button><Link href={router.asPath.split(/[?#]/)[0]} locale={otherLocale} lang={otherLocale} data-testid="lang-switch" onClick={() => setMobileMenuOpen(false)}>{t('lang.switch')}</Link></Button></li>
+                    <li className="lang-switch"><Button><Link href={router.asPath.split(/[?#]/)[0]} locale={otherLocale} lang={otherLocale} data-testid="lang-switch" onClick={() => { rememberLocale(otherLocale); setMobileMenuOpen(false) }}>{t('lang.switch')}</Link></Button></li>
                 </ul>
             </motion.nav>
         </header>

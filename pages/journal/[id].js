@@ -11,8 +11,9 @@ import Footer from "../../components/Footer";
 import BlogNavigation from "../../components/BlogNavigation";
 import Head from "next/head";
 import { useT } from "../../lib/i18n";
+import { formatDate } from "../../lib/dates";
 import { toJournalSummary } from "../../lib/summaries";
-import { SITE_URL } from "../../components/Layout";
+import { SITE_URL, jsonLd } from "../../components/Layout";
 
 
 // notion-x 관련 스타일시트
@@ -78,7 +79,7 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
+              __html: jsonLd({
                 "@context": "https://schema.org",
                 "@type": "BlogPosting",
                 headline: entry.title,
@@ -97,7 +98,7 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
           <p className="journal-entry-meta u-mono">
             {[
               entry.categories.join(", "),
-              entry.date && new Date(entry.date).toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", { year: "numeric", month: "long", day: "numeric" }),
+              formatDate(entry.date, locale, { year: "numeric", month: "long", day: "numeric" }),
               readingMinutes && t("journal.minutes").replace("{n}", readingMinutes),
             ].filter(Boolean).join(" · ")}
           </p>
@@ -197,8 +198,10 @@ export const getStaticProps = async ({ params }) => {
     const blogTitle = currentBlog.properties.title.title[0]?.plain_text || 'Unknown';
     console.error(`Error fetching blog "${blogTitle}" (${currentBlog.id}):`, error.message);
     console.error(`Slug: ${params.id}`);
+    // Retry soon: a one-off fetch failure shouldn't 404 the entry for a day
     return {
       notFound: true,
+      revalidate: 300,
     };
   }
 }

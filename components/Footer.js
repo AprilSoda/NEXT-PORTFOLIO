@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { identity, social } from "../content/site"
 import { useT } from "../lib/i18n"
+import { currentYear } from "../lib/dates"
 
 // Seoul time, rendered on the client only so SSR and hydration agree
 function SeoulClock() {
@@ -19,7 +20,7 @@ function SeoulClock() {
 
 export default function Footer() {
   const { t, pick } = useT()
-  const year = new Date().getFullYear()
+  const year = currentYear()
 
   return (
     <footer className="site-footer">

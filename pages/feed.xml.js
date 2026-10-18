@@ -6,7 +6,8 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 // RSS for the Journal, so people can follow along without social media
 export async function getServerSideProps({ res }) {
-  const entries = (await getDatabase(JOURNAL_DB).catch(() => [])).map(toJournalSummary)
+  // No catch: a Notion error returns a 500 (not cached) rather than an empty feed
+  const entries = (await getDatabase(JOURNAL_DB)).map(toJournalSummary)
   const items = entries
     .map(
       (e) => `    <item>

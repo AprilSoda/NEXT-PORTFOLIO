@@ -18,10 +18,11 @@ ${LOCALES.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ur
   ).join("\n")
 
 export async function getServerSideProps({ res }) {
-  const [works, journal] = await Promise.all([
-    getDatabase(WORKS_DB).catch(() => []),
-    getDatabase(JOURNAL_DB).catch(() => []),
-  ])
+  // If Notion is down, still list the static pages, but don't let the CDN keep
+  // the partial sitemap
+  let failed = false
+  const orEmpty = (promise) => promise.catch(() => { failed = true; return [] })
+  const [works, journal] = await Promise.all([orEmpty(getDatabase(WORKS_DB)), orEmpty(getDatabase(JOURNAL_DB))])
   const day = (iso) => (iso ? iso.slice(0, 10) : null)
   const paths = [
     ...STATIC_PATHS.map((p) => entry(p)),
@@ -36,7 +37,7 @@ ${paths.join("\n")}
 </urlset>`
 
   res.setHeader("Content-Type", "application/xml; charset=utf-8")
-  res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800")
+  res.setHeader("Cache-Control", failed ? "no-store" : "public, s-maxage=86400, stale-while-revalidate=604800")
   res.write(xml)
   res.end()
   return { props: {} }

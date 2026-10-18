@@ -5,6 +5,7 @@ import Button from './Button'
 import ShowreelButton from './ShowreelButton'
 import { identity, heroLines } from '../content/site'
 import { useT } from '../lib/i18n'
+import { currentYear } from '../lib/dates'
 
 // Client-only + lazy: the media-chrome player (web components) must not run on
 // the server, and there's no need to ship it until the showreel is opened.
@@ -38,7 +39,7 @@ export default function Hero() {
     const { pick } = useT();
 
     const thisYear = () => {
-        const year = new Date().getFullYear()
+        const year = currentYear()
         return year
     }
 

@@ -8,6 +8,7 @@ import {
   MediaFullscreenButton,
   MediaMuteButton,
 } from 'media-chrome/react';
+import { useT } from '../lib/i18n';
 
 // ┌──────────────────────────────────────────────────────────────────────┐
 // │  CHANGE THE SHOWREEL VIDEO HERE                                        │
@@ -22,6 +23,17 @@ const SHOWREEL_POSTER = process.env.NEXT_PUBLIC_SHOWREEL_POSTER || '/showreel-po
 
 export default function ModalShowreel({ isOpen, onClose }) {
   const videoRef = useRef(null);
+  const closeRef = useRef(null);
+  const { t } = useT();
+
+  // Move focus into the dialog on open and give it back on close, so keyboard
+  // and screen-reader users land inside the player and can leave it again
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previous = document.activeElement;
+    closeRef.current?.focus({ preventScroll: true });
+    return () => previous?.focus?.({ preventScroll: true });
+  }, [isOpen]);
 
   // Close on Escape while open.
   useEffect(() => {
@@ -59,13 +71,18 @@ export default function ModalShowreel({ isOpen, onClose }) {
             className="modal-content"
             role="dialog"
             aria-modal="true"
-            aria-label="Showreel"
+            aria-label={t('showreel.title')}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.35, ease: [0.19, 1, 0.22, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* The floating button closes it for pointer users; this one lives inside
+                the dialog for keyboard and screen-reader users (visible on focus) */}
+            <button ref={closeRef} type="button" className="modal-close" onClick={onClose}>
+              {t('showreel.closeLabel')}
+            </button>
             <MediaController className="showreel-player">
               <video
                 ref={videoRef}

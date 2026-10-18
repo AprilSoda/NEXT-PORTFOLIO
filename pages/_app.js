@@ -59,6 +59,7 @@ const PAGE_TITLES = {
   '/journal': { en: 'Journal — Kim Tae Kyun', ko: '저널 — 김태균' },
   '/about': { en: 'About — Kim Tae Kyun', ko: '소개 — 김태균' },
   '/contact': { en: 'Contact — Kim Tae Kyun', ko: '연락 — 김태균' },
+  '/404': { en: 'Not found — Kim Tae Kyun', ko: '페이지 없음 — 김태균' },
 }
 
 function MyApp({ Component, pageProps, router }) {
@@ -167,7 +168,7 @@ function MyApp({ Component, pageProps, router }) {
                 }
               }}
             >
-              <Component {...pageProps} key={router.asPath} />
+              <Component {...pageProps} key={router.asPath.split(/[?#]/)[0]} />
             </AnimatePresence>
           </Layout>
         </MouseContextProvider>

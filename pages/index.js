@@ -3,7 +3,7 @@ import HomeSections from '../components/HomeSections'
 import Footer from '../components/Footer'
 import Transition from '../components/Transition'
 import Head from 'next/head'
-import { SITE_URL } from '../components/Layout'
+import { SITE_URL, jsonLd } from '../components/Layout'
 import { identity, social } from '../content/site'
 import { getDatabase, WORKS_DB, JOURNAL_DB } from '../lib/notion'
 import { toWorkSummary, toJournalSummary } from '../lib/summaries'
@@ -29,7 +29,7 @@ export default function Home({ works, journal }) {
       <Head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(personJsonLd) }}
         />
       </Head>
       <Transition>
@@ -41,11 +41,16 @@ export default function Home({ works, journal }) {
   )
 }
 
+// During `next build` a Notion outage falls back to empty lists so the deploy
+// still succeeds; during revalidation it throws, so Next keeps serving the last
+// good page instead of caching an empty one for a day
+const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
+const orEmptyAtBuild = (promise) => (isBuild ? promise.catch(() => []) : promise)
+
 export const getStaticProps = async () => {
-  // A Notion outage shouldn't take the home page down — fall back to empty lists
   const [works, journal] = await Promise.all([
-    getDatabase(WORKS_DB).catch(() => []),
-    getDatabase(JOURNAL_DB).catch(() => []),
+    orEmptyAtBuild(getDatabase(WORKS_DB)),
+    orEmptyAtBuild(getDatabase(JOURNAL_DB)),
   ])
   return {
     props: {

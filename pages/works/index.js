@@ -76,18 +76,24 @@ function WorkGrid({ works }) {
 // List view: one row per project; the hovered row's frame follows the cursor
 function WorkList({ works }) {
     const [active, setActive] = useState(null);
+    // The frame follows the pointer, so it only appears once there is one —
+    // keyboard focus alone leaves it hidden instead of parked at (0, 0)
+    const [pointer, setPointer] = useState(false);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
     const sx = useSpring(x, { stiffness: 220, damping: 26, mass: 0.4 });
     const sy = useSpring(y, { stiffness: 220, damping: 26, mass: 0.4 });
-    const current = works.find((w) => w.id === active);
+    const current = pointer ? works.find((w) => w.id === active) : null;
     const hydrated = useHydrated();
 
     return (
         <div
             className="work-list"
-            onMouseMove={(e) => { x.set(e.clientX); y.set(e.clientY); }}
-            onMouseLeave={() => setActive(null)}
+            onMouseMove={(e) => {
+                if (!pointer) { x.jump(e.clientX); y.jump(e.clientY); sx.jump(e.clientX); sy.jump(e.clientY); setPointer(true); }
+                x.set(e.clientX); y.set(e.clientY);
+            }}
+            onMouseLeave={() => { setActive(null); setPointer(false); }}
         >
             <ul>
                 {works.map((work, i) => (
@@ -97,6 +103,7 @@ function WorkList({ works }) {
                             className="work-list__row"
                             onMouseEnter={() => setActive(work.id)}
                             onFocus={() => setActive(work.id)}
+                            onBlur={() => setActive(null)}
                         >
                             <span className="work-list__index u-mono">{pad(i + 1)}</span>
                             <span className="work-list__title">{work.title}</span>

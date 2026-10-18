@@ -17,7 +17,7 @@ export default function VideoEmbed({ url, title = "Video" }) {
   const src =
     video.kind === "youtube"
       ? `https://www.youtube-nocookie.com/embed/${video.id}?rel=0&modestbranding=1`
-      : `https://player.vimeo.com/video/${video.id}?dnt=1`
+      : `https://player.vimeo.com/video/${video.id}?dnt=1${video.hash ? `&h=${video.hash}` : ""}`
 
   return (
     <div className="video-embed">

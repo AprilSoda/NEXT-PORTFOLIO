@@ -14,6 +14,8 @@ import CompareSlider from "../../components/CompareSlider";
 import HoverPreview from "../../components/HoverPreview";
 import { parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
+import { yearOf } from "../../lib/dates";
+import { jsonLd } from "../../components/Layout";
 import { toWorkSummary } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
@@ -232,7 +234,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
 
     const props = page.properties;
     const title = props.title.title[0]?.plain_text || "";
-    const year = props.date?.date?.start ? new Date(props.date.date.start).getFullYear() : null;
+    const year = yearOf(props.date?.date?.start);
     const format = props.format?.select?.name || props.sort?.select?.name || null;
     const summary = plain(locale === "ko" ? props.summary_ko : props.summary_en) || plain(props.summary_en);
     const making = props.making?.url || null;
@@ -247,9 +249,12 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         ["work.format", format],
         ["work.year", year],
         ["work.honor", plain(props.honor)],
-        ["work.ai", aiUsage ? t(`ai.${aiUsage}`) : null],
+        ["work.ai", aiUsage ? t(`ai.${aiUsage}`, aiUsage) : null],
     ].filter(([, value]) => value);
     const cover = page.cover?.external?.url || page.cover?.file?.url || null;
+    // Covers uploaded to Notion are signed URLs that expire within hours, so
+    // only external (R2) covers are used where crawlers keep the URL
+    const shareImage = page.cover?.external?.url || null;
     const status = props.status?.select?.name;
     const tools = (props.tools?.multi_select || []).map((o) => o.name);
     const models = (props.models?.multi_select || []).map((o) => o.name);
@@ -260,12 +265,12 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         .filter(([role, name]) => role && name);
 
     // Structured data: the film, plus the video when there is one
-    const jsonLd = {
+    const structuredData = {
         "@context": "https://schema.org",
         "@type": format === "Music Video" ? "MusicVideoObject" : "CreativeWork",
         name: title,
         ...(summary && { description: summary }),
-        ...(cover && { image: cover }),
+        ...(shareImage && { image: shareImage }),
         ...(props.date?.date?.start && { dateCreated: props.date.date.start }),
         creator: { "@type": "Person", name: "Kim Tae Kyun", url: "https://www.kimtaekyun.dev" },
         ...(heroVideo && {
@@ -273,8 +278,8 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                 "@type": "VideoObject",
                 name: title,
                 description: summary || title,
-                ...(cover && { thumbnailUrl: cover }),
-                ...(props.date?.date?.start && { uploadDate: `${props.date.date.start}T00:00:00+09:00` }),
+                ...(shareImage && { thumbnailUrl: shareImage }),
+                ...(props.date?.date?.start && { uploadDate: `${props.date.date.start.slice(0, 10)}T00:00:00+09:00` }),
                 embedUrl: heroVideo,
             },
         }),
@@ -287,14 +292,15 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     {summary && <meta name="description" content={summary} key="description" />}
                     {summary && <meta property="og:description" content={summary} key="og:description" />}
                     <meta property="og:title" content={title} key="og:title" />
-                    {cover && <meta property="og:image" content={cover} key="og:image" />}
-                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+                    {shareImage && <meta property="og:image" content={shareImage} key="og:image" />}
+                    {shareImage && <meta name="twitter:image" content={shareImage} key="twitter:image" />}
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
                 </Head>
 
                 <section className="work-hero ds-container">
                     <p className="work-hero__eyebrow u-mono">
                         {[format, year].filter(Boolean).join(" · ")}
-                        {status && status !== "Released" && <span className="work-badge work-badge--status">{t(`status.${status}`)}</span>}
+                        {status && status !== "Released" && <span className="work-badge work-badge--status">{t(`status.${status}`, status)}</span>}
                     </p>
                     <h1 className="work-hero__title">{title}</h1>
                     {summary && <p className="work-hero__summary">{summary}</p>}
@@ -334,7 +340,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                                 <dl>
                                     {tools.length > 0 && (<div><dt className="u-mono">{t("work.tools")}</dt><dd>{tools.join(" · ")}</dd></div>)}
                                     {models.length > 0 && (<div><dt className="u-mono">{t("work.models")}</dt><dd>{models.join(" · ")}</dd></div>)}
-                                    {aiUsage && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`)}</dd></div>)}
+                                    {aiUsage && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`, aiUsage)}</dd></div>)}
                                 </dl>
                                 {models.length > 0 && <p className="work-madewith__note">{t("work.humanNote")}</p>}
                             </section>
@@ -411,7 +417,7 @@ export const getStaticProps = async (context) => {
     });
     // The finished film leads the page: use the `video` property, or promote
     // the first video in the page body so older entries get it too
-    let heroVideo = page.properties.video?.url || null;
+    let heroVideo = parseVideoUrl(page.properties.video?.url) ? page.properties.video.url : null;
     let bodyBlocks = blocksWithChildren;
     if (!heroVideo) {
         const first = blocksWithChildren.find((block) => {
