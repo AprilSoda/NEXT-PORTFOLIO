@@ -87,10 +87,6 @@ export default function HomeSections({ works = [], journal = [] }) {
         </motion.section>
       )}
 
-      <motion.section className="home-contact" {...reveal}>
-        <h2 className="home-contact__title">{t("home.contactTitle")}</h2>
-        <Link href="/contact" className="home-contact__cta u-mono">{t("home.contactCta")} →</Link>
-      </motion.section>
     </div>
   )
 }

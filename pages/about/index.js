@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import CreditList from "../../components/CreditList";
-import { about, identity, social } from "../../content/site";
+import { about, identity } from "../../content/site";
 import { useT } from "../../lib/i18n";
 
 const reveal = {
@@ -67,9 +67,6 @@ const About = () => {
 
                 <motion.section className="about-block about-links" {...reveal}>
                     <Link href="/contact" className="u-mono">{t("home.contactCta")} →</Link>
-                    {social.map((s) => (
-                        <a key={s.label} href={s.href} target="_blank" rel="noreferrer noopener" className="u-mono">{s.label} ↗</a>
-                    ))}
                     <a href="/cv.pdf" download className="u-mono">{t("about.cv")} ↓</a>
                 </motion.section>
             </div>
