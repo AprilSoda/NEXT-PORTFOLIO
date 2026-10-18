@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
 import Layout from '../components/Layout';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
@@ -66,11 +67,13 @@ function MyApp({ Component, pageProps, router }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, autoRaf: false });
     lenisRef.current = lenis;
-    let raf;
-    const loop = (time) => { lenis.raf(time); raf = requestAnimationFrame(loop); };
-    raf = requestAnimationFrame(loop);
+    // Drive Lenis from GSAP's ticker so scrolling and GSAP animations (cursor,
+    // parallax) share one frame loop instead of two competing rAF loops
+    const tick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     // Re-measure when the page height changes (images/fonts loading, route
     // changes) so the scroll limit always matches the real content height —
@@ -90,7 +93,7 @@ function MyApp({ Component, pageProps, router }) {
     window.addEventListener("load", onLoad);
 
     return () => {
-      cancelAnimationFrame(raf);
+      gsap.ticker.remove(tick);
       cancelAnimationFrame(resizeRaf);
       bumpTimers.forEach(clearTimeout);
       window.removeEventListener("load", onLoad);
