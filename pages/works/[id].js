@@ -12,10 +12,10 @@ import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
 import CompareSlider from "../../components/CompareSlider";
 import HoverPreview from "../../components/HoverPreview";
-import { parseVideoUrl } from "../../lib/video";
+import { embedSrc, parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { yearOf } from "../../lib/dates";
-import { jsonLd, ogCard } from "../../components/Layout";
+import { SITE_URL, jsonLd, ogCard } from "../../components/Layout";
 import { toWorkSummary } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
@@ -265,23 +265,34 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         .map((line) => line.split(/:(.+)/).map((part) => part?.trim()))
         .filter(([role, name]) => role && name);
 
-    // Structured data: the film, plus the video when there is one
+    // Structured data: the film, plus the video when there is one, and where
+    // the page sits in the site
+    const pageUrl = `${SITE_URL}${locale === "ko" ? "/ko" : ""}/works/${page.id}`;
+    const breadcrumbs = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            { "@type": "ListItem", position: 1, name: t("work.eyebrow"), item: `${SITE_URL}${locale === "ko" ? "/ko" : ""}/works` },
+            { "@type": "ListItem", position: 2, name: title, item: pageUrl },
+        ],
+    };
     const structuredData = {
         "@context": "https://schema.org",
+        url: pageUrl,
         "@type": format === "Music Video" ? "MusicVideoObject" : "CreativeWork",
         name: title,
         ...(summary && { description: summary }),
-        ...(shareImage && { image: shareImage }),
+        image: cardImage,
         ...(props.date?.date?.start && { dateCreated: props.date.date.start }),
-        creator: { "@type": "Person", name: "Kim Tae Kyun", url: "https://www.kimtaekyun.dev" },
+        creator: { "@type": "Person", name: "Kim Tae Kyun", url: SITE_URL },
         ...(heroVideo && {
             video: {
                 "@type": "VideoObject",
                 name: title,
                 description: summary || title,
-                ...(shareImage && { thumbnailUrl: shareImage }),
+                thumbnailUrl: cardImage,
                 ...(props.date?.date?.start && { uploadDate: `${props.date.date.start.slice(0, 10)}T00:00:00+09:00` }),
-                embedUrl: heroVideo,
+                embedUrl: embedSrc(parseVideoUrl(heroVideo)),
             },
         }),
     };
@@ -296,6 +307,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     <meta property="og:image" content={cardImage} key="og:image" />
                     <meta name="twitter:image" content={cardImage} key="twitter:image" />
                     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs) }} />
                 </Head>
 
                 <section className="work-hero ds-container">
