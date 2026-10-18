@@ -25,13 +25,13 @@ export const heroLines = [
   ["DREAM", "WELL."],
 ]
 
-// Public credits only. Unreleased titles stay out of this list.
+// Public credits only, newest release first. Unreleased titles stay out of this list.
 export const credits = [
   { title: "Street Fighter", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
+  { title: "부활남: 더 레드", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "Avengers: Endgame", note: { en: "Re-release", ko: "재개봉" }, year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "The Dog Stars", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "The End of Oak Street", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
-  { title: "부활남 더 레드", format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "Last Mankind", titleKo: "종말의 인간", year: 2026, format: "Film", role: { en: "VFX Supervisor", ko: "VFX 슈퍼바이저" }, honor: { en: "Cannes Fantastic 7", ko: "칸 Fantastic 7" } },
   { title: "너를 위해서", year: 2026, format: "Short film", role: { en: "VFX Artist", ko: "VFX 아티스트" }, honor: { en: "22nd Mise-en-scène Short Film Festival", ko: "제22회 미쟝센단편영화제" } },
 ]
