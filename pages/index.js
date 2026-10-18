@@ -5,7 +5,7 @@ import Transition from '../components/Transition'
 import Head from 'next/head'
 import { SITE_URL } from '../components/Layout'
 import { identity, social } from '../content/site'
-import { getDatabase } from '../lib/notion'
+import { getDatabase, WORKS_DB, JOURNAL_DB } from '../lib/notion'
 import { toWorkSummary, toJournalSummary } from '../lib/summaries'
 
 
@@ -44,8 +44,8 @@ export default function Home({ works, journal }) {
 export const getStaticProps = async () => {
   // A Notion outage shouldn't take the home page down — fall back to empty lists
   const [works, journal] = await Promise.all([
-    getDatabase(process.env.NOTION_DATABASE_ID).catch(() => []),
-    getDatabase(process.env.NOTION_DATABASE_ID2).catch(() => []),
+    getDatabase(WORKS_DB).catch(() => []),
+    getDatabase(JOURNAL_DB).catch(() => []),
   ])
   return {
     props: {

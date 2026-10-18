@@ -1,4 +1,4 @@
-import { getDatabase } from "../lib/notion"
+import { getDatabase, WORKS_DB, JOURNAL_DB } from "../lib/notion"
 import { createSlug } from "../lib/slugify"
 import { SITE_URL } from "../components/Layout"
 
@@ -19,8 +19,8 @@ ${LOCALES.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ur
 
 export async function getServerSideProps({ res }) {
   const [works, journal] = await Promise.all([
-    getDatabase(process.env.NOTION_DATABASE_ID).catch(() => []),
-    getDatabase(process.env.NOTION_DATABASE_ID2).catch(() => []),
+    getDatabase(WORKS_DB).catch(() => []),
+    getDatabase(JOURNAL_DB).catch(() => []),
   ])
   const day = (iso) => (iso ? iso.slice(0, 10) : null)
   const paths = [

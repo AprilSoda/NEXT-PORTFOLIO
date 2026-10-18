@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 5000 --webpack",
     "build": "next build --webpack",
+    "build:mock": "NOTION_MOCK=1 next build --webpack",
     "prettier": "prettier --write .",
     "lint": "eslint .",
     "start": "next start"

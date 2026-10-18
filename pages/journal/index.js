@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getDatabase } from "../../lib/notion";
+import { getDatabase, JOURNAL_DB } from "../../lib/notion";
 import { toJournalSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import { useT } from "../../lib/i18n";
 
-const databaseId_blog = process.env.NOTION_DATABASE_ID2;
+const databaseId_blog = JOURNAL_DB;
 
 const Journal = ({ entries }) => {
   const { t, locale } = useT();

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NotionAPI } from "notion-client";
 
-import { getDatabase } from "../../lib/notion";
+import { getDatabase, JOURNAL_DB } from "../../lib/notion";
 import { createSlug, findBlogBySlug } from "../../lib/slugify";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
@@ -136,7 +136,9 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
 export default Blog;
 
 export const getStaticPaths = async ({ locales = ["en"] }) => {
-  const databaseId_blog = process.env.NOTION_DATABASE_ID2;
+  // Mock mode has no real Notion pages to render — build them on demand instead
+  if (process.env.NOTION_MOCK === "1") return { paths: [], fallback: 'blocking' };
+  const databaseId_blog = JOURNAL_DB;
   const blogs = await getDatabase(databaseId_blog);
   const paths = blogs.map((blog) => {
     const title = blog.properties.title.title[0]?.plain_text || '';
@@ -147,7 +149,7 @@ export const getStaticPaths = async ({ locales = ["en"] }) => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const databaseId_blog = process.env.NOTION_DATABASE_ID2;
+  const databaseId_blog = JOURNAL_DB;
   const blogs = await getDatabase(databaseId_blog);
 
   // Find blog by slug

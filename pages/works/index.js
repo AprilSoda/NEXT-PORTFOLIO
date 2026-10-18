@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
-import { getDatabase } from "../../lib/notion";
+import { getDatabase, WORKS_DB } from "../../lib/notion";
 import { toWorkSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
@@ -15,7 +15,7 @@ import WorkBadges from "../../components/WorkBadges";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
 import { useT } from "../../lib/i18n";
-export const databaseId = process.env.NOTION_DATABASE_ID;
+export const databaseId = WORKS_DB;
 
 const pad = (n) => String(n).padStart(2, "0");
 const noop = () => () => {};
