@@ -216,3 +216,45 @@ needed, but Notion rejects requests without a browser-like User-Agent — see
 4. **Media on r2.dev** - Cloudflare's r2.dev is rate-limited and uncached; move to a
    custom domain (e.g. media.kimtaekyun.dev) and update the URLs
 5. **Mixed component patterns** - function declarations vs arrow functions
+
+## Complexity & Technical Debt Considerations
+
+### Current Pain Points for Solo Maintenance
+
+#### Styling Complexity
+- Many SCSS files imported globally via `globals.scss`; the 2026 renewal added
+  `design-system.scss` (tokens) and `renewal.scss` on top of the legacy files
+- No consistent styling pattern across older components
+
+#### Animation Library Redundancy
+- **Framer Motion** (page transitions, a few reveals) and **GSAP** (cursor, parallax,
+  Lenis ticker) both ship; above-the-fold entrances are plain CSS
+
+#### Email Infrastructure
+- Direct SMTP management via nodemailer
+- Could be replaced with a form service (Formspree, Web3Forms, etc.)
+
+### Simplification Opportunities
+
+#### Quick Wins (Low Risk)
+1. Consolidate legacy SCSS into `design-system.scss` + `renewal.scss`
+2. Drop the 4th Helvetica weight if unused (currently 400/500/600/700)
+3. Remove one animation library
+
+#### Medium-Term Improvements
+1. Replace SMTP email with an external service (fewer env vars)
+2. Restrict image remote patterns to R2 (+ any hosts still in Notion)
+3. Move media from r2.dev to a custom domain with CDN caching
+
+#### Long-Term Considerations
+1. TypeScript migration
+2. App Router migration
+3. Standardize component patterns (function declarations vs arrows)
+4. Error boundaries and fallbacks
+
+### Recommended Approach for Solo Developer
+Focus on **reducing cognitive load** rather than adding features:
+- Fewer files to navigate
+- Single source of truth for styles and copy (`content/site.js`, `lib/i18n.js`)
+- Minimize external dependencies
+- Document what remains
