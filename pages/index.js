@@ -26,7 +26,8 @@ export const getStaticProps = async () => {
   ])
   return {
     props: {
-      works: works.slice(0, 4).map(toWorkSummary),
+      // Ticked "featured" entries lead; the newest work fills the rest
+      works: [...works].sort((a, b) => Number(b.properties.featured?.checkbox || false) - Number(a.properties.featured?.checkbox || false)).slice(0, 4).map(toWorkSummary),
       journal: journal.slice(0, 3).map(toJournalSummary),
     },
     revalidate: 86400,

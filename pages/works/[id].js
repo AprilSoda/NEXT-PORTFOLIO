@@ -9,6 +9,9 @@ import Footer from "../../components/Footer";
 import { getDatabase, getPage, getBlocks } from "../../lib/notion";
 import styles from "./post.module.css";
 import { databaseId } from "./index.js";
+import VideoEmbed from "../../components/VideoEmbed";
+import { parseVideoUrl } from "../../lib/video";
+import { useT } from "../../lib/i18n";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -145,95 +148,19 @@ const renderBlock = (block) => {
                 </figure>
             );
         case "embed":
-            const embed =
-                value.url
+        case "link_preview": {
+            // Video links get a player; anything else becomes a plain link
+            if (parseVideoUrl(value.url)) return <VideoEmbed key={id} url={value.url} />;
             return (
-                <figure>
-                    <Image
-                        src={embed}
-                        alt="Embedded content"
-                        width={800}
-                        height={600}
-                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
-                    />
-                </figure>
+                <a key={id} href={value.url} target="_blank" rel="noopener noreferrer" className={styles.bookmark}>
+                    {value.url}
+                </a>
             );
-        case "link_preview":
-            const link_preview = value.url;
-            return (
-                <figure>
-                    <Image
-                        src={link_preview}
-                        alt="Link preview"
-                        width={800}
-                        height={600}
-                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
-                    />
-                </figure>
-            );
-        case "video":
-            const video =
-                value.type === "external" ? value.external.url : value.file.url;
-
-            // Convert YouTube URL to embed format
-            const getYouTubeEmbedUrl = (url) => {
-                if (!url) return url;
-
-                // Check if it's already an embed URL
-                if (url.includes('youtube.com/embed/')) return url;
-
-                // Extract video ID from various YouTube URL formats
-                let videoId = null;
-
-                // Format: https://www.youtube.com/watch?v=VIDEO_ID
-                if (url.includes('youtube.com/watch?v=')) {
-                    videoId = url.split('watch?v=')[1]?.split('&')[0];
-                }
-                // Format: https://youtu.be/VIDEO_ID
-                else if (url.includes('youtu.be/')) {
-                    videoId = url.split('youtu.be/')[1]?.split('?')[0];
-                }
-
-                // Return embed URL if video ID found, otherwise return original URL
-                return videoId
-                    ? `https://www.youtube.com/embed/${videoId}`
-                    : url;
-            };
-
-            const embedUrl = value.type === "external" ? getYouTubeEmbedUrl(video) : video;
-
-            return value.type === "external" ? (
-                <div style={{ width: "100%", padding: "62% 0 0 0", position: "relative", overflow: "hidden" }}>
-                    <iframe
-                        src={embedUrl + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-                        style={{
-                            position: "absolute",
-                            width: "100%",
-                            height: "115%",
-                            left: "50%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                            border: "0",
-                            outline: "unset",
-                            backgroundColor: "black",
-                        }}
-                    />
-                </div>
-            ) : (
-                <video
-                    controls
-                    autoPlay
-                    name="media"
-                    loop
-                    muted
-                    style={{ width: "100%" }}
-                >
-                    <source src={video} />
-                </video>
-            );
+        }
+        case "video": {
+            const video = value.type === "external" ? value.external.url : value.file.url;
+            return <VideoEmbed key={id} url={video} />;
+        }
         case "divider":
             return <hr key={id} />;
         case "quote":
@@ -280,9 +207,12 @@ const renderBlock = (block) => {
 };
 
 
+const plain = (prop) => (prop?.rich_text || []).map((t) => t.plain_text).join("").trim();
+
 //Master index
-export default function Post({ page, blocks }) {
+export default function Post({ page, blocks, heroVideo }) {
     const router = useRouter();
+    const { t, locale } = useT();
 
     // Show loading state when Next.js is generating the page on-demand
     if (router.isFallback) {
@@ -293,60 +223,64 @@ export default function Post({ page, blocks }) {
         );
     }
 
-
-
-
-    function formatDate(inputDate) {
-        const [month, year] = new Date(inputDate).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit' }).split('/');
-        return `${month}. ${year}`;
-    }
-
     if (!page || !blocks) {
         return <div />;
     }
+
+    const props = page.properties;
+    const title = props.title.title[0]?.plain_text || "";
+    const year = props.date?.date?.start ? new Date(props.date.date.start).getFullYear() : null;
+    const format = props.format?.select?.name || props.sort?.select?.name || null;
+    const summary = plain(locale === "ko" ? props.summary_ko : props.summary_en) || plain(props.summary_en);
+    const making = props.making?.url || null;
+    const aiUsage = props.ai_usage?.select?.name || null;
+    const client = props.client?.select?.name;
+    const meta = [
+        ["work.role", plain(props.role)],
+        // "PERSONAL PROJECT" in the client column just means there was no client
+        ["work.client", client && client !== "PERSONAL PROJECT" ? client : null],
+        ["work.format", format],
+        ["work.year", year],
+        ["work.honor", plain(props.honor)],
+        ["work.ai", aiUsage ? t(`ai.${aiUsage}`) : null],
+    ].filter(([, value]) => value);
+    const cover = page.cover?.external?.url || page.cover?.file?.url || null;
+
     return (
             <Transition>
                 <Head>
-                    <title>
-                        {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
-                    </title>
-                    <link rel="icon" href="/favicon.ico" />
+                    <title>{`${title} — ${locale === "ko" ? "김태균" : "Kim Tae Kyun"}`}</title>
+                    {summary && <meta name="description" content={summary} />}
+                    {cover && <meta property="og:image" content={cover} />}
                 </Head>
 
-                <div className="w_title_container">
-                    <div className="w_title">
-                        <div className="thumb">
-                            <Image
-                                src={page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
-                                alt={page.properties.title.title[0].plain_text}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                        </div>
-                        <div className="title">
-                            <h1> {page.properties.title.title[0].plain_text} </h1>
-                        </div>
+                <section className="work-hero ds-container">
+                    <p className="work-hero__eyebrow u-mono">{[format, year].filter(Boolean).join(" · ")}</p>
+                    <h1 className="work-hero__title">{title}</h1>
+                    {summary && <p className="work-hero__summary">{summary}</p>}
+                    <div className="work-hero__media">
+                        {heroVideo ? (
+                            <VideoEmbed url={heroVideo} title={title} />
+                        ) : cover ? (
+                            <div className="work-hero__cover">
+                                <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} priority sizes="100vw" />
+                            </div>
+                        ) : null}
                     </div>
-                </div>
+                    {meta.length > 0 && (
+                        <dl className="work-hero__meta">
+                            {meta.map(([key, value]) => (
+                                <div key={key}>
+                                    <dt className="u-mono">{t(key)}</dt>
+                                    <dd>{value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    )}
+                </section>
+
                 <article className="container">
                     <div className="content">
-                        <div className="work-meta">
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Client</span>
-                                <span className="work-meta__value">{page.properties.client?.select?.name || "—"}</span>
-                            </div>
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Discipline</span>
-                                <span className="work-meta__value">{page.properties.sort?.select?.name || "—"}</span>
-                            </div>
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Year</span>
-                                <span className="work-meta__value">
-                                    {page.properties.date?.date?.start ? formatDate(page.properties.date.date.start) : "—"}
-                                </span>
-                            </div>
-                        </div>
                         <section className="block">
                             {blocks.map((block) => (
                                 <Fragment key={block.id}>
@@ -354,9 +288,15 @@ export default function Post({ page, blocks }) {
                                 </Fragment>
                             ))}
                         </section>
-                        <a className="go_back u-mono" onClick={() => router.back()}>
-                            ← All projects
-                        </a>
+                        {making && (
+                            <details className="work-making">
+                                <summary className="u-mono">{t("work.making")}</summary>
+                                <VideoEmbed url={making} title={`${title} — making of`} />
+                            </details>
+                        )}
+                        <Link className="go_back u-mono" href="/works">
+                            {t("work.back")}
+                        </Link>
                     </div>
                 </article>
                 <Footer />
@@ -397,10 +337,27 @@ export const getStaticProps = async (context) => {
         }
         return block;
     });
+    // The finished film leads the page: use the `video` property, or promote
+    // the first video in the page body so older entries get it too
+    let heroVideo = page.properties.video?.url || null;
+    let bodyBlocks = blocksWithChildren;
+    if (!heroVideo) {
+        const first = blocksWithChildren.find((block) => {
+            const value = block[block.type];
+            const url = block.type === "video" ? value?.external?.url || value?.file?.url : value?.url;
+            return ["video", "embed"].includes(block.type) && parseVideoUrl(url);
+        });
+        if (first) {
+            const value = first[first.type];
+            heroVideo = first.type === "video" ? value.external?.url || value.file?.url : value.url;
+            bodyBlocks = blocksWithChildren.filter((block) => block.id !== first.id);
+        }
+    }
     return {
         props: {
             page,
-            blocks: blocksWithChildren,
+            blocks: bodyBlocks,
+            heroVideo,
         },
         revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };

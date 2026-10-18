@@ -191,3 +191,103 @@
     text-align: left;
   }
 }
+
+/*========== Video player (finished film first, real controls) ==========*/
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+
+  iframe,
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+/*========== Work detail: title, film, meta ==========*/
+.work-hero {
+  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  padding-top: calc(var(--sp-12) + 2rem);
+  padding-bottom: var(--sp-6);
+  color: var(--text);
+  text-transform: none;
+
+  &__eyebrow {
+    color: var(--text-faint);
+    margin: 0 0 var(--sp-2);
+  }
+
+  &__title {
+    font-size: var(--fs-h1);
+    line-height: 1.02;
+    font-weight: 600;
+    margin: 0 0 var(--sp-3);
+  }
+
+  &__summary {
+    font-size: var(--fs-body);
+    line-height: 1.7;
+    color: var(--text-dim);
+    max-width: 44rem;
+    margin: 0 0 var(--sp-6);
+  }
+
+  &__media {
+    margin-bottom: var(--sp-6);
+  }
+
+  &__cover {
+    position: relative;
+    aspect-ratio: 1.85;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--sp-3) var(--sp-4);
+    margin: 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--line);
+
+    dt {
+      color: var(--text-faint);
+      margin-bottom: 0.35rem;
+    }
+
+    dd {
+      margin: 0;
+      font-size: var(--fs-small);
+    }
+  }
+}
+
+.work-making {
+  margin: var(--sp-8) 0 var(--sp-4);
+  border-top: 1px solid var(--line);
+  padding-top: var(--sp-3);
+
+  summary {
+    cursor: pointer;
+    color: var(--text-dim);
+    margin-bottom: var(--sp-3);
+    list-style: none;
+
+    &::before {
+      content: "+ ";
+    }
+  }
+
+  &[open] summary::before {
+    content: "– ";
+  }
+}
