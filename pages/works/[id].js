@@ -251,6 +251,11 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const before = props.before?.url || null;
     const after = props.after?.url || null;
     const aiUsage = props.ai_usage?.select?.name || null;
+    // Where generative AI was used, on the three axes festivals now ask about
+    // (Cannes 2026: script, visual generation, performance) — Human/Assisted/Generated
+    const aiAxes = ["script", "visuals", "performance"]
+        .map((axis) => [axis, props[`ai_${axis}`]?.select?.name])
+        .filter(([, value]) => value);
     const client = props.client?.select?.name;
     const meta = [
         ["work.role", plain(props.role)],
@@ -259,7 +264,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         ["work.format", fmt(format)],
         ["work.year", year],
         ["work.honor", plain(props.honor)],
-        ["work.ai", aiUsage ? t(`ai.${aiUsage}`, aiUsage) : null],
+        ["work.ai", aiUsage && aiAxes.length === 0 ? t(`ai.${aiUsage}`, aiUsage) : null],
     ].filter(([, value]) => value);
     const cover = page.cover?.external?.url || page.cover?.file?.url || posterFor(props.video?.url) || null;
     // Covers uploaded to Notion are signed URLs that expire within hours, so
@@ -267,11 +272,6 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const shareImage = /^https?:\/\//.test(page.cover?.external?.url || "") ? page.cover.external.url : null;
     const cardImage = shareImage || ogCard({ title, kicker: fmt(format) || "", meta: [plain(props.role), year].filter(Boolean).join(" · ") });
     const status = props.status?.select?.name;
-    // Where generative AI was used, on the three axes festivals now ask about
-    // (Cannes 2026: script, visual generation, performance) — Human/Assisted/Generated
-    const aiAxes = ["script", "visuals", "performance"]
-        .map((axis) => [axis, props[`ai_${axis}`]?.select?.name])
-        .filter(([, value]) => value);
     const tools = (props.tools?.multi_select || []).map((o) => o.name);
     const models = (props.models?.multi_select || []).map((o) => o.name);
     // "Role: Name" per line → [role, name]
@@ -384,7 +384,13 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                                         </ul>
                                     </div>
                                 )}
-                                {(models.length > 0 || aiAxes.length > 0) && <p className="work-madewith__note">{t("work.humanNote")} <Link href="/ai">{t("ai.page.link")}</Link></p>}
+                                {(models.length > 0 || aiAxes.length > 0) && (
+                                    <p className="work-madewith__note">
+                                        {/* "finished by hand" would be false next to Generated */}
+                                        {aiAxes.some(([, v]) => v === "Generated") ? t("work.generatedNote") : models.length > 0 ? t("work.humanNote") : null}{" "}
+                                        <Link href="/ai">{t("ai.page.link")}</Link>
+                                    </p>
+                                )}
                             </section>
                         )}
                         {credits.length > 0 && (

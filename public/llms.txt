@@ -5,6 +5,7 @@
 - [Work](https://www.kimtaekyun.dev/works): finished films, ScreenX releases and music videos
 - [Journal](https://www.kimtaekyun.dev/journal): notes on filmmaking, VFX and building with AI
 - [About](https://www.kimtaekyun.dev/about): background, approach and credits
+- [How I use AI](https://www.kimtaekyun.dev/ai): where generative AI is used, what it does not replace, how each work is labelled
 - [Contact](https://www.kimtaekyun.dev/contact): hello@kimtaekyun.dev
 
 Korean versions live under /ko.

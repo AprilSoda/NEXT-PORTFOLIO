@@ -76,8 +76,8 @@ export default function HomeSections({ works = [], journal = [], developing = []
             {developing.map((w) => (
               <li key={w.id}>
                 <Link href={`/works/${w.id}`} className="home-next__item">
-                  <span className="home-next__stage u-mono">{t(`status.${w.status}`, w.status)}</span>
                   <span className="home-next__title">{w.title}</span>
+                  <span className="home-next__stage u-mono">{t(`status.${w.status}`, w.status)}</span>
                   {pick(w.logline) && <span className="home-next__logline">{pick(w.logline)}</span>}
                 </Link>
               </li>

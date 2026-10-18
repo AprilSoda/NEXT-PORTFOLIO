@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import Transition from "../components/Transition";
 import Footer from "../components/Footer";
@@ -12,6 +13,11 @@ export default function AiPage() {
 
     return (
         <Transition>
+            <Head>
+                <meta name="description" content={t("ai.page.description")} key="description" />
+                <meta property="og:description" content={t("ai.page.description")} key="og:description" />
+                <meta property="og:title" content={t("ai.page.title")} key="og:title" />
+            </Head>
             <div className="ai-page ds-container">
                 <header className="ai-page__head">
                     <p className="u-mono reveal">{t("ai.page.eyebrow")}</p>

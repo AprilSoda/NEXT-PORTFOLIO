@@ -1600,6 +1600,13 @@ html {
 
 .home-next ul:has(.home-next__item:hover) .home-next__item:not(:hover) { opacity: 0.4; }
 
-.home-next__stage { color: var(--accent, var(--text-dim)); }
+// Title comes first for screen readers; the stage still shows in the first column
+.home-next__stage { color: var(--accent, var(--text-dim)); order: -1; }
 .home-next__title { font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.15; }
 .home-next__logline { color: var(--text-dim); line-height: 1.55; }
+
+.about-tools a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
