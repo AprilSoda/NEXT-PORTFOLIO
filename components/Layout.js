@@ -32,11 +32,13 @@ const Layout = ({ children }) => {
                 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
                 <meta name="twitter:title" content="Kim Tae Kyun" />
                 <meta name="twitter:card" content="summary_large_image" />
-                                <meta name="twitter:image" content="https://www.kimtaekyun.dev/card.png" />
+                                <meta name="twitter:image" content="https://www.kimtaekyun.dev/og.jpg" key="twitter:image" />
                 <meta property="og:site_name" content="Kim Tae Kyun" />
                 <meta property="og:title" content="Kim Tae Kyun" key="og:title" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="https://www.kimtaekyun.dev/card.png" key="og:image" />
+                <meta property="og:image" content="https://www.kimtaekyun.dev/og.jpg" key="og:image" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
             </Head>
 
 
