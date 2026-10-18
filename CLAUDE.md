@@ -6,15 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Running the Application
 ```bash
-npm run dev        # Start dev server on http://0.0.0.0:5000
-npm run build      # Build for production
-npm run start      # Start production server
+npm run dev          # Dev server on http://0.0.0.0:5000 (webpack)
+npm run build        # Production build (needs NOTION_TOKEN + database ids)
+npm run build:mock   # Production build with sample data (NOTION_MOCK=1, no token)
+npm run start        # Serve the production build
 ```
 
 ### Code Quality
 ```bash
-npm run lint       # Run ESLint
-npm run prettier   # Format code (note: script currently has typo, should be --write not -write)
+npm run lint         # ESLint (must pass clean)
+npm run prettier     # Format code
 ```
 
 ## Architecture Overview
@@ -37,32 +38,30 @@ This dual setup is the standard pattern for Notion-based sites, as the official 
 - Both databases must have a `pub` (checkbox) property to control visibility
 - Content is fetched at build time via ISR (Incremental Static Regeneration)
 
-#### Dynamic Routing with Custom Slugs
-- Blog and work URLs use **descriptive slugs** instead of Notion IDs
-- `lib/slugify.js` handles slug generation:
-  - Extracts English characters only from titles
-  - Falls back to `post-{id}` for non-English titles (e.g., Korean)
-  - `createSlug()` - Converts title to URL-safe slug
-  - `findBlogBySlug()` - Matches URL slug to Notion page
+#### Content model (Notion WORKS database)
+Besides `title`, `date`, `pub`, `sort`, `client`, the works database has:
+`role`, `format`, `honor`, `status`, `featured`, `summary_en`, `summary_ko`,
+`video` (finished film/trailer, shown first), `making`, `preview` (hover loop),
+`before`/`after` (compare slider), `tools`, `models`, `ai_usage`, `credits`
+("Role: Name" per line). All are optional — pages render without them.
+`lib/summaries.js` trims rows to what list views need.
 
-**Example**: Blog with title "Understanding React Hooks" → `/blogs/understanding-react-hooks`
+#### Routing
+- `/works/[id]` uses the Notion page id; `/journal/[slug]` uses `createSlug()`
+  (English characters only, `post-{id}` fallback for Korean titles)
+- `/blogs/*` permanently redirects to `/journal/*`
+- `getStaticPaths` returns one path per locale; `fallback: 'blocking'`
 
-#### Static Generation Flow
-```
-User requests /blogs/my-post
-    ↓
-getStaticPaths() - Pre-generates all blog paths at build time
-    ↓
-Fetches all blogs via lib/notion.js (official SDK)
-    ↓
-Creates slug for each post (lib/slugify.js)
-    ↓
-getStaticProps() - Fetches full page content for specific slug
-    ↓
-Uses notion-client (NotionX) to get full recordMap
-    ↓
-Renders with react-notion-x components
-```
+#### Bilingual (i18n)
+- Next.js Pages Router i18n: English at `/`, Korean at `/ko`
+- UI strings: `lib/i18n.js` → `const { t, pick, locale } = useT()`
+- Identity copy, credits, About text: `content/site.js` (`{ en, ko }` objects)
+- Notion content is shown as written; `summary_en` / `summary_ko` per work
+
+#### SEO
+- `components/Layout.js`: canonical, hreflang (en/ko/x-default), og tags
+- JSON-LD: Person (home), CreativeWork/VideoObject (work), BlogPosting (journal)
+- `/sitemap.xml` and `/feed.xml` are server-rendered; `public/robots.txt`, `public/llms.txt`
 
 #### Page Animation System
 - **Framer Motion** handles page transitions via `AnimatePresence` in `_app.js`
@@ -72,15 +71,16 @@ Renders with react-notion-x components
   - `CustomCursor` component renders cursor overlay
   - Components trigger cursor changes via context (e.g., hover states)
 
-#### Font Loading Strategy
-The app loads **5 font families** (see `pages/_app.js`):
-- **17 variants of Helvetica Now Display** (local font, all weights + italics)
-- Canyon Black (local, display font)
-- ProFont Windows (local, monospace)
-- Roboto (Google Fonts)
-- Exo (Google Fonts)
-
-All use `display: swap` to prevent FOIT. Fonts are exposed as CSS variables.
+#### Performance rules (keep Lighthouse ≥80 / a11y 100)
+- First page load renders immediately: `Transition` skips its wipe/fade on the
+  first render; above-the-fold entrances use CSS `.reveal` / `.reveal--slide`
+  (styles/renewal.scss), not Framer Motion, so they don't wait for hydration
+- Never start the largest visible element at `opacity: 0`
+- Hero: poster `<Image priority>` under the loop; the loop plays only in view
+- Shader backdrop skips low-end / Save-Data / reduced-motion, pauses in background tabs
+- Lenis runs on the GSAP ticker (one frame loop)
+- Fonts: Helvetica Now (4 weights, not preloaded), Canyon, ProFont, JetBrains Mono
+  via next/font; Pretendard (Hangul) from the jsDelivr dynamic-subset CSS, attached by script
 
 #### Email Contact System
 - API route at `pages/api/contact.js` handles form submissions
@@ -100,12 +100,16 @@ pages/
 ├── journal/              # formerly /blogs (old URLs redirect)
 │   ├── index.js          # Journal list (fetches NOTION_DATABASE_ID2)
 │   └── [id].js           # Journal entry detail (uses NotionX renderer)
-├── contact/index.js      # Contact form
+├── contact/index.js      # Contact form (enquiry type → email subject)
+├── 404.js                # Bilingual not-found page
+├── sitemap.xml.js        # Sitemap with hreflang alternates
+├── feed.xml.js           # Journal RSS
 └── api/
     └── contact.js        # Email submission handler
 
 lib/
-├── notion.js             # Official Notion SDK functions
+├── notion.js             # Official Notion SDK functions (+ NOTION_MOCK, WORKS_DB/JOURNAL_DB)
+├── mock/notion-fixtures.js  # Sample rows for NOTION_MOCK=1
 ├── slugify.js            # URL slug generation utilities
 ├── i18n.js               # UI strings (en/ko) + useT() hook
 ├── summaries.js          # Trim Notion rows for list views
@@ -115,20 +119,28 @@ content/
 └── site.js               # Identity copy, credits, About text (en/ko)
 
 components/
-├── Layout.js             # Global layout wrapper (Header + Arrow)
-├── Header.js             # Navigation header
-├── Footer.js             # Footer
-├── Hero.js               # Homepage hero section
+├── Layout.js             # Head/SEO, skip link, Header, back-to-top
+├── Header.js             # Navigation + language switch
+├── Footer.js             # Contact line, Seoul clock, labelled links
+├── Hero.js               # Home hero (headline, loop, showreel button)
+├── HomeSections.js       # Home: statement, credits, work, journal
+├── CreditList.js         # Public credits (content/site.js)
+├── HoverPreview.js       # Cover + hover-only silent loop
+├── WorkBadges.js         # Festival / in-progress badges
+├── VideoEmbed.js         # YouTube/Vimeo/file player with controls
+├── CompareSlider.js      # Plate vs final wipe
+├── modal-showreel.js     # Showreel modal (media-chrome)
 ├── CustomCursor.js       # Custom cursor overlay
 ├── MouseContext.js       # Cursor state management
-├── Transition.js         # Page transition wrapper
-├── BlogNavigation.js     # Blog prev/next navigation
-└── PageCard.js           # Blog card component
+├── Transition.js         # Page transition wrapper (skipped on first load)
+└── BlogNavigation.js     # Journal prev/next navigation
 
 styles/
 ├── globals.scss          # Global styles entry
 ├── variable.scss         # SCSS variables
-└── [component].scss      # Component-specific styles
+├── design-system.scss    # Tokens (color, type scale, spacing, motion)
+├── renewal.scss          # 2026 renewal — new work goes here
+└── [component].scss      # Legacy component/page styles
 ```
 
 ### Next.js Configuration Notes
@@ -139,8 +151,11 @@ styles/
 - **Server externals**: `@notionhq/client` marked as external package
 
 #### Image Configuration
-- **Remote patterns** currently allow all HTTPS hosts (`hostname: "**"`)
-- This is overly permissive - should be restricted to specific domains (Notion, YouTube, etc.)
+- **Remote patterns** currently allow all HTTPS hosts (`hostname: "**"`); see Known Issues
+
+#### i18n and redirects
+- `i18n: { locales: ['en', 'ko'], defaultLocale: 'en' }`
+- `/blogs` → `/journal` (permanent)
 
 ### Important Environment Variables
 
@@ -148,13 +163,11 @@ Required for the application to function:
 ```
 NOTION_TOKEN              # Official Notion API integration token
 NOTION_DATABASE_ID        # Works database ID
-NOTION_DATABASE_ID2       # Blogs database ID
-NOTION_ACTIVE_USER        # NotionX user ID (for private pages)
-NOTION_AUTH_TOKEN         # NotionX auth token (for private pages)
+NOTION_DATABASE_ID2       # Journal database ID
 MAIL_USER                 # SMTP email address
 MAIL_PASS                 # SMTP password
-NEXT_PUBLIC_API_URL       # API base URL (for contact form)
-GOOGLE_ANALYTICS          # GA measurement ID (optional)
+NEXT_PUBLIC_GOOGLE_ANALYTICS  # GA measurement ID (optional)
+NOTION_MOCK               # 1 = sample data, no Notion calls (optional)
 ```
 
 See `.env.example` for template with documentation.
@@ -164,35 +177,19 @@ See `.env.example` for template with documentation.
 #### Fetching Content from Notion
 Always use `lib/notion.js` for database queries:
 ```javascript
-import { getDatabase } from '../lib/notion'
+import { getDatabase, JOURNAL_DB } from '../lib/notion'
+import { toJournalSummary } from '../lib/summaries'
 
 export async function getStaticProps() {
-  const databaseId = process.env.NOTION_DATABASE_ID2
-  const posts = await getDatabase(databaseId)
-  return { props: { posts }, revalidate: 1 }
+  const posts = await getDatabase(JOURNAL_DB)
+  return { props: { posts: posts.map(toJournalSummary) }, revalidate: 86400 }
 }
 ```
 
 #### Rendering Notion Pages
-Use NotionX in dynamic routes:
-```javascript
-import { NotionAPI } from 'notion-client'
-import { NotionRenderer } from 'react-notion-x'
-
-const notion = new NotionAPI({
-  activeUser: process.env.NOTION_ACTIVE_USER,
-  authToken: process.env.NOTION_AUTH_TOKEN,
-})
-
-export async function getStaticProps({ params }) {
-  const recordMap = await notion.getPage(pageId)
-  return { props: { recordMap } }
-}
-
-export default function Page({ recordMap }) {
-  return <NotionRenderer recordMap={recordMap} darkMode={true} />
-}
-```
+Journal entries use NotionX. Pages are published to web, so no auth token is
+needed, but Notion rejects requests without a browser-like User-Agent — see
+`pages/journal/[id].js`.
 
 #### Creating New Dynamic Pages
 1. Create `[id].js` route in appropriate pages directory
@@ -211,73 +208,11 @@ export default function Page({ recordMap }) {
 
 ### Known Issues & Limitations
 
-1. **ISR revalidation is too aggressive** - Currently set to `revalidate: 1` (1 second), should be increased to reduce API calls
-2. **No TypeScript** - Pure JavaScript codebase
-3. **Multiple console.logs in production** - Should be removed or gated by environment
-4. **Legacy Link syntax** - Some components use deprecated `legacyBehavior` prop
-5. **Mixed component patterns** - Inconsistent use of function declarations vs arrow functions
-6. **Google Analytics in _document.js** - Won't track SPA navigation, should move to _app.js with router events
-
-## Complexity & Technical Debt Considerations
-
-### Current Pain Points for Solo Maintenance
-
-#### Styling Complexity
-- **14 separate SCSS files** all imported globally via `globals.scss`
-- Mix of SCSS modules and global styles
-- `styled-components` in dependencies but unused
-- No consistent styling pattern across components
-
-#### Font Loading Overhead
-- **17 Helvetica Now Display variants** (weights 100-900 + italics)
-- **5 total font families** loading on every page
-- Significant initial page load impact
-- Most variants likely unused in production
-
-#### Animation Library Redundancy
-- **Framer Motion** - Used for page transitions
-- **GSAP** - Also present with @gsap/react
-- Both libraries serve similar purposes, only one needed
-
-
-#### Deployment Configuration Cruft
-- Replit-specific settings in `next.config.js` (`allowedDevOrigins`)
-- Overly permissive image hostname patterns (`hostname: "**"`)
-- 9 environment variables to manage across environments
-
-#### Email Infrastructure
-- Direct SMTP management via nodemailer
-- Requires credential management and server configuration
-- Could be replaced with form service (Formspree, Web3Forms, etc.)
-
-### Simplification Opportunities
-
-#### Quick Wins (Low Risk)
-1. Remove unused npm packages (Redux, styled-components)
-2. Consolidate SCSS files (14 → 3-5 files)
-3. Reduce font variants (17 → 3-5 variants)
-4. Remove one animation library
-5. Clean up console.logs and debug code
-6. Fix prettier script typo (`-write` → `--write`)
-
-#### Medium-Term Improvements
-1. Consider Tailwind CSS migration (eliminate SCSS complexity)
-2. Replace SMTP email with external service (reduce env vars)
-3. Simplify Notion auth (remove private page support if unused)
-4. Optimize ISR revalidation times
-5. Restrict image remote patterns to specific domains
-
-#### Long-Term Considerations
-1. TypeScript migration for better maintainability
-2. Migrate to App Router (Next.js 13+) when stable
-3. Consider Markdown-based content (eliminate Notion dependency)
-4. Standardize component patterns (function declarations vs arrows)
-5. Add proper error boundaries and fallbacks
-
-### Recommended Approach for Solo Developer
-Focus on **reducing cognitive load** rather than adding features:
-- Fewer files to navigate
-- Single source of truth for styles
-- Minimize external dependencies
-- Automate deployment concerns
-- Document what remains
+1. **No TypeScript** - Pure JavaScript codebase
+2. **Styles are layered** - legacy `pages.scss`/`components.scss` plus the newer
+   `design-system.scss` tokens and `renewal.scss`; new work goes in `renewal.scss`
+3. **Image remote patterns allow all HTTPS hosts** - images are synced to R2 at
+   build time (`scripts/notion-images-to-r2.mjs`); restrict once confirmed
+4. **Media on r2.dev** - Cloudflare's r2.dev is rate-limited and uncached; move to a
+   custom domain (e.g. media.kimtaekyun.dev) and update the URLs
+5. **Mixed component patterns** - function declarations vs arrow functions
