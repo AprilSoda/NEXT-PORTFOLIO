@@ -587,3 +587,33 @@ $font-sans: var(--font-helvetica-now-display), "Pretendard Variable", "Pretendar
 html {
   scroll-padding-top: clamp(80px, 8vw, 100px);
 }
+
+/*========== Korean typography (from Plus X / Everyday Practice / Dexter) ==========*/
+:lang(ko) {
+  p,
+  li,
+  dd {
+    line-height: 1.75;
+    letter-spacing: -0.01em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+}
+
+/*========== Dim siblings while one row is hovered ==========*/
+@media (hover: hover) and (pointer: fine) {
+  .journal-list:has(.journal-list__item:hover) .journal-list__item:not(:hover),
+  .credit-list:has(.credit-list__item:hover) .credit-list__item:not(:hover) {
+    opacity: 0.4;
+  }
+
+  .journal-list__item,
+  .credit-list__item {
+    transition: opacity 0.2s ease, color var(--dur) var(--ease-out-expo);
+  }
+}

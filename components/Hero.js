@@ -98,30 +98,33 @@ export default function Hero() {
                     </span>
                     <span className="hero-meta__loc">{pick(identity.location)} — {thisYear()}</span>
                 </motion.div>
-                <div className={'centering ' + align}>
+                {/* One heading for search engines and screen readers; the animated words are decoration */}
+                <h1 className={'centering ' + align} aria-label={heroLines.map((line) => line.join(' ')).join(' ')}>
                     {HeroTitle.map((HeroTitle, i) => {
                         const indexs = HeroTitle.count
                         return (
-                            <div key={i} className='outter'>
-                                <div className='inner'>
+                            <span key={i} className='outter'>
+                                <span className='inner'>
                                     {HeroTitle.h1s.map((v, i) => {
                                         var indexing = i + indexs
                                         return (
-                                            <motion.h1
+                                            <motion.span
                                                 key={indexing}
+                                                className="hero-word"
+                                                aria-hidden="true"
                                                 initial={{ opacity: 0, translateY: -30 }}
                                                 animate={{ opacity: 1, translateY: 0 }}
                                                 transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.6 + indexing * 0.08 } }}
                                             >
                                                 {v}
-                                            </motion.h1>
+                                            </motion.span>
                                         )
                                     })}
-                                </div>
-                            </div>
+                                </span>
+                            </span>
                         )
                     })}
-                </div>
+                </h1>
                 <div className="bg-area">
                     <motion.div
                         className="video"
