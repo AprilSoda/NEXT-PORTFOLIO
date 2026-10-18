@@ -1230,3 +1230,11 @@ html {
     }
   }
 }
+
+.journal-head__rss {
+  color: var(--text-dim);
+
+  &:hover {
+    color: var(--accent);
+  }
+}

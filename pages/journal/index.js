@@ -5,6 +5,7 @@ import { toJournalSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import { useT } from "../../lib/i18n";
+import { SITE_URL } from "../../components/Layout";
 
 const databaseId_blog = JOURNAL_DB;
 
@@ -37,7 +38,9 @@ const Journal = ({ entries }) => {
       <div className="journal-page ds-container">
         <header className="journal-head">
           <h1 className="journal-head__title reveal reveal--slide">{t("journal.title")}</h1>
-          <p className="journal-head__sub">{t("journal.sub")}</p>
+          <p className="journal-head__sub">
+            {t("journal.sub")} · <a href={`${SITE_URL}/feed.xml`} className="journal-head__rss u-mono">RSS</a>
+          </p>
         </header>
 
         {categories.length > 0 && (

@@ -23,6 +23,7 @@ const Layout = ({ children }) => {
                     <link key={`alt-${l}`} rel="alternate" hrefLang={l} href={localeUrl(l, path)} />
                 ))}
                 <link rel="alternate" hrefLang="x-default" href={localeUrl('en', path)} key="alt-default" />
+                <link rel="alternate" type="application/rss+xml" title="Kim Tae Kyun — Journal" href={`${SITE_URL}/feed.xml`} />
                 <meta property="og:locale" content={locale === 'ko' ? 'ko_KR' : 'en_US'} />
                 <meta property="og:locale:alternate" content={locale === 'ko' ? 'en_US' : 'ko_KR'} />
                 <meta property="og:url" content={localeUrl(locale, path)} />
