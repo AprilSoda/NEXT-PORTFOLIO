@@ -291,3 +291,194 @@
     content: "– ";
   }
 }
+
+/*========== About ==========*/
+.about-page {
+  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  color: var(--text);
+  text-transform: none;
+  padding-top: calc(var(--sp-12) + 2rem);
+  padding-bottom: var(--sp-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.about-label {
+  color: var(--text-faint);
+  font-weight: 400;
+  margin: 0 0 var(--sp-3);
+}
+
+.about-hero {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--sp-8);
+  align-items: end;
+
+  &__name {
+    font-size: var(--fs-display);
+    line-height: 0.95;
+    font-weight: 600;
+    margin: 0 0 var(--sp-2);
+  }
+
+  &__role {
+    font-size: var(--fs-h2);
+    color: var(--text-dim);
+    margin: 0 0 var(--sp-4);
+  }
+
+  &__contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    color: var(--text-dim);
+    margin: 0;
+
+    a:hover {
+      color: var(--accent);
+    }
+  }
+
+  &__portrait {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+}
+
+.about-manifesto {
+  max-width: 54rem;
+
+  p {
+    font-size: var(--fs-h2);
+    line-height: 1.35;
+    margin: 0 0 var(--sp-4);
+  }
+}
+
+.about-block__text {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--text-dim);
+  max-width: 44rem;
+  margin: 0;
+}
+
+.about-practice {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+
+  li {
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-body);
+  }
+}
+
+.about-tools {
+  font-size: var(--fs-body);
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+
+  a {
+    color: var(--text-dim);
+    transition: color var(--dur) var(--ease-out-expo);
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+    gap: var(--sp-4);
+  }
+
+  .about-page {
+    gap: var(--sp-8);
+  }
+}
+
+/*========== Journal list ==========*/
+.journal-page {
+  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  color: var(--text);
+  text-transform: none;
+  padding-top: calc(var(--sp-12) + 2rem);
+  padding-bottom: var(--sp-12);
+}
+
+.journal-head {
+  margin-bottom: var(--sp-6);
+
+  &__title {
+    font-size: var(--fs-display);
+    line-height: 0.95;
+    font-weight: 600;
+    margin: 0 0 var(--sp-2);
+  }
+
+  &__sub {
+    font-size: var(--fs-body);
+    color: var(--text-dim);
+    margin: 0;
+  }
+}
+
+.journal-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-8);
+
+  button {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-dim);
+    padding: 0.45rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--dur) var(--ease-out-expo), border-color var(--dur) var(--ease-out-expo);
+
+    &:hover,
+    &.active {
+      color: var(--text);
+      border-color: var(--text-dim);
+    }
+  }
+}
+
+.journal-year {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+
+  &__label {
+    color: var(--text-faint);
+    font-weight: 400;
+    margin: var(--sp-3) 0 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .journal-year {
+    grid-template-columns: 1fr;
+    gap: var(--sp-1);
+  }
+}

@@ -41,3 +41,37 @@ export const social = [
   { label: "Instagram", href: "https://www.instagram.com/lsingleplayer/" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/tae-kyun-kim/" },
 ]
+
+// About page — draft copy built from Tae Kyun's own answers (2026-10-18); confirm before launch
+export const about = {
+  manifesto: [
+    {
+      en: "I grew up on films about space. Seen from out there we are specks of dust — and still we fight. What I keep coming back to is the opposite: people wanting to be understood, wanting to share what they feel.",
+      ko: "우주를 다룬 영화를 보며 자랐습니다. 저 멀리서 보면 우리는 먼지처럼 작은데, 그래도 서로 싸웁니다. 제가 계속 돌아가는 건 그 반대편입니다. 이해받고 싶고, 감정을 나누고 싶은 사람들.",
+    },
+    {
+      en: "AI is changing how films get made, faster than anyone can price it. It was built from all of us, so in a way it belongs to all of us. What I want to protect is the human part — the right to express, and to connect.",
+      ko: "AI는 영화를 만드는 방식을 누구도 값을 매기기 어려울 만큼 빠르게 바꾸고 있습니다. 우리 모두에게서 만들어졌으니 어떤 의미에선 모두의 자산이기도 합니다. 제가 지키고 싶은 건 사람의 몫, 표현하고 연결될 권리입니다.",
+    },
+    {
+      en: "History repeats because people don't change. I try to see what we want before the tools decide it for us.",
+      ko: "역사가 반복되는 건 사람이 바뀌지 않기 때문입니다. 도구가 대신 정하기 전에, 우리가 무엇을 원하는지 먼저 보려고 합니다.",
+    },
+    {
+      en: "My stories have often ended dark. I'm learning to end them differently: the world is hard, but I'd rather choose the problem I give my life to — and keep dreaming well until the end.",
+      ko: "제 이야기는 자주 어둡게 끝났습니다. 이제는 다르게 끝내는 법을 배우는 중입니다. 세상은 힘들지만, 평생 붙들 문제는 내가 고르고 끝까지 좋은 꿈을 꾸고 싶습니다.",
+    },
+  ],
+  now: {
+    en: "At CJ OliveNetworks I work with CJ 4DPLEX on ScreenX releases, building AI-native VFX pipelines and the tools our team uses every day. On my own, I make films and teach Nuke compositing.",
+    ko: "CJ 올리브네트웍스에서 CJ 4DPLEX와 함께 ScreenX 개봉작을 작업하며, AI 기반 VFX 파이프라인과 팀이 매일 쓰는 도구를 만듭니다. 개인으로는 영화를 만들고 Nuke 컴포지팅을 가르칩니다.",
+  },
+  practice: [
+    { en: "Films — directing, VFX supervision, compositing", ko: "영화 — 연출, VFX 슈퍼비전, 컴포지팅" },
+    { en: "ScreenX releases — immersive, multi-screen cinema", ko: "ScreenX 개봉작 — 다면 상영 몰입형 영화" },
+    { en: "Music videos — artists telling their own story", ko: "뮤직비디오 — 자기 이야기를 하는 아티스트와 함께" },
+    { en: "AI pipelines & tools — ComfyUI workflows, Nuke tooling", ko: "AI 파이프라인과 도구 — ComfyUI 워크플로, Nuke 툴" },
+    { en: "Teaching — Nuke compositing", ko: "강의 — Nuke 컴포지팅" },
+  ],
+  tools: ["Nuke", "ComfyUI", "Python", "Blender", "DaVinci Resolve", "3DEqualizer", "After Effects", "Premiere Pro"],
+}

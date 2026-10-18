@@ -1,7 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { credits, identity } from "../content/site"
+import { identity } from "../content/site"
+import CreditList from "./CreditList"
 import { useT } from "../lib/i18n"
 
 const reveal = {
@@ -31,19 +32,7 @@ export default function HomeSections({ works = [], journal = [] }) {
 
       <motion.section className="home-credits" {...reveal}>
         <h2 className="home-label u-mono">{t("home.credits")}</h2>
-        <ul className="credit-list">
-          {credits.map((c) => (
-            <li key={c.title} className="credit-list__item">
-              <span className="credit-list__title">
-                {locale === "ko" && c.titleKo ? c.titleKo : c.title}
-                {c.note && <em> — {pick(c.note)}</em>}
-              </span>
-              <span className="credit-list__meta u-mono">
-                {[c.format, pick(c.role), pick(c.honor), c.year].filter(Boolean).join(" · ")}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <CreditList />
       </motion.section>
 
       {works.length > 0 && (

@@ -19,7 +19,7 @@ npm run prettier   # Format code (note: script currently has typo, should be --w
 
 ## Architecture Overview
 
-This is a **Next.js 15 (Pages Router)** portfolio website for a VFX artist, integrated with Notion as a CMS for dynamic content.
+This is a **Next.js 16 (Pages Router, built-in i18n: en at /, ko at /ko)** portfolio website for a VFX artist, integrated with Notion as a CMS for dynamic content.
 
 ### Key Architectural Patterns
 
@@ -97,16 +97,22 @@ pages/
 ├── works/
 │   ├── index.js          # Works gallery (fetches NOTION_DATABASE_ID)
 │   └── [id].js           # Individual work detail (dynamic route)
-├── blogs/
-│   ├── index.js          # Blog list (fetches NOTION_DATABASE_ID2)
-│   └── [id].js           # Blog post detail (uses NotionX renderer)
+├── journal/              # formerly /blogs (old URLs redirect)
+│   ├── index.js          # Journal list (fetches NOTION_DATABASE_ID2)
+│   └── [id].js           # Journal entry detail (uses NotionX renderer)
 ├── contact/index.js      # Contact form
 └── api/
     └── contact.js        # Email submission handler
 
 lib/
 ├── notion.js             # Official Notion SDK functions
-└── slugify.js            # URL slug generation utilities
+├── slugify.js            # URL slug generation utilities
+├── i18n.js               # UI strings (en/ko) + useT() hook
+├── summaries.js          # Trim Notion rows for list views
+└── video.js              # Parse YouTube/Vimeo/file URLs
+
+content/
+└── site.js               # Identity copy, credits, About text (en/ko)
 
 components/
 ├── Layout.js             # Global layout wrapper (Header + Arrow)
