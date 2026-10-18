@@ -16,6 +16,9 @@ const ModalShowreel = dynamic(() => import('./modal-showreel'), { ssr: false })
 const BG_VIDEO_SRC =
   process.env.NEXT_PUBLIC_HERO_BG_URL ||
   'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/hero-bg.mp4'
+// First frame of the loop (public/hero-poster.webp) — shows instantly and stays
+// for reduced-motion visitors. Regenerate if the loop changes.
+const BG_POSTER = '/hero-poster.webp'
 
 
 // Running word offset per line, so the stagger continues across lines
@@ -136,6 +139,7 @@ export default function Hero() {
                             ref={videoRef}
                             className="bg-video"
                             src={BG_VIDEO_SRC}
+                            poster={BG_POSTER}
                             muted
                             loop
                             playsInline
