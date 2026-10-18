@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import Button from './Button'
 import ShowreelButton from './ShowreelButton'
 import { identity, heroLines } from '../content/site'
@@ -89,18 +89,13 @@ export default function Hero() {
                 <ShowreelButton isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
             )}
             <section ref={heroRef} className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
-                <motion.div
-                    className="hero-meta u-mono"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1.5 }}
-                >
+                <div className="hero-meta u-mono reveal" style={{ '--d': '0.6s', '--reveal-y': '0px' }}>
                     <span className="hero-meta__role">{pick(identity.role)}</span>
                     <span className="hero-meta__status">
                         <i /> {pick(identity.status)}
                     </span>
                     <span className="hero-meta__loc">{pick(identity.location)} — {thisYear()}</span>
-                </motion.div>
+                </div>
                 {/* One heading for search engines and screen readers; the animated words are decoration */}
                 <h1 className={'centering ' + align} aria-label={heroLines.map((line) => line.join(' ')).join(' ')}>
                     {HeroTitle.map((HeroTitle, i) => {
@@ -111,16 +106,14 @@ export default function Hero() {
                                     {HeroTitle.h1s.map((v, i) => {
                                         var indexing = i + indexs
                                         return (
-                                            <motion.span
+                                            <span
                                                 key={indexing}
-                                                className="hero-word"
+                                                className="hero-word reveal reveal--slide"
                                                 aria-hidden="true"
-                                                initial={{ opacity: 0, translateY: -30 }}
-                                                animate={{ opacity: 1, translateY: 0 }}
-                                                transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.6 + indexing * 0.08 } }}
+                                                style={{ '--d': `${0.2 + indexing * 0.06}s`, '--reveal-y': '-24px' }}
                                             >
                                                 {v}
-                                            </motion.span>
+                                            </span>
                                         )
                                     })}
                                 </span>
@@ -129,12 +122,9 @@ export default function Hero() {
                     })}
                 </h1>
                 <div className="bg-area">
-                    <motion.div
-                        className="video"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ default: { duration: 2.4, delay: 1 } }}
-                    >
+                    {/* Real image under the video: paints instantly and is what the browser measures as LCP */}
+                    <Image src={BG_POSTER} alt="" fill priority sizes="100vw" className="bg-poster" />
+                    <div className="video">
                         <video
                             ref={videoRef}
                             className="bg-video"
@@ -145,30 +135,25 @@ export default function Hero() {
                             playsInline
                             preload="metadata"
                         />
-                    </motion.div>
+                    </div>
                 </div>
-                <motion.div
-                    className="copy-area"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 3 }}
-                >
+                <div className="copy-area reveal" style={{ '--d': '1s', '--reveal-y': '0px' }}>
                     <div className="social">
                         <Button>
-                            <a href="https://www.imdb.com/name/nm16975542/" target="_blank" rel="noreferrer">
+                            <a aria-label="IMDb" href="https://www.imdb.com/name/nm16975542/" target="_blank" rel="noreferrer">
                                 <svg fill="#ffffff" width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="social_link">
                                     <g><path d="M8.4,21.1H5.9V9.9h3.8l0.7,4.7h0.1L11,9.9h3.8v11.2h-2.5v-6.7h-0.1l-0.9,6.7H9.4l-1-6.7h0L8.4,21.1L8.4,21.1z" /><path d="M15.8,9.8c0.4,0,3.2-0.1,4.7,0.1c1.2,0.1,1.8,1.1,1.9,2.3c0.1,2.2,0.1,4.4,0.1,6.6c0,0.2,0,0.5-0.1,0.8   c-0.2,0.9-0.7,1.4-1.9,1.5c-1.5,0.1-3,0.1-4.4,0.1c0,0-0.1,0-0.2,0V9.8z M18.8,11.9v7.2c0.5,0,0.8-0.2,0.8-0.7c0-1.9,0-3.9,0-5.9   C19.6,12,19.4,11.8,18.8,11.9z" /><path d="M2,21.1V9.9h2.9v11.2H2z" /><path d="M29.9,14.1c-0.1-0.8-0.6-1.2-1.4-1.4c-0.8-0.1-1.6,0-2.3,0.7V9.9h-2.8v11.2H26c0.1-0.2,0.1-0.4,0.2-0.5c0,0,0,0,0.1,0   c0.1,0.1,0.2,0.2,0.3,0.3c0.7,0.5,1.5,0.6,2.3,0.3c0.7-0.3,1-0.9,1-1.6c0-0.8,0.1-1.7,0.1-2.6C30,16,30,15,29.9,14.1L29.9,14.1z    M27.1,19.1c0,0.2-0.2,0.4-0.4,0.4s-0.4-0.2-0.4-0.4v-4.3c0-0.2,0.2-0.4,0.4-0.4s0.4,0.2,0.4,0.4V19.1z" /></g>
                                 </svg>
                             </a>
                         </Button>
                         <Button>
-                            <a href="https://www.instagram.com/lsingleplayer/" target="_blank" rel="noreferrer">
+                            <a aria-label="Instagram" href="https://www.instagram.com/lsingleplayer/" target="_blank" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="social_link">
                                     <path d="M12,2.982c2.937,0,3.285.011,4.445.064a6.072,6.072,0,0,1,2.042.379,3.4,3.4,0,0,1,1.265.823,3.4,3.4,0,0,1,.823,1.265,6.072,6.072,0,0,1,.379,2.042c.053,1.16.064,1.508.064,4.445s-.011,3.285-.064,4.445a6.072,6.072,0,0,1-.379,2.042,3.644,3.644,0,0,1-2.088,2.088,6.072,6.072,0,0,1-2.042.379c-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064a6.072,6.072,0,0,1-2.042-.379,3.4,3.4,0,0,1-1.265-.823,3.4,3.4,0,0,1-.823-1.265,6.072,6.072,0,0,1-.379-2.042c-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445a6.072,6.072,0,0,1,.379-2.042,3.4,3.4,0,0,1,.823-1.265,3.4,3.4,0,0,1,1.265-.823,6.072,6.072,0,0,1,2.042-.379c1.16-.053,1.508-.064,4.445-.064M12,1c-2.987,0-3.362.013-4.535.066a8.108,8.108,0,0,0-2.67.511A5.625,5.625,0,0,0,1.577,4.8a8.108,8.108,0,0,0-.511,2.67C1.013,8.638,1,9.013,1,12s.013,3.362.066,4.535a8.108,8.108,0,0,0,.511,2.67A5.625,5.625,0,0,0,4.8,22.423a8.108,8.108,0,0,0,2.67.511C8.638,22.987,9.013,23,12,23s3.362-.013,4.535-.066a8.108,8.108,0,0,0,2.67-.511A5.625,5.625,0,0,0,22.423,19.2a8.108,8.108,0,0,0,.511-2.67C22.987,15.362,23,14.987,23,12s-.013-3.362-.066-4.535a8.108,8.108,0,0,0-.511-2.67A5.625,5.625,0,0,0,19.2,1.577a8.108,8.108,0,0,0-2.67-.511C15.362,1.013,14.987,1,12,1Z"></path><path d="M12,6.351A5.649,5.649,0,1,0,17.649,12,5.649,5.649,0,0,0,12,6.351Zm0,9.316A3.667,3.667,0,1,1,15.667,12,3.667,3.667,0,0,1,12,15.667Z"></path><circle cx="17.872" cy="6.128" r="1.32"></circle>
                                 </svg>
                             </a>
                         </Button>
-                        <Button><a href="https://www.linkedin.com/in/tae-kyun-kim/" target="_blank" rel="noreferrer">
+                        <Button><a aria-label="LinkedIn" href="https://www.linkedin.com/in/tae-kyun-kim/" target="_blank" rel="noreferrer">
                             <svg height="24px" width="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="social_link">
                                 <path d="M23,0H1C0.4,0,0,0.4,0,1v22c0,0.6,0.4,1,1,1h22c0.6,0,1-0.4,1-1V1C24,0.4,23.6,0,23,0z M7.1,20.5H3.6V9h3.6 V20.5z M5.3,7.4c-1.1,0-2.1-0.9-2.1-2.1c0-1.1,0.9-2.1,2.1-2.1c1.1,0,2.1,0.9,2.1,2.1C7.4,6.5,6.5,7.4,5.3,7.4z M20.5,20.5h-3.6 v-5.6c0-1.3,0-3-1.8-3c-1.9,0-2.1,1.4-2.1,2.9v5.7H9.4V9h3.4v1.6h0c0.5-0.9,1.6-1.8,3.4-1.8c3.6,0,4.3,2.4,4.3,5.5V20.5z"></path>
                             </svg>
@@ -177,7 +162,7 @@ export default function Hero() {
                     <div>
                         © {thisYear()} {pick(identity.name)}
                     </div>
-                </motion.div>
+                </div>
             </section>
         </>
     )

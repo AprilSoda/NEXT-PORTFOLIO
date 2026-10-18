@@ -26,6 +26,8 @@ const helveticaNowDisplay = localFont({
   ],
   variable: '--font-helvetica-now-display',
   display: 'swap',
+  // Four weights would preload ~250 KB on every page; swap-in is fine for body text
+  preload: false,
 })
 
 const canyon = localFont({

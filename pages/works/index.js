@@ -29,23 +29,14 @@ function WorkGrid({ works }) {
     const rows = [];
     for (let i = 0; i < works.length; i += 2) rows.push(works.slice(i, i + 2));
 
-    const container = {
-        hidden: { opacity: 0 },
-        show: { opacity: 1, transition: { delayChildren: 0.15, staggerChildren: 0.08 } },
-    };
-    const item = {
-        hidden: { opacity: 0, y: 60 },
-        show: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.19, 1, 0.22, 1] } },
-    };
-
     return (
-        <motion.div className="work-grid" variants={container} initial="hidden" animate="show">
+        <div className="work-grid">
             {rows.map((row, ri) => (
-                <motion.div className="work-row" variants={container} key={ri}>
+                <div className="work-row" key={ri}>
                     {row.map((work, ci) => {
                         const index = ri * 2 + ci;
                         return (
-                            <motion.div key={work.id} className="work-card" variants={item}>
+                            <div key={work.id} className="work-card reveal" style={{ '--d': `${0.25 + index * 0.08}s`, '--reveal-y': '48px' }}>
                                 <Link
                                     href={`/works/${work.id}`}
                                     onMouseEnter={() => { handleCursorChange("hover"); setHovered(work.id); }}
@@ -73,12 +64,12 @@ function WorkGrid({ works }) {
                                         <span className="work-card__year">{work.year}</span>
                                     </div>
                                 </Link>
-                            </motion.div>
+                            </div>
                         );
                     })}
-                </motion.div>
+                </div>
             ))}
-        </motion.div>
+        </div>
     );
 }
 
@@ -183,38 +174,16 @@ const Works = ({ works }) => {
             <section className="works">
                 <div className="ds-container">
                     <div className="work-head" ref={headRef}>
-                        <motion.span
-                            className="work-head__eyebrow u-mono"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                        >
+                        <span className="work-head__eyebrow u-mono reveal" style={{ '--d': '0.1s' }}>
                             {t("work.eyebrow")} [ {pad(works.length)} ]
-                        </motion.span>
+                        </span>
                         <h1 className="work-head__title">
-                            <motion.span
-                                initial={{ opacity: 0, y: "20%" }}
-                                animate={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.3 }}
-                            >
-                                SELECTED
-                            </motion.span>
-                            <motion.span
-                                initial={{ opacity: 0, y: "20%" }}
-                                animate={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.38 }}
-                            >
-                                WORK
-                            </motion.span>
+                            <span className="reveal reveal--slide" style={{ '--d': '0.15s' }}>SELECTED</span>
+                            <span className="reveal reveal--slide" style={{ '--d': '0.22s' }}>WORK</span>
                         </h1>
-                        <motion.p
-                            className="work-head__intro"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                        >
+                        <p className="work-head__intro reveal" style={{ '--d': '0.3s' }}>
                             {t("work.intro")}
-                        </motion.p>
+                        </p>
                     </div>
 
                     {!isMobile && (

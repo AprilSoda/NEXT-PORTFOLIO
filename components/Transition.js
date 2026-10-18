@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
 
@@ -18,13 +18,20 @@ const variantsChildren = {
 }
 
 
+// The very first page load renders straight away: no wipe, no fade-in.
+// Hiding content behind an opacity-0 intro delays the first paint (LCP) and
+// leaves search engines and slow devices staring at an empty screen.
+let firstRender = true
+
 function Transition({ children }) {
   const router = useRouter()
+  const [isFirst] = useState(() => firstRender)
+  useEffect(() => { firstRender = false }, [])
   return (
     <>
       <motion.div
         className='transition_div'
-        initial="initial"
+        initial={isFirst ? 'enter' : 'initial'}
         animate='enter'
         variants={variantsIn}
         transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
@@ -38,7 +45,7 @@ function Transition({ children }) {
       />
       <motion.div
         className='transition_children'
-        initial={{ opacity: 0 }}
+        initial={isFirst ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}

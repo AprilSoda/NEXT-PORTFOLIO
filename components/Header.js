@@ -51,7 +51,7 @@ const Header = ({ workcount }) => {
             >
                 <div className="logo">
                     <Button>
-                        <Link href='/'>
+                        <Link href='/' aria-label="Kim Tae Kyun — home">
                             <SVG_LOGO />
                         </Link>
                     </Button>

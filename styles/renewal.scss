@@ -1093,3 +1093,43 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/*========== CSS entrance (runs before hydration, so it never delays LCP) ==========*/
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-y, 24px));
+  }
+}
+
+.reveal {
+  animation: reveal-up 0.9s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}
+
+.hero-comp .bg-area .bg-poster {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-comp .bg-area .video {
+  position: relative;
+}
+
+// Slide-only variant for the largest above-the-fold text: visible from the
+// first paint (so it counts as LCP immediately), still moves into place
+@keyframes reveal-slide {
+  from {
+    transform: translateY(var(--reveal-y, 24px));
+  }
+}
+
+.reveal--slide {
+  animation-name: reveal-slide;
+}
