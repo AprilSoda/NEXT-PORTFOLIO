@@ -1,6 +1,7 @@
 import { getDatabase, WORKS_DB, JOURNAL_DB } from "../lib/notion"
 import { createSlug } from "../lib/slugify"
 import { SITE_URL } from "../components/Layout"
+import { aiPolicy } from "../content/site"
 
 const LOCALES = ["en", "ko"]
 const STATIC_PATHS = ["/", "/works", "/journal", "/about", "/ai", "/contact"]
@@ -25,7 +26,8 @@ export async function getServerSideProps({ res }) {
   const [works, journal] = await Promise.all([orEmpty(getDatabase(WORKS_DB)), orEmpty(getDatabase(JOURNAL_DB))])
   const day = (iso) => (iso ? iso.slice(0, 10) : null)
   const paths = [
-    ...STATIC_PATHS.map((p) => entry(p)),
+    // /ai carries its own "updated" date
+    ...STATIC_PATHS.map((p) => entry(p, p === "/ai" ? aiPolicy.updated : null)),
     ...works.map((w) => entry(`/works/${w.id}`, day(w.last_edited_time))),
     ...journal.map((j) =>
       entry(`/journal/${createSlug(j.properties.title?.title?.[0]?.plain_text || "", j.id)}`, day(j.last_edited_time))
