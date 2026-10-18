@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { embedSrc, parseVideoUrl, posterFor } from "../lib/video"
 import { useT } from "../lib/i18n"
@@ -9,6 +9,11 @@ import { useT } from "../lib/i18n"
 export default function VideoEmbed({ url, title = "Video", poster, priority = false }) {
   const { t } = useT()
   const [playing, setPlaying] = useState(false)
+  const frameRef = useRef(null)
+  // The play button disappears on click; hand keyboard focus to the player
+  useEffect(() => {
+    if (playing) frameRef.current?.focus()
+  }, [playing])
   const video = parseVideoUrl(url)
   if (!video) return null
 
@@ -38,6 +43,7 @@ export default function VideoEmbed({ url, title = "Video", poster, priority = fa
   return (
     <div className="video-embed">
       <iframe
+        ref={frameRef}
         src={`${src}${src.includes("?") ? "&" : "?"}autoplay=1`}
         title={title}
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
