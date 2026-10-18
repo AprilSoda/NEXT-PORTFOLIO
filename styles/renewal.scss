@@ -749,3 +749,83 @@ html {
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   }
 }
+
+/*========== Work page: made with, credits ==========*/
+.work-hero__eyebrow .work-badge {
+  margin-left: var(--sp-2);
+}
+
+.work-madewith,
+.work-credits {
+  margin: var(--sp-8) 0 0;
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--line);
+  font-family: $font-sans;
+  text-transform: none;
+
+  h2 {
+    color: var(--text-faint);
+    font-weight: 400;
+    margin: 0 0 var(--sp-3);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--sp-2) var(--sp-4);
+    margin: 0;
+  }
+
+  dt {
+    color: var(--text-faint);
+    margin-bottom: 0.25rem;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text);
+  }
+}
+
+.work-credits dt {
+  font-size: var(--fs-small);
+}
+
+.work-madewith__note {
+  margin: var(--sp-3) 0 0;
+  color: var(--text-dim);
+  font-size: var(--fs-small);
+  max-width: 40rem;
+}
+
+// Work page body lines up with the hero instead of a centred column;
+// text keeps a readable measure, media can use the full width
+.work-hero ~ .container {
+  max-width: var(--page-max);
+  margin-inline: auto;
+
+  .content {
+    max-width: none;
+  }
+
+  .block :is(p, h1, h2, h3, ul, ol, blockquote) {
+    max-width: 46rem;
+  }
+}
+
+.next-work {
+  grid-template-rows: auto auto;
+  align-content: center;
+  align-items: center;
+
+  &__title {
+    align-self: start;
+  }
+}
+
+// Rule inset to the gutters, matching the other section rules
+.next-work {
+  border-top: 0;
+  background: linear-gradient(var(--line), var(--line)) no-repeat center top / calc(100% - 2 * var(--gutter)) 1px;
+  margin-top: var(--sp-8);
+}

@@ -246,6 +246,35 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         ["work.ai", aiUsage ? t(`ai.${aiUsage}`) : null],
     ].filter(([, value]) => value);
     const cover = page.cover?.external?.url || page.cover?.file?.url || null;
+    const status = props.status?.select?.name;
+    const tools = (props.tools?.multi_select || []).map((o) => o.name);
+    const models = (props.models?.multi_select || []).map((o) => o.name);
+    // "Role: Name" per line → [role, name]
+    const credits = plain(props.credits)
+        .split("\n")
+        .map((line) => line.split(/:(.+)/).map((part) => part?.trim()))
+        .filter(([role, name]) => role && name);
+
+    // Structured data: the film, plus the video when there is one
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": format === "Music Video" ? "MusicVideoObject" : "CreativeWork",
+        name: title,
+        ...(summary && { description: summary }),
+        ...(cover && { image: cover }),
+        ...(props.date?.date?.start && { dateCreated: props.date.date.start }),
+        creator: { "@type": "Person", name: "Kim Tae Kyun", url: "https://www.kimtaekyun.dev" },
+        ...(heroVideo && {
+            video: {
+                "@type": "VideoObject",
+                name: title,
+                description: summary || title,
+                ...(cover && { thumbnailUrl: cover }),
+                ...(props.date?.date?.start && { uploadDate: `${props.date.date.start}T00:00:00+09:00` }),
+                embedUrl: heroVideo,
+            },
+        }),
+    };
 
     return (
             <Transition>
@@ -255,10 +284,14 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     {summary && <meta property="og:description" content={summary} key="og:description" />}
                     <meta property="og:title" content={title} key="og:title" />
                     {cover && <meta property="og:image" content={cover} key="og:image" />}
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
                 </Head>
 
                 <section className="work-hero ds-container">
-                    <p className="work-hero__eyebrow u-mono">{[format, year].filter(Boolean).join(" · ")}</p>
+                    <p className="work-hero__eyebrow u-mono">
+                        {[format, year].filter(Boolean).join(" · ")}
+                        {status && status !== "Released" && <span className="work-badge work-badge--status">{t(`status.${status}`)}</span>}
+                    </p>
                     <h1 className="work-hero__title">{title}</h1>
                     {summary && <p className="work-hero__summary">{summary}</p>}
                     <div className="work-hero__media">
@@ -291,6 +324,27 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                                 </Fragment>
                             ))}
                         </section>
+                        {(tools.length > 0 || models.length > 0 || aiUsage) && (
+                            <section className="work-madewith">
+                                <h2 className="u-mono">{t("work.madeWith")}</h2>
+                                <dl>
+                                    {tools.length > 0 && (<div><dt className="u-mono">{t("work.tools")}</dt><dd>{tools.join(" · ")}</dd></div>)}
+                                    {models.length > 0 && (<div><dt className="u-mono">{t("work.models")}</dt><dd>{models.join(" · ")}</dd></div>)}
+                                    {aiUsage && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`)}</dd></div>)}
+                                </dl>
+                                {models.length > 0 && <p className="work-madewith__note">{t("work.humanNote")}</p>}
+                            </section>
+                        )}
+                        {credits.length > 0 && (
+                            <section className="work-credits">
+                                <h2 className="u-mono">{t("work.credits")}</h2>
+                                <dl>
+                                    {credits.map(([role, name], i) => (
+                                        <div key={i}><dt>{role}</dt><dd>{name}</dd></div>
+                                    ))}
+                                </dl>
+                            </section>
+                        )}
                         {making && (
                             <details className="work-making">
                                 <summary className="u-mono">{t("work.making")}</summary>
