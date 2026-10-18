@@ -187,6 +187,7 @@ $font-sans: var(--font-helvetica-now-display), "Pretendard Variable", "Pretendar
   }
 
   .credit-list__item,
+  .credit-list__link,
   .journal-list__item {
     flex-direction: column;
     gap: 0.25rem;
@@ -1616,4 +1617,36 @@ html {
   margin-left: 0.3em;
   font-size: 0.7em;
   color: var(--text-faint);
+}
+
+// Credits with a work page: the whole row is the link
+.credit-list__item:has(> .credit-list__link) {
+  padding: 0;
+}
+
+.credit-list__link {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover .credit-list__arrow,
+  &:focus-visible .credit-list__arrow {
+    color: var(--text);
+  }
+}
+
+.credit-list__arrow {
+  color: var(--text-faint);
+}
+
+@media screen and (max-width: 768px) {
+  .credit-list__link {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 }

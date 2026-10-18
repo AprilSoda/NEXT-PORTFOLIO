@@ -17,7 +17,7 @@ const reveal = {
 
 const formatMonth = (iso, locale) => formatDate(iso, locale, { year: "numeric", month: "short" })
 
-export default function HomeSections({ works = [], journal = [], developing = [] }) {
+export default function HomeSections({ works = [], journal = [], developing = [], creditLinks = {} }) {
   const { t, pick, fmt, locale } = useT()
   const [hovered, setHovered] = useState(null)
 
@@ -30,7 +30,7 @@ export default function HomeSections({ works = [], journal = [], developing = []
 
       <motion.section className="home-credits" {...reveal}>
         <h2 className="home-label u-mono">{t("home.credits")}</h2>
-        <CreditList />
+        <CreditList links={creditLinks} />
       </motion.section>
 
       {works.length > 0 && (
