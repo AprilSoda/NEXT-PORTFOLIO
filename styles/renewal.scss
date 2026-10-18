@@ -1692,3 +1692,10 @@ html {
     gap: 0.25rem;
   }
 }
+
+// Work page body: Notion headings keep their visual sizes after being demoted
+.block {
+  .notion-h1 { font-size: clamp(1.6rem, 2.6vw, 2rem); margin: var(--sp-6) 0 var(--sp-2); }
+  .notion-h2 { font-size: clamp(1.25rem, 2vw, 1.5rem); margin: var(--sp-4) 0 var(--sp-1); }
+  .notion-h3 { font-size: 1.05rem; margin: var(--sp-3) 0 0.25rem; }
+}

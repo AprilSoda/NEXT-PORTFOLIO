@@ -15,7 +15,6 @@ import WorkBadges from "../../components/WorkBadges";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
 import { useT } from "../../lib/i18n";
-export const databaseId = WORKS_DB;
 
 const pad = (n) => String(n).padStart(2, "0");
 const noop = () => () => {};
@@ -262,7 +261,7 @@ const Works = ({ works }) => {
 };
 
 export const getStaticProps = async () => {
-    const database = await getDatabase(databaseId);
+    const database = await getDatabase(WORKS_DB);
     return {
         props: {
             works: database.map(toWorkSummary),

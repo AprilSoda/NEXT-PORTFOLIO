@@ -6,9 +6,8 @@ import { useRouter } from "next/router";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 
-import { getDatabase, getPage, getBlocks } from "../../lib/notion";
+import { getDatabase, getPage, getBlocks, WORKS_DB } from "../../lib/notion";
 import styles from "./post.module.css";
-import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
 import CompareSlider from "../../components/CompareSlider";
 import HoverPreview from "../../components/HoverPreview";
@@ -85,24 +84,18 @@ const renderBlock = (block) => {
                     )}
                 </p>
             );
+        // Notion headings sit below the page title (the only h1); `_h` is the
+        // level worked out in getStaticProps so the outline never skips a level
         case "heading_1":
-            return (
-                <h1>
-                    <Text text={value.rich_text} />
-                </h1>
-            );
         case "heading_2":
+        case "heading_3": {
+            const Tag = `h${block._h || Number(type.slice(-1)) + 1}`;
             return (
-                <h2>
+                <Tag className={`notion-h${type.slice(-1)}`}>
                     <Text text={value.rich_text} />
-                </h2>
+                </Tag>
             );
-        case "heading_3":
-            return (
-                <h3>
-                    <Text text={value.rich_text} />
-                </h3>
-            );
+        }
         case "bulleted_list_item":
         case "numbered_list_item":
             return (
@@ -223,6 +216,19 @@ function videoUrls(url) {
     if (!video) return {};
     if (video.kind !== "file") return { embedUrl: embedSrc(video) };
     return /amazonaws\.com|notion\.(so|site)/.test(url) ? {} : { contentUrl: url };
+}
+
+// The API returns list items one by one; wrap consecutive ones in a <ul>/<ol>
+function groupLists(blocks) {
+    const out = [];
+    for (const block of blocks) {
+        const ordered = block.type === "numbered_list_item";
+        if (block.type !== "bulleted_list_item" && !ordered) { out.push(block); continue; }
+        const last = out[out.length - 1];
+        if (last?.type === "list" && last.ordered === ordered) last.items.push(block);
+        else out.push({ type: "list", id: `list-${block.id}`, ordered, items: [block] });
+    }
+    return out;
 }
 
 export default function Post({ page, blocks, heroVideo, nextWork }) {
@@ -357,11 +363,15 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                 <article className="container">
                     <div className="content">
                         <section className="block">
-                            {blocks.map((block) => (
-                                <Fragment key={block.id}>
-                                    {renderBlock(block)}
-                                </Fragment>
-                            ))}
+                            {groupLists(blocks).map((block) =>
+                                block.type === "list" ? (
+                                    block.ordered
+                                        ? <ol key={block.id}>{block.items.map((item) => <Fragment key={item.id}>{renderBlock(item)}</Fragment>)}</ol>
+                                        : <ul key={block.id}>{block.items.map((item) => <Fragment key={item.id}>{renderBlock(item)}</Fragment>)}</ul>
+                                ) : (
+                                    <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+                                )
+                            )}
                         </section>
                         {(tools.length > 0 || models.length > 0 || aiUsage || aiAxes.length > 0) && (
                             <section className="work-madewith">
@@ -430,7 +440,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
 }
 
 export const getStaticPaths = async ({ locales = ["en"] }) => {
-    const database = await getDatabase(databaseId);
+    const database = await getDatabase(WORKS_DB);
     return {
         // Prebuild every locale — without `locale` only the default one is generated
         paths: database.flatMap((page) => locales.map((locale) => ({ params: { id: page.id }, locale }))),
@@ -479,8 +489,15 @@ export const getStaticProps = async (context) => {
             bodyBlocks = blocksWithChildren.filter((block) => block.id !== first.id);
         }
     }
+    // Heading levels: h2 and below, never more than one deeper than the last
+    let previous = 1;
+    for (const block of bodyBlocks) {
+        if (!/^heading_[123]$/.test(block.type)) continue;
+        block._h = Math.min(Number(block.type.slice(-1)) + 1, previous + 1);
+        previous = block._h;
+    }
     // Next project in the list order (wraps around), for the footer teaser
-    const all = await getDatabase(databaseId).catch(() => []);
+    const all = await getDatabase(WORKS_DB).catch(() => []);
     const index = all.findIndex((p) => p.id === page.id);
     const nextWork = index >= 0 && all.length > 1 ? toWorkSummary(all[(index + 1) % all.length]) : null;
 

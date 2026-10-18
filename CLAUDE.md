@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev          # Dev server on http://0.0.0.0:5000 (webpack)
 npm run build        # Production build (needs NOTION_TOKEN + database ids)
 npm run build:mock   # Production build with sample data (NOTION_MOCK=1, no token)
+NOTION_SNAPSHOT=snap.json npx next build --webpack   # Real content from a saved export, no token
 npm run start        # Serve the production build
 ```
 
@@ -199,6 +200,8 @@ MAIL_USER                 # SMTP email address
 MAIL_PASS                 # SMTP password
 NEXT_PUBLIC_GOOGLE_ANALYTICS  # GA measurement ID (optional)
 NOTION_MOCK               # 1 = sample data, no Notion calls (optional)
+NOTION_SNAPSHOT           # path to a JSON export ({ works, journal, blocks }) — real content
+                          # without a token; journal bodies still load live from notion.so
 ```
 
 See `.env.example` for template with documentation.
@@ -217,10 +220,14 @@ export async function getStaticProps() {
 }
 ```
 
+#### Work page body
+- Notion headings render one level below the title and never skip a level (`_h`, set in getStaticProps)
+- Consecutive list items are wrapped in `<ul>`/`<ol>` (`groupLists`)
+
 #### Rendering Notion Pages
 Journal entries use NotionX. Pages are published to web, so no auth token is
 needed, but Notion rejects requests without a browser-like User-Agent — see
-`pages/journal/[id].js`.
+`pages/journal/[id].js`. Images already on R2 bypass Notion's image proxy (`mapImageUrl`).
 
 #### Creating New Dynamic Pages
 1. Create `[id].js` route in appropriate pages directory
