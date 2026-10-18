@@ -160,7 +160,8 @@ export default function Hero() {
                         </a></Button>
                     </div>
                     <div>
-                        © {thisYear()} {pick(identity.name)}
+                        {/* ProFont has no © glyph — set it in the mono face */}
+                        <span className="copy-mark">©</span> {thisYear()} {pick(identity.name)}
                     </div>
                 </div>
             </section>

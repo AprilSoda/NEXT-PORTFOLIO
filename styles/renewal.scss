@@ -1133,3 +1133,7 @@ html {
 .reveal--slide {
   animation-name: reveal-slide;
 }
+
+.hero-comp .copy-mark {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
