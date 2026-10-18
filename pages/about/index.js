@@ -6,7 +6,7 @@ import Footer from "../../components/Footer";
 import CreditList from "../../components/CreditList";
 import { about, identity } from "../../content/site";
 import { useT } from "../../lib/i18n";
-import { getDatabase, WORKS_DB } from "../../lib/notion";
+import { getDatabase, orEmptyAtBuild, WORKS_DB } from "../../lib/notion";
 import { linkCredits } from "../../lib/summaries";
 
 const reveal = {
@@ -95,10 +95,9 @@ const About = ({ creditLinks }) => {
     );
 };
 
-// Only to link credits to their work pages; the rest of About is static copy.
-// A Notion failure just leaves the credits unlinked.
+// Only to link credits to their work pages; the rest of About is static copy
 export const getStaticProps = async () => ({
-    props: { creditLinks: linkCredits(await getDatabase(WORKS_DB).catch(() => [])) },
+    props: { creditLinks: linkCredits(await orEmptyAtBuild(getDatabase(WORKS_DB))) },
     revalidate: 86400,
 });
 

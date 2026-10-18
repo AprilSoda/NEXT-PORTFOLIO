@@ -5,7 +5,7 @@ import Transition from '../components/Transition'
 import Head from 'next/head'
 import { SITE_URL, jsonLd } from '../components/Layout'
 import { identity, social } from '../content/site'
-import { getDatabase, WORKS_DB, JOURNAL_DB } from '../lib/notion'
+import { getDatabase, orEmptyAtBuild, WORKS_DB, JOURNAL_DB } from '../lib/notion'
 import { toWorkSummary, toJournalSummary, toDevelopingSummary, IN_PROGRESS, linkCredits } from '../lib/summaries'
 
 
@@ -40,12 +40,6 @@ export default function Home({ works, journal, developing, creditLinks }) {
     </>
   )
 }
-
-// During `next build` a Notion outage falls back to empty lists so the deploy
-// still succeeds; during revalidation it throws, so Next keeps serving the last
-// good page instead of caching an empty one for a day
-const isBuild = process.env.NEXT_PHASE === 'phase-production-build'
-const orEmptyAtBuild = (promise) => (isBuild ? promise.catch(() => []) : promise)
 
 export const getStaticProps = async () => {
   const [works, journal] = await Promise.all([

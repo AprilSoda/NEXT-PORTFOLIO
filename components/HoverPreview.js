@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import Image from "next/image"
+import { thumbnailFallback } from "../lib/video"
 
 const QUERY = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)"
 const subscribe = (onChange) => {
@@ -15,6 +16,7 @@ const canPreview = () => window.matchMedia(QUERY).matches && !navigator.connecti
 export default function HoverPreview({ cover, preview, alt, active, priority, sizes }) {
   const videoRef = useRef(null)
   const [playing, setPlaying] = useState(false)
+  const [src, setSrc] = useState(cover)
   const allowed = useSyncExternalStore(subscribe, canPreview, () => false) && Boolean(preview)
 
   useEffect(() => {
@@ -35,7 +37,15 @@ export default function HoverPreview({ cover, preview, alt, active, priority, si
   return (
     <>
       {cover ? (
-        <Image src={cover} alt={alt} fill style={{ objectFit: "cover" }} priority={priority} sizes={sizes} />
+        <Image
+          src={src || cover}
+          alt={alt}
+          fill
+          style={{ objectFit: "cover" }}
+          priority={priority}
+          sizes={sizes}
+          onError={() => { const next = thumbnailFallback(src || cover); if (next) setSrc(next) }}
+        />
       ) : (
         // No cover yet: a title card instead of a stock placeholder
         <span className="title-card" aria-hidden="true">

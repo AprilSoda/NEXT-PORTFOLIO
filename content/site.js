@@ -28,7 +28,6 @@ export const heroLines = [
 // Public credits only, newest release first. Unreleased titles stay out of this list.
 // A credit links to its work page when a published Notion work's title starts with it.
 export const credits = [
-  { title: "Street Fighter", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "부활남: 더 레드", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "Avengers: Endgame", note: { en: "Re-release", ko: "재개봉" }, year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
   { title: "The Dog Stars", year: 2026, format: "ScreenX", role: { en: "VFX", ko: "VFX" } },
