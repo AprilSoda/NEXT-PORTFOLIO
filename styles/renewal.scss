@@ -1480,3 +1480,89 @@ html {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+// AI disclosure: one row per axis, a dot that fills with the level of AI use
+.work-ai {
+  margin-top: var(--sp-3);
+
+  h3 {
+    color: var(--text-faint);
+    font-weight: 400;
+    margin: 0 0 var(--sp-1);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--sp-1) var(--sp-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+
+    .u-mono {
+      color: var(--text-faint);
+      min-width: 7em;
+    }
+
+    &::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border: 1px solid var(--text-dim);
+      border-radius: 50%;
+      flex: none;
+      align-self: center;
+    }
+
+    &[data-level="assisted"]::before { background: linear-gradient(90deg, var(--text-dim) 50%, transparent 50%); }
+    &[data-level="generated"]::before { background: var(--text-dim); }
+  }
+}
+
+.work-madewith__note a {
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/*========== /ai — How I use AI ==========*/
+.ai-page {
+  max-width: 52rem;
+  padding-top: calc(var(--sp-8) * 2);
+  font-family: $font-sans;
+  text-transform: none;
+
+  &__head {
+    margin-bottom: var(--sp-8);
+
+    .u-mono { color: var(--text-faint); margin: 0 0 var(--sp-2); }
+    h1 { font-size: clamp(2.5rem, 7vw, 5rem); line-height: 1; margin: 0 0 var(--sp-4); font-weight: 500; }
+  }
+
+  &__intro {
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  &__group {
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--line);
+
+    h2 { color: var(--text-faint); font-weight: 400; font-size: var(--fs-small, 0.85rem); margin: 0 0 var(--sp-2); }
+    ul { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--sp-1); }
+    li, p { color: var(--text-dim); line-height: 1.6; margin: 0; }
+  }
+
+  &__updated {
+    margin: var(--sp-4) 0 var(--sp-8);
+    color: var(--text-faint);
+
+    a { color: var(--text-dim); }
+  }
+}

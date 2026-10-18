@@ -37,6 +37,7 @@ export default function Footer() {
               <a href={s.href} target="_blank" rel="noreferrer noopener">{s.label} ↗</a>
             </li>
           ))}
+          <li><Link href="/ai">{t("ai.page.short")}</Link></li>
           <li><Link href="/contact">{t("nav.contact")}</Link></li>
         </ul>
         <span className="site-footer__copy" suppressHydrationWarning>© {year} {pick(identity.name)}</span>

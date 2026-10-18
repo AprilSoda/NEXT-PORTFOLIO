@@ -78,6 +78,11 @@ const About = () => {
                     <p className="about-tools">{about.tools.join(" · ")}</p>
                 </motion.section>
 
+                <motion.section className="about-block" {...reveal}>
+                    <h2 className="about-label u-mono">{t("about.colophon")}</h2>
+                    <p className="about-tools">{pick(about.colophon)} <Link href="/ai">{t("ai.page.link")}</Link></p>
+                </motion.section>
+
                 <motion.section className="about-block about-links" {...reveal}>
                     <Link href="/contact" className="u-mono">{t("home.contactCta")} →</Link>
                     <a href="/cv.pdf" download className="u-mono">{t("about.cv")} ↓</a>

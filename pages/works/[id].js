@@ -267,6 +267,11 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const shareImage = /^https?:\/\//.test(page.cover?.external?.url || "") ? page.cover.external.url : null;
     const cardImage = shareImage || ogCard({ title, kicker: fmt(format) || "", meta: [plain(props.role), year].filter(Boolean).join(" · ") });
     const status = props.status?.select?.name;
+    // Where generative AI was used, on the three axes festivals now ask about
+    // (Cannes 2026: script, visual generation, performance) — Human/Assisted/Generated
+    const aiAxes = ["script", "visuals", "performance"]
+        .map((axis) => [axis, props[`ai_${axis}`]?.select?.name])
+        .filter(([, value]) => value);
     const tools = (props.tools?.multi_select || []).map((o) => o.name);
     const models = (props.models?.multi_select || []).map((o) => o.name);
     // "Role: Name" per line → [role, name]
@@ -358,15 +363,28 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                                 </Fragment>
                             ))}
                         </section>
-                        {(tools.length > 0 || models.length > 0 || aiUsage) && (
+                        {(tools.length > 0 || models.length > 0 || aiUsage || aiAxes.length > 0) && (
                             <section className="work-madewith">
                                 <h2 className="u-mono">{t("work.madeWith")}</h2>
                                 <dl>
                                     {tools.length > 0 && (<div><dt className="u-mono">{t("work.tools")}</dt><dd>{tools.join(" · ")}</dd></div>)}
                                     {models.length > 0 && (<div><dt className="u-mono">{t("work.models")}</dt><dd>{models.join(" · ")}</dd></div>)}
-                                    {aiUsage && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`, aiUsage)}</dd></div>)}
+                                    {aiUsage && aiAxes.length === 0 && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`, aiUsage)}</dd></div>)}
                                 </dl>
-                                {models.length > 0 && <p className="work-madewith__note">{t("work.humanNote")}</p>}
+                                {aiAxes.length > 0 && (
+                                    <div className="work-ai">
+                                        <h3 className="u-mono">{t("work.ai")}</h3>
+                                        <ul>
+                                            {aiAxes.map(([axis, value]) => (
+                                                <li key={axis} data-level={value.toLowerCase()}>
+                                                    <span className="u-mono">{t(`ai.axis.${axis}`)}</span>
+                                                    <span>{t(`ai.${value}`, value)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {(models.length > 0 || aiAxes.length > 0) && <p className="work-madewith__note">{t("work.humanNote")} <Link href="/ai">{t("ai.page.link")}</Link></p>}
                             </section>
                         )}
                         {credits.length > 0 && (

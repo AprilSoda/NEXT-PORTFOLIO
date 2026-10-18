@@ -3,7 +3,7 @@ import { createSlug } from "../lib/slugify"
 import { SITE_URL } from "../components/Layout"
 
 const LOCALES = ["en", "ko"]
-const STATIC_PATHS = ["/", "/works", "/journal", "/about", "/contact"]
+const STATIC_PATHS = ["/", "/works", "/journal", "/about", "/ai", "/contact"]
 
 const url = (locale, path) => `${SITE_URL}${locale === "en" ? "" : `/${locale}`}${path === "/" ? "" : path}`
 

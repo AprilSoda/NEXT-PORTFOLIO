@@ -98,4 +98,43 @@ export const about = {
     },
   ],
   tools: ["Nuke", "ComfyUI", "Python", "Blender", "DaVinci Resolve", "3DEqualizer", "After Effects", "Premiere Pro"],
+  // How this site is made — practising the AI disclosure on the site itself (DRAFT)
+  colophon: {
+    en: "Designed by Kim Tae Kyun. Built with Next.js, written in Notion, media on Cloudflare R2. Type: Helvetica Now, Canyon, JetBrains Mono, Pretendard. Code written with Claude Code as an assistant; direction and final calls are mine.",
+    ko: "디자인 김태균. Next.js로 만들고, 글은 Notion에 쓰고, 미디어는 Cloudflare R2에 둡니다. 글꼴은 Helvetica Now, Canyon, JetBrains Mono, Pretendard. 코드는 Claude Code를 보조로 썼고, 방향과 최종 결정은 제가 했습니다.",
+  },
+}
+
+// "How I use AI" (/ai) — a dated statement each work's disclosure links to.
+// DRAFT: written from the branding Q&A; to be confirmed in Kim Tae Kyun's own words.
+export const aiPolicy = {
+  updated: "2026-10-18",
+  intro: {
+    en: "I build AI pipelines for VFX, and I use them on my own films. Models are tools inside a pipeline. The decisions — what the story is, which frame is right, when it's finished — stay with people.",
+    ko: "VFX를 위한 AI 파이프라인을 만들고, 제 영화에도 씁니다. 모델은 파이프라인 안의 도구입니다. 무엇을 이야기할지, 어떤 장면이 맞는지, 언제 끝났는지는 사람이 정합니다.",
+  },
+  uses: {
+    title: { en: "Where AI helps", ko: "AI가 돕는 곳" },
+    items: [
+      { en: "Exploring — trying looks, lighting and variations quickly before committing", ko: "탐색 — 정하기 전에 룩, 조명, 변형을 빠르게 시험해 보기" },
+      { en: "Production — mattes, clean-up, depth and upscaling inside a compositing pipeline", ko: "제작 — 합성 파이프라인 안에서 매트, 클린업, 뎁스, 업스케일" },
+      { en: "Tools — building ComfyUI pipelines so a team can repeat good results", ko: "도구 — 팀이 좋은 결과를 반복할 수 있도록 ComfyUI 파이프라인 만들기" },
+    ],
+  },
+  limits: {
+    title: { en: "What it doesn't replace", ko: "AI가 대신하지 않는 것" },
+    items: [
+      { en: "The story and the script", ko: "이야기와 각본" },
+      { en: "Actors' performances", ko: "배우의 연기" },
+      { en: "The final call on every frame", ko: "모든 장면의 최종 결정" },
+      { en: "Credit for the people who made the work", ko: "작업을 만든 사람들의 크레딧" },
+    ],
+  },
+  labels: {
+    title: { en: "How each work is labelled", ko: "작업마다 표시하는 방법" },
+    body: {
+      en: "Every project shows three lines — Script, Visuals, Performance — each marked Human, Assisted or Generated. These are the same three questions film festivals now ask. Realistic generated imagery is always labelled.",
+      ko: "모든 작업에 각본 · 영상 · 연기 세 줄을 두고, 각각 사람 · 보조 사용 · 생성으로 표시합니다. 영화제들이 요즘 묻는 세 가지 질문과 같습니다. 실제처럼 보이는 생성 이미지는 항상 표시합니다.",
+    },
+  },
 }

@@ -43,7 +43,10 @@ Besides `title`, `date`, `pub`, `sort`, `client`, the works database has:
 `role`, `format`, `honor`, `status`, `featured`, `summary_en`, `summary_ko`,
 `video` (finished film/trailer, shown first), `making`, `preview` (hover loop),
 `before`/`after` (compare slider), `tools`, `models`, `ai_usage`, `credits`
-("Role: Name" per line). All are optional — pages render without them.
+("Role: Name" per line), and `ai_script` / `ai_visuals` / `ai_performance`
+(Human / Assisted / Generated — the festival AI-disclosure axes; when set they
+replace the single `ai_usage` line). All are optional — pages render without them.
+The disclosure links to `/ai` (copy in `content/site.js` → `aiPolicy`, dated).
 `lib/summaries.js` trims rows to what list views need.
 
 #### Routing
@@ -111,6 +114,7 @@ pages/
 ├── journal/              # formerly /blogs (old URLs redirect)
 │   ├── index.js          # Journal list (fetches NOTION_DATABASE_ID2)
 │   └── [id].js           # Journal entry detail (uses NotionX renderer)
+├── ai.js                 # How I use AI (dated statement, en/ko)
 ├── contact/index.js      # Contact form (enquiry type → email subject)
 ├── 404.js                # Bilingual not-found page
 ├── sitemap.xml.js        # Sitemap with hreflang alternates
