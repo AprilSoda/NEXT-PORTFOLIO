@@ -1610,3 +1610,10 @@ html {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
+
+// Journal chips carry counts like the Work filter
+.journal-filter sup {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  color: var(--text-faint);
+}

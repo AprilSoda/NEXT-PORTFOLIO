@@ -6,6 +6,8 @@ import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import { useT } from "../../lib/i18n";
 import { formatDate, yearOf } from "../../lib/dates";
+
+const pad = (n) => String(n).padStart(2, "0");
 import { SITE_URL } from "../../components/Layout";
 
 const databaseId_blog = JOURNAL_DB;
@@ -45,12 +47,12 @@ const Journal = ({ entries }) => {
 
         {categories.length > 0 && (
           <div className="journal-filter u-mono">
-            <button className={!category ? "active" : undefined} onClick={() => setCategory(null)}>
-              {t("journal.all")}
+            <button aria-pressed={!category} className={!category ? "active" : undefined} onClick={() => setCategory(null)}>
+              {t("journal.all")}<span className="u-sr-only">, </span><sup>{pad(entries.length)}</sup>
             </button>
             {categories.map((c) => (
-              <button key={c} className={category === c ? "active" : undefined} onClick={() => setCategory(c)}>
-                {c}
+              <button key={c} aria-pressed={category === c} className={category === c ? "active" : undefined} onClick={() => setCategory(c)}>
+                {c}<span className="u-sr-only">, </span><sup>{pad(entries.filter((e) => e.categories.includes(c)).length)}</sup>
               </button>
             ))}
           </div>
