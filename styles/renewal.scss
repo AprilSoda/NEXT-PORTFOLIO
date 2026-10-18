@@ -1568,3 +1568,38 @@ html {
     a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 0.2em; }
   }
 }
+
+/*========== Home: originals in the works ==========*/
+.home-next {
+  margin-top: var(--sp-8);
+
+  ul {
+    margin: var(--sp-3) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  li { border-bottom: 1px solid var(--line); }
+}
+
+.home-next__item {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--sp-1) var(--sp-4);
+  align-items: baseline;
+  padding: var(--sp-3) 0;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-next ul:has(.home-next__item:hover) .home-next__item:not(:hover) { opacity: 0.4; }
+
+.home-next__stage { color: var(--accent, var(--text-dim)); }
+.home-next__title { font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.15; }
+.home-next__logline { color: var(--text-dim); line-height: 1.55; }

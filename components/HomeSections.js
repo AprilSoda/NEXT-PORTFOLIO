@@ -17,7 +17,7 @@ const reveal = {
 
 const formatMonth = (iso, locale) => formatDate(iso, locale, { year: "numeric", month: "short" })
 
-export default function HomeSections({ works = [], journal = [] }) {
+export default function HomeSections({ works = [], journal = [], developing = [] }) {
   const { t, pick, fmt, locale } = useT()
   const [hovered, setHovered] = useState(null)
 
@@ -66,6 +66,23 @@ export default function HomeSections({ works = [], journal = [] }) {
               </Link>
             ))}
           </div>
+        </motion.section>
+      )}
+
+      {developing.length > 0 && (
+        <motion.section className="home-next" {...reveal}>
+          <h2 className="home-label u-mono">{t("home.next")}</h2>
+          <ul>
+            {developing.map((w) => (
+              <li key={w.id}>
+                <Link href={`/works/${w.id}`} className="home-next__item">
+                  <span className="home-next__stage u-mono">{t(`status.${w.status}`, w.status)}</span>
+                  <span className="home-next__title">{w.title}</span>
+                  {pick(w.logline) && <span className="home-next__logline">{pick(w.logline)}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </motion.section>
       )}
 
