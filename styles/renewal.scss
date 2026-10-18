@@ -1408,3 +1408,75 @@ html {
 :lang(ko) .screenx__labels {
   letter-spacing: 0.02em;
 }
+
+/*========== Print: About and work pages as a light one-pager ==========*/
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  html,
+  body,
+  .Container {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  // Site chrome and motion have no place on paper
+  .header-comp,
+  .site-footer,
+  .arrow-nav,
+  .Cursor_app,
+  .skip-link,
+  .showreel-fab,
+  .hover-preview,
+  .video-embed,
+  .screenx__stage,
+  .screenx__labels,
+  .work-view,
+  .work-filter,
+  .journal-filter,
+  canvas,
+  video,
+  iframe {
+    display: none !important;
+  }
+
+  * {
+    color: #111 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .reveal,
+  .reveal--slide {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  // External links print their address
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+
+  section,
+  li,
+  dl > div {
+    break-inside: avoid;
+  }
+}
+
+// Text for screen readers only
+.u-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -145,13 +145,21 @@ function WorkList({ works }) {
 const AI_FILTER = "ai";
 function filtersFor(works) {
     const counts = new Map();
-    for (const w of works) if (w.category) counts.set(w.category, (counts.get(w.category) || 0) + 1);
+    // Case-insensitive, so "ScreenX" and "SCREENX" are one chip
+    const names = new Map();
+    for (const w of works) {
+        if (!w.category) continue;
+        const key = w.category.toLowerCase();
+        if (!names.has(key)) names.set(key, w.category);
+        counts.set(names.get(key), (counts.get(names.get(key)) || 0) + 1);
+    }
     const filters = [...counts].sort((a, b) => b[1] - a[1]).map(([value, count]) => ({ value, count }));
     const ai = works.filter((w) => w.ai).length;
     if (ai) filters.push({ value: AI_FILTER, count: ai });
     return filters;
 }
-const matches = (work, filter) => !filter || (filter === AI_FILTER ? work.ai : work.category === filter);
+const matches = (work, filter) =>
+    !filter || (filter === AI_FILTER ? work.ai : work.category.toLowerCase() === filter.toLowerCase());
 
 const Works = ({ works }) => {
     const { t, fmt } = useT();
@@ -227,7 +235,7 @@ const Works = ({ works }) => {
                                         onClick={() => setQuery({ type: f.value })}
                                     >
                                         {f.value === null ? t("work.filter.all") : f.value === AI_FILTER ? t("work.filter.ai") : fmt(f.value)}
-                                        <sup>{pad(f.count)}</sup>
+                                        <span className="u-sr-only">, </span><sup>{pad(f.count)}</sup>
                                     </button>
                                 ))}
                             </div>

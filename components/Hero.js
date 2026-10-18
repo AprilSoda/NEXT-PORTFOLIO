@@ -95,7 +95,7 @@ export default function Hero() {
                     <span className="hero-meta__status">
                         <i /> {pick(identity.status)}
                     </span>
-                    <span className="hero-meta__loc">{pick(identity.location)} — {thisYear()}</span>
+                    <span className="hero-meta__loc" suppressHydrationWarning>{pick(identity.location)} — {thisYear()}</span>
                 </div>
                 {/* One heading for search engines and screen readers; the animated words are decoration */}
                 <h1 className={'centering ' + align} aria-label={heroLines.map((line) => line.join(' ')).join(' ')}>
@@ -162,7 +162,7 @@ export default function Hero() {
                     </div>
                     <div>
                         {/* ProFont has no © glyph — set it in the mono face */}
-                        <span className="copy-mark">©</span> {thisYear()} {pick(identity.name)}
+                        <span className="copy-mark">©</span> <span suppressHydrationWarning>{thisYear()}</span> {pick(identity.name)}
                     </div>
                 </div>
             </section>

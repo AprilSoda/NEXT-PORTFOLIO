@@ -17,7 +17,7 @@ import { embedSrc, parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { yearOf } from "../../lib/dates";
 import { SITE_URL, jsonLd, ogCard } from "../../components/Layout";
-import { toWorkSummary } from "../../lib/summaries";
+import { toWorkSummary, workFormat } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -216,6 +216,15 @@ const renderBlock = (block) => {
 const plain = (prop) => (prop?.rich_text || []).map((t) => t.plain_text).join("").trim();
 
 //Master index
+// VideoObject URLs: a player page for YouTube/Vimeo, the file itself for
+// self-hosted video — but never a Notion upload, whose signed URL expires
+function videoUrls(url) {
+    const video = parseVideoUrl(url);
+    if (!video) return {};
+    if (video.kind !== "file") return { embedUrl: embedSrc(video) };
+    return /amazonaws\.com|notion\.(so|site)/.test(url) ? {} : { contentUrl: url };
+}
+
 export default function Post({ page, blocks, heroVideo, nextWork }) {
     const router = useRouter();
     const { t, fmt, locale } = useT();
@@ -236,7 +245,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const props = page.properties;
     const title = props.title.title[0]?.plain_text || "";
     const year = yearOf(props.date?.date?.start);
-    const format = props.format?.select?.name || props.sort?.select?.name || null;
+    const format = workFormat(props) || null;
     const summary = plain(locale === "ko" ? props.summary_ko : props.summary_en) || plain(props.summary_en);
     const making = props.making?.url || null;
     const before = props.before?.url || null;
@@ -293,7 +302,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                 description: summary || title,
                 thumbnailUrl: cardImage,
                 ...(props.date?.date?.start && { uploadDate: `${props.date.date.start.slice(0, 10)}T00:00:00+09:00` }),
-                embedUrl: embedSrc(parseVideoUrl(heroVideo)),
+                ...videoUrls(heroVideo),
             },
         }),
     };

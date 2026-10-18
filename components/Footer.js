@@ -39,7 +39,7 @@ export default function Footer() {
           ))}
           <li><Link href="/contact">{t("nav.contact")}</Link></li>
         </ul>
-        <span className="site-footer__copy">© {year} {pick(identity.name)}</span>
+        <span className="site-footer__copy" suppressHydrationWarning>© {year} {pick(identity.name)}</span>
       </div>
     </footer>
   )

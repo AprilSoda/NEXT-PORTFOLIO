@@ -30,7 +30,10 @@ export default async function handler(req) {
   const kicker = clip(searchParams.get("kicker"), 40)
   const meta = clip(searchParams.get("meta"), 80)
 
-  const [helvetica, korean] = await Promise.all([helveticaBold, koreanFont(title + kicker + meta)])
+  const text = title + kicker + meta
+  const [helvetica, korean] = await Promise.all([helveticaBold, koreanFont(text)])
+  // Hangul without its font would draw as boxes — serve it, but don't let caches keep it
+  const degraded = /[\u3131-\ud7a3]/.test(text) && !korean
   const fonts = [{ name: "Helvetica", data: helvetica, weight: 700 }]
   if (korean) fonts.push({ name: "NotoKR", data: korean, weight: 700 })
 
@@ -66,7 +69,7 @@ export default async function handler(req) {
       width: 1200,
       height: 630,
       fonts,
-      headers: { "Cache-Control": "public, max-age=86400, s-maxage=604800, immutable" },
+      headers: { "Cache-Control": degraded ? "no-store" : "public, max-age=86400, s-maxage=604800, immutable" },
     }
   )
 }
