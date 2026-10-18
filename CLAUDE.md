@@ -51,16 +51,27 @@ Besides `title`, `date`, `pub`, `sort`, `client`, the works database has:
   (English characters only, `post-{id}` fallback for Korean titles)
 - `/blogs/*` permanently redirects to `/journal/*`
 - `getStaticPaths` returns one path per locale; `fallback: 'blocking'`
+- `/works?type=ScreenX&view=list` — format filter (counts per format, plus `ai`
+  for Assisted/Generated) and grid/list view live in the query string, updated
+  with shallow `router.replace`; page transitions are keyed on the path only
 
 #### Bilingual (i18n)
 - Next.js Pages Router i18n: English at `/`, Korean at `/ko`
-- UI strings: `lib/i18n.js` → `const { t, pick, locale } = useT()`
+- UI strings: `lib/i18n.js` → `const { t, pick, fmt, locale } = useT()`
+  - `t(key, fallback)` — unknown Notion option values pass their name as the fallback
+  - `fmt(name)` — Notion format option in the current language (`format.*` keys)
+- Dates: `lib/dates.js` (`formatDate`, `yearOf`) — always Seoul time, so SSR and browsers agree
+- The language switch sets the `NEXT_LOCALE` cookie so an explicit choice sticks
 - Identity copy, credits, About text: `content/site.js` (`{ en, ko }` objects)
 - Notion content is shown as written; `summary_en` / `summary_ko` per work
 
 #### SEO
 - `components/Layout.js`: canonical, hreflang (en/ko/x-default), og tags
-- JSON-LD: Person (home), CreativeWork/VideoObject (work), BlogPosting (journal)
+- JSON-LD: Person (home), CreativeWork/VideoObject + BreadcrumbList (work), BlogPosting (journal);
+  serialize with `jsonLd()` from Layout (escapes `<`)
+- Share images: an external (R2) cover, else a generated card from `/api/og`
+  (`ogCard()` in Layout). Notion-uploaded covers are signed URLs that expire — never share them
+- 404: no canonical/hreflang, `noindex`
 - `/sitemap.xml` and `/feed.xml` are server-rendered; `public/robots.txt`, `public/llms.txt`
 
 #### Page Animation System
@@ -105,13 +116,15 @@ pages/
 ├── sitemap.xml.js        # Sitemap with hreflang alternates
 ├── feed.xml.js           # Journal RSS
 └── api/
-    └── contact.js        # Email submission handler
+    ├── contact.js        # Email submission handler
+    └── og.js             # Share card image (edge, next/og)
 
 lib/
 ├── notion.js             # Official Notion SDK functions (+ NOTION_MOCK, WORKS_DB/JOURNAL_DB)
 ├── mock/notion-fixtures.js  # Sample rows for NOTION_MOCK=1
 ├── slugify.js            # URL slug generation utilities
 ├── i18n.js               # UI strings (en/ko) + useT() hook
+├── dates.js              # Seoul-time date formatting
 ├── summaries.js          # Trim Notion rows for list views
 └── video.js              # Parse YouTube/Vimeo/file URLs
 
@@ -156,6 +169,15 @@ styles/
 #### i18n and redirects
 - `i18n: { locales: ['en', 'ko'], defaultLocale: 'en' }`
 - `/blogs` → `/journal` (permanent)
+
+#### Headers
+- nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy on every route
+- No CSP yet (GA, Notion images and video embeds would need allow-lists)
+
+#### Notion outages
+- Home `getStaticProps` falls back to empty lists only during `next build`; on
+  revalidation it throws so Next keeps the last good page
+- Sitemap is `no-store` when Notion failed; the feed returns 500
 
 ### Important Environment Variables
 
