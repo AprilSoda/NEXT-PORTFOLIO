@@ -1,35 +1,47 @@
-import React from 'react'
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { identity, social } from "../content/site"
+import { useT } from "../lib/i18n"
+import { currentYear } from "../lib/dates"
 
-function Footer() {
+// Seoul time, rendered on the client only so SSR and hydration agree
+function SeoulClock() {
+  const [now, setNow] = useState(null)
+  useEffect(() => {
+    const tick = () => setNow(new Date())
+    const first = setTimeout(tick, 0)
+    const id = setInterval(tick, 30_000)
+    return () => { clearTimeout(first); clearInterval(id) }
+  }, [])
+  if (!now) return <span className="site-footer__clock">—</span>
+  const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit" }).format(now)
+  return <span className="site-footer__clock">{time} KST</span>
+}
 
-  //using moment.js to get current year
-  const year = new Date().getFullYear();
-
+export default function Footer() {
+  const { t, pick } = useT()
+  const year = currentYear()
 
   return (
-    <footer>
-      <div>
-        <p>Copyright {year} © All rights reserved </p>
-        <li style={{ display: 'flex', gap: '1rem' }}>
-          <a href="https://www.imdb.com/name/nm16975542/" target="_blank" rel="noreferrer">
-            <svg fill="#ffffff" width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="social_link">
-              <g><path d="M8.4,21.1H5.9V9.9h3.8l0.7,4.7h0.1L11,9.9h3.8v11.2h-2.5v-6.7h-0.1l-0.9,6.7H9.4l-1-6.7h0L8.4,21.1L8.4,21.1z" /><path d="M15.8,9.8c0.4,0,3.2-0.1,4.7,0.1c1.2,0.1,1.8,1.1,1.9,2.3c0.1,2.2,0.1,4.4,0.1,6.6c0,0.2,0,0.5-0.1,0.8   c-0.2,0.9-0.7,1.4-1.9,1.5c-1.5,0.1-3,0.1-4.4,0.1c0,0-0.1,0-0.2,0V9.8z M18.8,11.9v7.2c0.5,0,0.8-0.2,0.8-0.7c0-1.9,0-3.9,0-5.9   C19.6,12,19.4,11.8,18.8,11.9z" /><path d="M2,21.1V9.9h2.9v11.2H2z" /><path d="M29.9,14.1c-0.1-0.8-0.6-1.2-1.4-1.4c-0.8-0.1-1.6,0-2.3,0.7V9.9h-2.8v11.2H26c0.1-0.2,0.1-0.4,0.2-0.5c0,0,0,0,0.1,0   c0.1,0.1,0.2,0.2,0.3,0.3c0.7,0.5,1.5,0.6,2.3,0.3c0.7-0.3,1-0.9,1-1.6c0-0.8,0.1-1.7,0.1-2.6C30,16,30,15,29.9,14.1L29.9,14.1z    M27.1,19.1c0,0.2-0.2,0.4-0.4,0.4s-0.4-0.2-0.4-0.4v-4.3c0-0.2,0.2-0.4,0.4-0.4s0.4,0.2,0.4,0.4V19.1z" /></g>
-            </svg>
-          </a>
-          <a href="https://www.linkedin.com/in/tae-kyun-kim/" target="_blank" rel="noreferrer noopener">
-            <svg height="24px" width="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="social_link">
-              <path d="M23,0H1C0.4,0,0,0.4,0,1v22c0,0.6,0.4,1,1,1h22c0.6,0,1-0.4,1-1V1C24,0.4,23.6,0,23,0z M7.1,20.5H3.6V9h3.6 V20.5z M5.3,7.4c-1.1,0-2.1-0.9-2.1-2.1c0-1.1,0.9-2.1,2.1-2.1c1.1,0,2.1,0.9,2.1,2.1C7.4,6.5,6.5,7.4,5.3,7.4z M20.5,20.5h-3.6 v-5.6c0-1.3,0-3-1.8-3c-1.9,0-2.1,1.4-2.1,2.9v5.7H9.4V9h3.4v1.6h0c0.5-0.9,1.6-1.8,3.4-1.8c3.6,0,4.3,2.4,4.3,5.5V20.5z"></path>
-            </svg>
-          </a>
-          <a href="https://www.instagram.com/lsingleplayer/" target="_blank" rel="noreferrer noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="social_link">
-              <path d="M12,2.982c2.937,0,3.285.011,4.445.064a6.072,6.072,0,0,1,2.042.379,3.4,3.4,0,0,1,1.265.823,3.4,3.4,0,0,1,.823,1.265,6.072,6.072,0,0,1,.379,2.042c.053,1.16.064,1.508.064,4.445s-.011,3.285-.064,4.445a6.072,6.072,0,0,1-.379,2.042,3.644,3.644,0,0,1-2.088,2.088,6.072,6.072,0,0,1-2.042.379c-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064a6.072,6.072,0,0,1-2.042-.379,3.4,3.4,0,0,1-1.265-.823,3.4,3.4,0,0,1-.823-1.265,6.072,6.072,0,0,1-.379-2.042c-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445a6.072,6.072,0,0,1,.379-2.042,3.4,3.4,0,0,1,.823-1.265,3.4,3.4,0,0,1,1.265-.823,6.072,6.072,0,0,1,2.042-.379c1.16-.053,1.508-.064,4.445-.064M12,1c-2.987,0-3.362.013-4.535.066a8.108,8.108,0,0,0-2.67.511A5.625,5.625,0,0,0,1.577,4.8a8.108,8.108,0,0,0-.511,2.67C1.013,8.638,1,9.013,1,12s.013,3.362.066,4.535a8.108,8.108,0,0,0,.511,2.67A5.625,5.625,0,0,0,4.8,22.423a8.108,8.108,0,0,0,2.67.511C8.638,22.987,9.013,23,12,23s3.362-.013,4.535-.066a8.108,8.108,0,0,0,2.67-.511A5.625,5.625,0,0,0,22.423,19.2a8.108,8.108,0,0,0,.511-2.67C22.987,15.362,23,14.987,23,12s-.013-3.362-.066-4.535a8.108,8.108,0,0,0-.511-2.67A5.625,5.625,0,0,0,19.2,1.577a8.108,8.108,0,0,0-2.67-.511C15.362,1.013,14.987,1,12,1Z"></path><path d="M12,6.351A5.649,5.649,0,1,0,17.649,12,5.649,5.649,0,0,0,12,6.351Zm0,9.316A3.667,3.667,0,1,1,15.667,12,3.667,3.667,0,0,1,12,15.667Z"></path><circle cx="17.872" cy="6.128" r="1.32"></circle>
-            </svg>
-          </a>
-        </li>
+    <footer className="site-footer">
+      <div className="site-footer__top">
+        <p className="site-footer__cta">{t("footer.cta")}</p>
+        <a className="site-footer__mail" href="mailto:hello@kimtaekyun.dev">hello@kimtaekyun.dev</a>
+      </div>
+      <div className="site-footer__grid u-mono">
+        <span className="site-footer__status"><i aria-hidden="true" /> {pick(identity.status)}</span>
+        <span>{pick(identity.location)} · <SeoulClock /></span>
+        <ul className="site-footer__social">
+          {social.map((s) => (
+            <li key={s.label}>
+              <a href={s.href} target="_blank" rel="noreferrer noopener">{s.label} ↗</a>
+            </li>
+          ))}
+          <li><Link href="/ai">{t("ai.page.short")}</Link></li>
+          <li><Link href="/contact">{t("nav.contact")}</Link></li>
+        </ul>
+        <span className="site-footer__copy" suppressHydrationWarning>© {year} {pick(identity.name)}</span>
       </div>
     </footer>
   )
 }
-
-export default Footer

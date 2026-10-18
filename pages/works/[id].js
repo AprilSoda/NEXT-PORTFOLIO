@@ -6,9 +6,17 @@ import { useRouter } from "next/router";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 
-import { getDatabase, getPage, getBlocks } from "../../lib/notion";
+import { getDatabase, getPage, getBlocks, WORKS_DB } from "../../lib/notion";
 import styles from "./post.module.css";
-import { databaseId } from "./index.js";
+import VideoEmbed from "../../components/VideoEmbed";
+import CompareSlider from "../../components/CompareSlider";
+import HoverPreview from "../../components/HoverPreview";
+import ScreenXStage from "../../components/ScreenXStage";
+import { embedSrc, parseVideoUrl, posterFor } from "../../lib/video";
+import { useT } from "../../lib/i18n";
+import { yearOf } from "../../lib/dates";
+import { SITE_URL, jsonLd, ogCard } from "../../components/Layout";
+import { toWorkSummary, workFormat } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -76,24 +84,18 @@ const renderBlock = (block) => {
                     )}
                 </p>
             );
+        // Notion headings sit below the page title (the only h1); `_h` is the
+        // level worked out in getStaticProps so the outline never skips a level
         case "heading_1":
-            return (
-                <h1>
-                    <Text text={value.rich_text} />
-                </h1>
-            );
         case "heading_2":
+        case "heading_3": {
+            const Tag = `h${block._h || Number(type.slice(-1)) + 1}`;
             return (
-                <h2>
+                <Tag className={`notion-h${type.slice(-1)}`}>
                     <Text text={value.rich_text} />
-                </h2>
+                </Tag>
             );
-        case "heading_3":
-            return (
-                <h3>
-                    <Text text={value.rich_text} />
-                </h3>
-            );
+        }
         case "bulleted_list_item":
         case "numbered_list_item":
             return (
@@ -145,95 +147,19 @@ const renderBlock = (block) => {
                 </figure>
             );
         case "embed":
-            const embed =
-                value.url
+        case "link_preview": {
+            // Video links get a player; anything else becomes a plain link
+            if (parseVideoUrl(value.url)) return <VideoEmbed key={id} url={value.url} />;
             return (
-                <figure>
-                    <Image
-                        src={embed}
-                        alt="Embedded content"
-                        width={800}
-                        height={600}
-                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
-                    />
-                </figure>
+                <a key={id} href={value.url} target="_blank" rel="noopener noreferrer" className={styles.bookmark}>
+                    {value.url}
+                </a>
             );
-        case "link_preview":
-            const link_preview = value.url;
-            return (
-                <figure>
-                    <Image
-                        src={link_preview}
-                        alt="Link preview"
-                        width={800}
-                        height={600}
-                        style={{ borderRadius: '36px', marginTop: '25px', width: '100%', height: 'auto' }}
-                    />
-                </figure>
-            );
-        case "video":
-            const video =
-                value.type === "external" ? value.external.url : value.file.url;
-
-            // Convert YouTube URL to embed format
-            const getYouTubeEmbedUrl = (url) => {
-                if (!url) return url;
-
-                // Check if it's already an embed URL
-                if (url.includes('youtube.com/embed/')) return url;
-
-                // Extract video ID from various YouTube URL formats
-                let videoId = null;
-
-                // Format: https://www.youtube.com/watch?v=VIDEO_ID
-                if (url.includes('youtube.com/watch?v=')) {
-                    videoId = url.split('watch?v=')[1]?.split('&')[0];
-                }
-                // Format: https://youtu.be/VIDEO_ID
-                else if (url.includes('youtu.be/')) {
-                    videoId = url.split('youtu.be/')[1]?.split('?')[0];
-                }
-
-                // Return embed URL if video ID found, otherwise return original URL
-                return videoId
-                    ? `https://www.youtube.com/embed/${videoId}`
-                    : url;
-            };
-
-            const embedUrl = value.type === "external" ? getYouTubeEmbedUrl(video) : video;
-
-            return value.type === "external" ? (
-                <div style={{ width: "100%", padding: "62% 0 0 0", position: "relative", overflow: "hidden" }}>
-                    <iframe
-                        src={embedUrl + "?autoplay=1&controls=0&mute=1&enablejsapi=1"}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
-                        style={{
-                            position: "absolute",
-                            width: "100%",
-                            height: "115%",
-                            left: "50%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            objectFit: "cover",
-                            objectPosition: "center",
-                            border: "0",
-                            outline: "unset",
-                            backgroundColor: "black",
-                        }}
-                    />
-                </div>
-            ) : (
-                <video
-                    controls
-                    autoPlay
-                    name="media"
-                    loop
-                    muted
-                    style={{ width: "100%" }}
-                >
-                    <source src={video} />
-                </video>
-            );
+        }
+        case "video": {
+            const video = value.type === "external" ? value.external.url : value.file.url;
+            return <VideoEmbed key={id} url={video} />;
+        }
         case "divider":
             return <hr key={id} />;
         case "quote":
@@ -280,9 +206,34 @@ const renderBlock = (block) => {
 };
 
 
+const plain = (prop) => (prop?.rich_text || []).map((t) => t.plain_text).join("").trim();
+
 //Master index
-export default function Post({ page, blocks }) {
+// VideoObject URLs: a player page for YouTube/Vimeo, the file itself for
+// self-hosted video — but never a Notion upload, whose signed URL expires
+function videoUrls(url) {
+    const video = parseVideoUrl(url);
+    if (!video) return {};
+    if (video.kind !== "file") return { embedUrl: embedSrc(video) };
+    return /amazonaws\.com|notion\.(so|site)/.test(url) ? {} : { contentUrl: url };
+}
+
+// The API returns list items one by one; wrap consecutive ones in a <ul>/<ol>
+function groupLists(blocks) {
+    const out = [];
+    for (const block of blocks) {
+        const ordered = block.type === "numbered_list_item";
+        if (block.type !== "bulleted_list_item" && !ordered) { out.push(block); continue; }
+        const last = out[out.length - 1];
+        if (last?.type === "list" && last.ordered === ordered) last.items.push(block);
+        else out.push({ type: "list", id: `list-${block.id}`, ordered, items: [block] });
+    }
+    return out;
+}
+
+export default function Post({ page, blocks, heroVideo, nextWork }) {
     const router = useRouter();
+    const { t, fmt, locale } = useT();
 
     // Show loading state when Next.js is generating the page on-demand
     if (router.isFallback) {
@@ -293,81 +244,206 @@ export default function Post({ page, blocks }) {
         );
     }
 
-
-
-
-    function formatDate(inputDate) {
-        const [month, year] = new Date(inputDate).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit' }).split('/');
-        return `${month}. ${year}`;
-    }
-
     if (!page || !blocks) {
         return <div />;
     }
+
+    const props = page.properties;
+    const title = props.title.title[0]?.plain_text || "";
+    const year = yearOf(props.date?.date?.start);
+    const format = workFormat(props) || null;
+    const summary = plain(locale === "ko" ? props.summary_ko : props.summary_en) || plain(props.summary_en);
+    const making = props.making?.url || null;
+    const before = props.before?.url || null;
+    const after = props.after?.url || null;
+    const aiUsage = props.ai_usage?.select?.name || null;
+    // Where generative AI was used, on the three axes festivals now ask about
+    // (Cannes 2026: script, visual generation, performance) — Human/Assisted/Generated
+    const aiAxes = ["script", "visuals", "performance"]
+        .map((axis) => [axis, props[`ai_${axis}`]?.select?.name])
+        .filter(([, value]) => value);
+    const client = props.client?.select?.name;
+    const meta = [
+        ["work.role", plain(props.role)],
+        // "PERSONAL PROJECT" in the client column just means there was no client
+        ["work.client", client && client !== "PERSONAL PROJECT" ? client : null],
+        ["work.format", fmt(format)],
+        ["work.year", year],
+        ["work.honor", plain(props.honor)],
+        ["work.ai", aiUsage && aiAxes.length === 0 ? t(`ai.${aiUsage}`, aiUsage) : null],
+    ].filter(([, value]) => value);
+    const cover = page.cover?.external?.url || page.cover?.file?.url || posterFor(props.video?.url) || null;
+    // Covers uploaded to Notion are signed URLs that expire within hours, so
+    // only external (R2) covers are used where crawlers keep the URL
+    const shareImage = /^https?:\/\//.test(page.cover?.external?.url || "") ? page.cover.external.url : null;
+    const cardImage = shareImage || ogCard({ title, kicker: fmt(format) || "", meta: [plain(props.role), year].filter(Boolean).join(" · ") });
+    const status = props.status?.select?.name;
+    const tools = (props.tools?.multi_select || []).map((o) => o.name);
+    const models = (props.models?.multi_select || []).map((o) => o.name);
+    // "Role: Name" per line → [role, name]
+    const credits = plain(props.credits)
+        .split("\n")
+        .map((line) => line.split(/:(.+)/).map((part) => part?.trim()))
+        .filter(([role, name]) => role && name);
+
+    // Structured data: the film, plus the video when there is one, and where
+    // the page sits in the site
+    const pageUrl = `${SITE_URL}${locale === "ko" ? "/ko" : ""}/works/${page.id}`;
+    const breadcrumbs = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            { "@type": "ListItem", position: 1, name: t("work.eyebrow"), item: `${SITE_URL}${locale === "ko" ? "/ko" : ""}/works` },
+            { "@type": "ListItem", position: 2, name: title, item: pageUrl },
+        ],
+    };
+    const structuredData = {
+        "@context": "https://schema.org",
+        url: pageUrl,
+        "@type": format === "Music Video" ? "MusicVideoObject" : "CreativeWork",
+        name: title,
+        ...(summary && { description: summary }),
+        image: cardImage,
+        ...(props.date?.date?.start && { dateCreated: props.date.date.start }),
+        creator: { "@type": "Person", name: "Kim Tae Kyun", url: SITE_URL },
+        ...(heroVideo && {
+            video: {
+                "@type": "VideoObject",
+                name: title,
+                description: summary || title,
+                thumbnailUrl: cardImage,
+                ...(props.date?.date?.start && { uploadDate: `${props.date.date.start.slice(0, 10)}T00:00:00+09:00` }),
+                ...videoUrls(heroVideo),
+            },
+        }),
+    };
+
     return (
             <Transition>
                 <Head>
-                    <title>
-                        {"Kim Tae Kyun - " + page.properties.title.title[0].plain_text}
-                    </title>
-                    <link rel="icon" href="/favicon.ico" />
+                    <title>{`${title} — ${locale === "ko" ? "김태균" : "Kim Tae Kyun"}`}</title>
+                    {summary && <meta name="description" content={summary} key="description" />}
+                    {summary && <meta property="og:description" content={summary} key="og:description" />}
+                    <meta property="og:title" content={title} key="og:title" />
+                    <meta property="og:image" content={cardImage} key="og:image" />
+                    <meta name="twitter:image" content={cardImage} key="twitter:image" />
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbs) }} />
                 </Head>
 
-                <div className="w_title_container">
-                    <div className="w_title">
-                        <div className="thumb">
-                            <Image
-                                src={page.cover?.external?.url || page.cover?.file?.url || '/placeholder.jpg'}
-                                alt={page.properties.title.title[0].plain_text}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                        </div>
-                        <div className="title">
-                            <h1> {page.properties.title.title[0].plain_text} </h1>
-                        </div>
+                <section className="work-hero ds-container">
+                    <p className="work-hero__eyebrow u-mono">
+                        {[fmt(format), year].filter(Boolean).join(" · ")}
+                        {status && status !== "Released" && <span className="work-badge work-badge--status">{t(`status.${status}`, status)}</span>}
+                    </p>
+                    <h1 className="work-hero__title">{title}</h1>
+                    {summary && <p className="work-hero__summary">{summary}</p>}
+                    <div className="work-hero__media">
+                        {heroVideo ? (
+                            <VideoEmbed url={heroVideo} title={title} poster={shareImage || undefined} priority />
+                        ) : cover ? (
+                            <div className="work-hero__cover">
+                                <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} priority sizes="100vw" />
+                            </div>
+                        ) : null}
                     </div>
-                </div>
+                    {meta.length > 0 && (
+                        <dl className="work-hero__meta">
+                            {meta.map(([key, value]) => (
+                                <div key={key}>
+                                    <dt className="u-mono">{t(key)}</dt>
+                                    <dd>{value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    )}
+                    {/screenx/i.test(format || "") && <ScreenXStage image={cover} />}
+                </section>
+
                 <article className="container">
                     <div className="content">
-                        <div className="work-meta">
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Client</span>
-                                <span className="work-meta__value">{page.properties.client?.select?.name || "—"}</span>
-                            </div>
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Discipline</span>
-                                <span className="work-meta__value">{page.properties.sort?.select?.name || "—"}</span>
-                            </div>
-                            <div className="work-meta__item">
-                                <span className="work-meta__label u-mono">Year</span>
-                                <span className="work-meta__value">
-                                    {page.properties.date?.date?.start ? formatDate(page.properties.date.date.start) : "—"}
-                                </span>
-                            </div>
-                        </div>
                         <section className="block">
-                            {blocks.map((block) => (
-                                <Fragment key={block.id}>
-                                    {renderBlock(block)}
-                                </Fragment>
-                            ))}
+                            {groupLists(blocks).map((block) =>
+                                block.type === "list" ? (
+                                    block.ordered
+                                        ? <ol key={block.id}>{block.items.map((item) => <Fragment key={item.id}>{renderBlock(item)}</Fragment>)}</ol>
+                                        : <ul key={block.id}>{block.items.map((item) => <Fragment key={item.id}>{renderBlock(item)}</Fragment>)}</ul>
+                                ) : (
+                                    <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+                                )
+                            )}
                         </section>
-                        <a className="go_back u-mono" onClick={() => router.back()}>
-                            ← All projects
-                        </a>
+                        {(tools.length > 0 || models.length > 0 || aiUsage || aiAxes.length > 0) && (
+                            <section className="work-madewith">
+                                <h2 className="u-mono">{t("work.madeWith")}</h2>
+                                <dl>
+                                    {tools.length > 0 && (<div><dt className="u-mono">{t("work.tools")}</dt><dd>{tools.join(" · ")}</dd></div>)}
+                                    {models.length > 0 && (<div><dt className="u-mono">{t("work.models")}</dt><dd>{models.join(" · ")}</dd></div>)}
+                                    {aiUsage && aiAxes.length === 0 && (<div><dt className="u-mono">{t("work.ai")}</dt><dd>{t(`ai.${aiUsage}`, aiUsage)}</dd></div>)}
+                                </dl>
+                                {aiAxes.length > 0 && (
+                                    <div className="work-ai">
+                                        <h3 className="u-mono">{t("work.ai")}</h3>
+                                        <ul>
+                                            {aiAxes.map(([axis, value]) => (
+                                                <li key={axis} data-level={value.toLowerCase()}>
+                                                    <span className="u-mono">{t(`ai.axis.${axis}`)}</span>
+                                                    <span>{t(`ai.${value}`, value)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {(models.length > 0 || aiAxes.length > 0) && (
+                                    <p className="work-madewith__note">
+                                        {/* "finished by hand" would be false next to Generated */}
+                                        {aiAxes.some(([, v]) => v === "Generated") ? t("work.generatedNote") : models.length > 0 ? t("work.humanNote") : null}{" "}
+                                        <Link href="/ai">{t("ai.page.link")}</Link>
+                                    </p>
+                                )}
+                            </section>
+                        )}
+                        {credits.length > 0 && (
+                            <section className="work-credits">
+                                <h2 className="u-mono">{t("work.credits")}</h2>
+                                <dl>
+                                    {credits.map(([role, name], i) => (
+                                        <div key={i}><dt>{role}</dt><dd>{name}</dd></div>
+                                    ))}
+                                </dl>
+                            </section>
+                        )}
+                        {(making || (before && after)) && (
+                            <details className="work-making">
+                                <summary className="u-mono">{t("work.making")}</summary>
+                                {before && after && <CompareSlider before={before} after={after} />}
+                                {making && <VideoEmbed url={making} title={`${title} — making of`} />}
+                            </details>
+                        )}
+                        <Link className="go_back u-mono" href="/works">
+                            {t("work.back")}
+                        </Link>
                     </div>
                 </article>
+                {nextWork && (
+                    <Link href={`/works/${nextWork.id}`} className="next-work ds-container">
+                        <span className="next-work__label u-mono">{t("work.next")}</span>
+                        <span className="next-work__title">{nextWork.title}</span>
+                        <span className="next-work__media">
+                            <HoverPreview cover={nextWork.cover} preview={null} alt={nextWork.title} sizes="(max-width: 768px) 100vw, 40vw" />
+                        </span>
+                    </Link>
+                )}
                 <Footer />
             </Transition>
     );
 }
 
-export const getStaticPaths = async () => {
-    const database = await getDatabase(databaseId);
+export const getStaticPaths = async ({ locales = ["en"] }) => {
+    const database = await getDatabase(WORKS_DB);
     return {
-        paths: database.map((page) => ({ params: { id: page.id } })),
+        // Prebuild every locale — without `locale` only the default one is generated
+        paths: database.flatMap((page) => locales.map((locale) => ({ params: { id: page.id }, locale }))),
         fallback: 'blocking',
     };
 };
@@ -397,10 +473,40 @@ export const getStaticProps = async (context) => {
         }
         return block;
     });
+    // The finished film leads the page: use the `video` property, or promote
+    // the first video in the page body so older entries get it too
+    let heroVideo = parseVideoUrl(page.properties.video?.url) ? page.properties.video.url : null;
+    let bodyBlocks = blocksWithChildren;
+    if (!heroVideo) {
+        const first = blocksWithChildren.find((block) => {
+            const value = block[block.type];
+            const url = block.type === "video" ? value?.external?.url || value?.file?.url : value?.url;
+            return ["video", "embed"].includes(block.type) && parseVideoUrl(url);
+        });
+        if (first) {
+            const value = first[first.type];
+            heroVideo = first.type === "video" ? value.external?.url || value.file?.url : value.url;
+            bodyBlocks = blocksWithChildren.filter((block) => block.id !== first.id);
+        }
+    }
+    // Heading levels: h2 and below, never more than one deeper than the last
+    let previous = 1;
+    for (const block of bodyBlocks) {
+        if (!/^heading_[123]$/.test(block.type)) continue;
+        block._h = Math.min(Number(block.type.slice(-1)) + 1, previous + 1);
+        previous = block._h;
+    }
+    // Next project in the list order (wraps around), for the footer teaser
+    const all = await getDatabase(WORKS_DB).catch(() => []);
+    const index = all.findIndex((p) => p.id === page.id);
+    const nextWork = index >= 0 && all.length > 1 ? toWorkSummary(all[(index + 1) % all.length]) : null;
+
     return {
         props: {
             page,
-            blocks: blocksWithChildren,
+            blocks: bodyBlocks,
+            heroVideo,
+            nextWork,
         },
         revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };

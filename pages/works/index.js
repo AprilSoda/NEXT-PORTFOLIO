@@ -1,35 +1,188 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
-import { getDatabase } from "../../lib/notion";
+import { getDatabase, WORKS_DB } from "../../lib/notion";
+import { toWorkSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
+import HoverPreview from "../../components/HoverPreview";
+import WorkBadges from "../../components/WorkBadges";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
-export const databaseId = process.env.NOTION_DATABASE_ID;
+import { useT } from "../../lib/i18n";
 
-//Create Context
-export const MovieContext = React.createContext();
+const pad = (n) => String(n).padStart(2, "0");
+const noop = () => () => {};
+// true after hydration, false on the server — keeps the portal out of SSR markup
+const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
 
-const yearOf = (post) => {
-    const d = post.properties?.date?.date?.start;
-    return d ? new Date(d).getFullYear() : "";
-};
-
-const Works = ({ posts }) => {
+// Grid view: rows of two cinematic frames; hovering one widens it
+function WorkGrid({ works }) {
+    const { fmt } = useT();
     const { handleCursorChange } = useContext(MouseContext);
-    const [selectedfilter, setSelectedfilter] = useState("ALL");
+    const [hovered, setHovered] = useState(null);
+    const rows = [];
+    for (let i = 0; i < works.length; i += 2) rows.push(works.slice(i, i + 2));
+
+    return (
+        <div className="work-grid">
+            {rows.map((row, ri) => (
+                <div className="work-row" key={ri}>
+                    {row.map((work, ci) => {
+                        const index = ri * 2 + ci;
+                        return (
+                            // First row slides without fading, so the likely LCP image paints at once
+                            <div key={work.id} className={`work-card reveal${index < 2 ? " reveal--slide" : ""}`} style={{ '--d': `${0.25 + index * 0.08}s`, '--reveal-y': '48px' }}>
+                                <Link
+                                    href={`/works/${work.id}`}
+                                    onMouseEnter={() => { handleCursorChange("hover"); setHovered(work.id); }}
+                                    onMouseLeave={() => { handleCursorChange("off"); setHovered(null); }}
+                                    onFocus={() => setHovered(work.id)}
+                                    onBlur={() => setHovered(null)}
+                                >
+                                    <div className="work-card__media">
+                                        <Button type="pic">
+                                            <HoverPreview
+                                                cover={work.cover}
+                                                preview={work.preview}
+                                                alt={work.title}
+                                                active={hovered === work.id}
+                                                priority={index < 4}
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                            />
+                                        </Button>
+                                        <WorkBadges work={work} />
+                                    </div>
+                                    <div className="work-card__meta u-mono">
+                                        <span className="work-card__index">{pad(index + 1)}</span>
+                                        <span className="work-card__title">{work.title}</span>
+                                        <span className="work-card__cat">{fmt(work.category)}</span>
+                                        <span className="work-card__year">{work.year}</span>
+                                    </div>
+                                </Link>
+                            </div>
+                        );
+                    })}
+                </div>
+            ))}
+        </div>
+    );
+}
+
+// List view: one row per project; the hovered row's frame follows the cursor
+function WorkList({ works }) {
+    const { fmt } = useT();
+    const [active, setActive] = useState(null);
+    // The frame follows the pointer, so it only appears once there is one —
+    // keyboard focus alone leaves it hidden instead of parked at (0, 0)
+    const [pointer, setPointer] = useState(false);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const sx = useSpring(x, { stiffness: 220, damping: 26, mass: 0.4 });
+    const sy = useSpring(y, { stiffness: 220, damping: 26, mass: 0.4 });
+    const current = pointer ? works.find((w) => w.id === active) : null;
+    const hydrated = useHydrated();
+
+    return (
+        <div
+            className="work-list"
+            onMouseMove={(e) => {
+                if (!pointer) { x.jump(e.clientX); y.jump(e.clientY); sx.jump(e.clientX); sy.jump(e.clientY); setPointer(true); }
+                x.set(e.clientX); y.set(e.clientY);
+            }}
+            onMouseLeave={() => { setActive(null); setPointer(false); }}
+        >
+            <ul>
+                {works.map((work, i) => (
+                    <li key={work.id}>
+                        <Link
+                            href={`/works/${work.id}`}
+                            className="work-list__row"
+                            onMouseEnter={() => setActive(work.id)}
+                            onFocus={() => setActive(work.id)}
+                            onBlur={() => setActive(null)}
+                        >
+                            <span className="work-list__index u-mono">{pad(i + 1)}</span>
+                            <span className="work-list__title">{work.title}</span>
+                            <span className="work-list__meta u-mono">
+                                {[fmt(work.category), work.role, work.year].filter(Boolean).join(" · ")}
+                            </span>
+                            <WorkBadges work={work} />
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+            {/* Portaled to <body>: transformed ancestors would otherwise offset a fixed element */}
+            {hydrated && createPortal(
+            <AnimatePresence>
+                {current && (
+                    <motion.div
+                        className="work-list__float"
+                        style={{ x: sx, y: sy }}
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.92 }}
+                        transition={{ duration: 0.25, ease: [0.19, 1, 0.22, 1] }}
+                        aria-hidden="true"
+                    >
+                        <HoverPreview key={current.id} cover={current.cover} preview={current.preview} alt="" active sizes="420px" />
+                    </motion.div>
+                )}
+            </AnimatePresence>,
+            document.body)}
+        </div>
+    );
+}
+
+// Filters narrow the one stream instead of splitting it into sections:
+// one per format that has work, plus "AI" for anything made with generative AI
+const AI_FILTER = "ai";
+function filtersFor(works) {
+    const counts = new Map();
+    // Case-insensitive, so "ScreenX" and "SCREENX" are one chip
+    const names = new Map();
+    for (const w of works) {
+        if (!w.category) continue;
+        const key = w.category.toLowerCase();
+        if (!names.has(key)) names.set(key, w.category);
+        counts.set(names.get(key), (counts.get(names.get(key)) || 0) + 1);
+    }
+    const filters = [...counts].sort((a, b) => b[1] - a[1]).map(([value, count]) => ({ value, count }));
+    const ai = works.filter((w) => w.ai).length;
+    if (ai) filters.push({ value: AI_FILTER, count: ai });
+    return filters;
+}
+const matches = (work, filter) =>
+    !filter || (filter === AI_FILTER ? work.ai : work.category.toLowerCase() === filter.toLowerCase());
+
+const Works = ({ works }) => {
+    const { t, fmt } = useT();
+    const router = useRouter();
     const isMobile = useIsMobile();
+    const view = router.query.view === "list" && !isMobile ? "list" : "grid";
+    const filters = filtersFor(works);
+    const filter = filters.some((f) => f.value === router.query.type) ? router.query.type : null;
+    const shown = works.filter((w) => matches(w, filter));
     const gridRef = useRef(null);
     const headRef = useRef(null);
 
-    // Mouse parallax — the whole works layout drifts toward the cursor (layered:
-    // grid moves more than the heading for depth). Desktop only, reduced-motion safe.
+    // Keep the chosen view and filter in the URL so they survive refresh and back navigation
+    const setQuery = (patch) => {
+        const query = { ...(view === "list" && { view }), ...(filter && { type: filter }), ...patch };
+        Object.keys(query).forEach((k) => query[k] == null && delete query[k]);
+        router.replace({ pathname: router.pathname, query }, undefined, { shallow: true, scroll: false });
+    };
+    const setView = (next) => setQuery({ view: next === "list" ? "list" : null });
+
+    // Mouse parallax — the grid drifts toward the cursor (layered: grid moves more
+    // than the heading for depth). Desktop grid only, reduced-motion safe.
     useEffect(() => {
-        if (isMobile) return;
+        if (isMobile || view !== "grid") return;
         if (typeof window === "undefined") return;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const grid = gridRef.current;
@@ -51,136 +204,54 @@ const Works = ({ posts }) => {
             gsap.killTweensOf([grid, head].filter(Boolean));
             gsap.set([grid, head].filter(Boolean), { x: 0, y: 0 });
         };
-    }, [isMobile]);
-
-    const filters = ["ALL", ...new Set(posts.map((post) => post.properties.sort.select.name))];
-    const visible = posts.filter(
-        (post) => selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter
-    );
-    // group into rows of 2 so a hovered card can expand and its pair contract
-    const rows = [];
-    for (let i = 0; i < visible.length; i += 2) rows.push(visible.slice(i, i + 2));
-
-    //Animation
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { delayChildren: 0.15, staggerChildren: 0.08 },
-        },
-    };
-    const item = {
-        hidden: { opacity: 0, y: 60 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
-        },
-    };
+    }, [isMobile, view]);
 
     return (
         <Transition>
             <section className="works">
                 <div className="ds-container">
                     <div className="work-head" ref={headRef}>
-                        <motion.span
-                            className="work-head__eyebrow u-mono"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                        >
-                            Selected Works — {String(posts.length).padStart(2, "0")}
-                        </motion.span>
+                        <span className="work-head__eyebrow u-mono reveal" style={{ '--d': '0.1s' }}>
+                            {t("work.eyebrow")} [ {pad(works.length)} ]
+                        </span>
                         <h1 className="work-head__title">
-                            <motion.span
-                                initial={{ opacity: 0, y: "20%" }}
-                                animate={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.3 }}
-                            >
-                                SELECTED
-                            </motion.span>
-                            <motion.span
-                                initial={{ opacity: 0, y: "20%" }}
-                                animate={{ opacity: 1, y: "0%" }}
-                                transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.38 }}
-                            >
-                                WORKS
-                            </motion.span>
+                            <span className="reveal reveal--slide" style={{ '--d': '0.15s' }}>SELECTED</span>
+                            <span className="reveal reveal--slide" style={{ '--d': '0.22s' }}>WORK</span>
                         </h1>
-                        <motion.p
-                            className="work-head__intro"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                        >
-                            A selection of my favourite projects — some made while freelancing,
-                            others for studios I&apos;ve worked with.
-                        </motion.p>
+                        <p className="work-head__intro reveal" style={{ '--d': '0.3s' }}>
+                            {t("work.intro")}
+                        </p>
                     </div>
 
-                    <div className="work-sort u-mono">
-                        {filters.map((filter, index) => (
-                            <button
-                                className={filter === selectedfilter ? "filter_item active" : "filter_item"}
-                                key={index}
-                                onClick={() => setSelectedfilter(filter)}
-                            >
-                                {filter}
-                            </button>
-                        ))}
+                    <div className="work-controls u-mono">
+                        {filters.length > 1 && (
+                            <div className="work-filter" role="group" aria-label={t("work.filter")}>
+                                {[{ value: null, count: works.length }, ...filters].map((f) => (
+                                    <button
+                                        key={f.value || "all"}
+                                        aria-pressed={filter === f.value}
+                                        className={filter === f.value ? "active" : undefined}
+                                        onClick={() => setQuery({ type: f.value })}
+                                    >
+                                        {f.value === null ? t("work.filter.all") : f.value === AI_FILTER ? t("work.filter.ai") : fmt(f.value)}
+                                        <span className="u-sr-only">, </span><sup>{pad(f.count)}</sup>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {!isMobile && (
+                            <div className="work-view" role="group" aria-label={t("work.view")}>
+                                {["grid", "list"].map((v) => (
+                                    <button key={v} aria-pressed={view === v} className={view === v ? "active" : undefined} onClick={() => setView(v)}>
+                                        {t(`work.view.${v}`)}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="work-grid-wrap" ref={gridRef}>
-                        <motion.div
-                            key={selectedfilter}
-                            className="work-grid"
-                            variants={container}
-                            initial="hidden"
-                            animate="show"
-                        >
-                            {rows.map((row, ri) => (
-                                <motion.div className="work-row" variants={container} key={ri}>
-                                    {row.map((post, ci) => {
-                                        const index = ri * 2 + ci;
-                                        return (
-                                            <motion.div key={selectedfilter + post.id} className="work-card" variants={item}>
-                                                <Link
-                                                    href={`works/${post.id}`}
-                                                    onMouseEnter={() => handleCursorChange("hover")}
-                                                    onMouseLeave={() => handleCursorChange("off")}
-                                                >
-                                                    <div className="work-card__media">
-                                                        <Button type="pic">
-                                                            <Image
-                                                                src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                                                alt={post.properties.title.title[0].plain_text}
-                                                                fill
-                                                                style={{ objectFit: "cover" }}
-                                                                priority={index < 4}
-                                                                loading={index < 4 ? "eager" : "lazy"}
-                                                                sizes="(max-width: 768px) 60vw, 50vw"
-                                                            />
-                                                        </Button>
-                                                    </div>
-                                                    <div className="work-card__meta u-mono">
-                                                        <span className="work-card__index">
-                                                            {String(index + 1).padStart(2, "0")}
-                                                        </span>
-                                                        <span className="work-card__title">
-                                                            {post.properties.title.title[0].plain_text}
-                                                        </span>
-                                                        <span className="work-card__cat">
-                                                            {post.properties.sort.select.name}
-                                                        </span>
-                                                        <span className="work-card__year">{yearOf(post)}</span>
-                                                    </div>
-                                                </Link>
-                                            </motion.div>
-                                        );
-                                    })}
-                                </motion.div>
-                            ))}
-                        </motion.div>
+                        {view === "list" ? <WorkList works={shown} /> : <WorkGrid works={shown} />}
                     </div>
                 </div>
             </section>
@@ -190,10 +261,10 @@ const Works = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-    const database = await getDatabase(databaseId);
+    const database = await getDatabase(WORKS_DB);
     return {
         props: {
-            posts: database,
+            works: database.map(toWorkSummary),
         },
         revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };

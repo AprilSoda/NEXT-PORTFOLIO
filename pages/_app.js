@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
 import Layout from '../components/Layout';
 import '../styles/globals.scss'
 import { AnimatePresence } from 'framer-motion'
@@ -25,6 +26,8 @@ const helveticaNowDisplay = localFont({
   ],
   variable: '--font-helvetica-now-display',
   display: 'swap',
+  // Four weights would preload ~250 KB on every page; swap-in is fine for body text
+  preload: false,
 })
 
 const canyon = localFont({
@@ -51,11 +54,13 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 const PAGE_TITLES = {
-  '/': 'Kim Tae Kyun — VFX Generalist',
-  '/works': 'Works — Kim Tae Kyun',
-  '/blogs': 'Blog — Kim Tae Kyun',
-  '/about': 'About — Kim Tae Kyun',
-  '/contact': 'Contact — Kim Tae Kyun',
+  '/': { en: 'Kim Tae Kyun — VFX Artist & Filmmaker', ko: '김태균 — VFX 아티스트 · 영화 만드는 사람' },
+  '/works': { en: 'Work — Kim Tae Kyun', ko: '작업 — 김태균' },
+  '/journal': { en: 'Journal — Kim Tae Kyun', ko: '저널 — 김태균' },
+  '/about': { en: 'About — Kim Tae Kyun', ko: '소개 — 김태균' },
+  '/contact': { en: 'Contact — Kim Tae Kyun', ko: '연락 — 김태균' },
+  '/ai': { en: 'How I use AI — Kim Tae Kyun', ko: 'AI를 쓰는 방식 — 김태균' },
+  '/404': { en: 'Not found — Kim Tae Kyun', ko: '페이지 없음 — 김태균' },
 }
 
 function MyApp({ Component, pageProps, router }) {
@@ -66,11 +71,13 @@ function MyApp({ Component, pageProps, router }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, autoRaf: false });
     lenisRef.current = lenis;
-    let raf;
-    const loop = (time) => { lenis.raf(time); raf = requestAnimationFrame(loop); };
-    raf = requestAnimationFrame(loop);
+    // Drive Lenis from GSAP's ticker so scrolling and GSAP animations (cursor,
+    // parallax) share one frame loop instead of two competing rAF loops
+    const tick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     // Re-measure when the page height changes (images/fonts loading, route
     // changes) so the scroll limit always matches the real content height —
@@ -90,7 +97,7 @@ function MyApp({ Component, pageProps, router }) {
     window.addEventListener("load", onLoad);
 
     return () => {
-      cancelAnimationFrame(raf);
+      gsap.ticker.remove(tick);
       cancelAnimationFrame(resizeRaf);
       bumpTimers.forEach(clearTimeout);
       window.removeEventListener("load", onLoad);
@@ -120,7 +127,8 @@ function MyApp({ Component, pageProps, router }) {
     };
   }, [nextRouter.events]);
 
-  const pageTitle = PAGE_TITLES[nextRouter.pathname] || 'Kim Tae Kyun — VFX Generalist'
+  const locale = nextRouter.locale === 'ko' ? 'ko' : 'en'
+  const pageTitle = (PAGE_TITLES[nextRouter.pathname] || PAGE_TITLES['/'])[locale]
   return (
     <>
       <Head>
@@ -161,7 +169,7 @@ function MyApp({ Component, pageProps, router }) {
                 }
               }}
             >
-              <Component {...pageProps} key={router.asPath} />
+              <Component {...pageProps} key={router.asPath.split(/[?#]/)[0]} />
             </AnimatePresence>
           </Layout>
         </MouseContextProvider>

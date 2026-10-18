@@ -2,6 +2,33 @@
 const path = require('path')
 const nextConfig = {
   reactStrictMode: true,
+  // English at /, Korean at /ko
+  i18n: {
+    locales: ['en', 'ko'],
+    defaultLocale: 'en',
+  },
+  // The blog was renamed to Journal — keep old links working
+  async redirects() {
+    return [
+      { source: '/blogs', destination: '/journal', permanent: true },
+      { source: '/blogs/:slug', destination: '/journal/:slug', permanent: true },
+    ]
+  },
+  // Baseline security headers. No CSP yet: GA, Notion images and video embeds
+  // would each need allow-listing, and a wrong CSP silently breaks pages.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()' },
+        ],
+      },
+    ]
+  },
   images: {
     // Host-native next/image optimization (Netlify on prod). No third-party CDN.
     // Allow any HTTPS host: blog/works covers are pasted from arbitrary sources

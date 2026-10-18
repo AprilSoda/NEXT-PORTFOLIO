@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import Transition from '../../components/Transition';
 import SVG_CHECK from '../../public/SVG_CHECK.svg'
@@ -8,12 +8,21 @@ import axios from 'axios';
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
+import { useT } from '../../lib/i18n';
+
+const TOPICS = ['film', 'screenx', 'mv', 'other'];
 
 const Contact = () => {
-    const { register, handleSubmit, formState: { errors }, clearErrors } = useForm();
+    const { register, handleSubmit, formState: { errors }, clearErrors, setValue } = useForm();
+    const { t } = useT();
     const [sent, setSent] = useState(false);
     const [unexpectedError, setUnexpectedError] = useState("")
-    const mountedAt = React.useRef(Date.now()); // spam guard: reject near-instant submits
+
+    // Spam guard: the API rejects submits that arrive too soon after the form rendered
+    useEffect(() => {
+        setValue('renderedAt', String(Date.now()))
+    }, [setValue])
+
     async function onSubmitForm(values) {
         clearErrors("name", "email", "text")
         setUnexpectedError("")
@@ -25,7 +34,7 @@ const Contact = () => {
             headers: {
                 'Content-type': 'application/json',
             },
-            data: { ...values, renderedAt: mountedAt.current },
+            data: values,
         };
 
         try {
@@ -35,7 +44,7 @@ const Contact = () => {
             }
         } catch (err) {
             console.error('Contact form error:', err)
-            const errorMessage = err.response?.data?.error || "Unexpected error. Try again later."
+            const errorMessage = err.response?.data?.error || t("contact.unexpected")
             setUnexpectedError(errorMessage);
         }
     }
@@ -58,10 +67,10 @@ const Contact = () => {
             <div className='about-container' ref={container}>
                 <div className="about-wrapper">
                     <div className="about-text">
-                        <h1 id='obj2'> Say Hello, <br /> {`I won't bite`} </h1>
+                        <h1 id='obj2'>{t("contact.title1")}<br />{t("contact.title2")}</h1>
                         <div id='obj3'>
-                            <h6> Allways open door for any contact </h6>
-                            <p> Email :<a>hello@kimtaekyun.dev </a></p>
+                            <p>{t("contact.sub")}</p>
+                            <p> Email : <a href="mailto:hello@kimtaekyun.dev">hello@kimtaekyun.dev</a></p>
                         </div>
                     </div>
                     {!sent ? (
@@ -75,6 +84,7 @@ const Contact = () => {
                                 aria-hidden="true"
                                 style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
                             />
+                            <input type="hidden" {...register('renderedAt')} />
                             <div className="errorMsg contact__error">
                                 {errors?.name?.message || errors?.email?.message || errors?.text?.message || unexpectedError ?
                                     <div className="errorMsg__wrapper">
@@ -83,30 +93,39 @@ const Contact = () => {
                                                 <path fill="none" d="M0 0h24v24H0z" />
                                                 <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z" fill="rgba(255,255,255,1)" />
                                             </svg>
-                                            {unexpectedError || "Make sure you got all the fields right!"}
+                                            {unexpectedError || t("contact.fields")}
                                         </span>
                                     </div>
                                     : null}
                             </div>
+                            <fieldset className="contact__topic">
+                                <legend className="u-mono">{t("contact.topic")}</legend>
+                                {TOPICS.map((topic) => (
+                                    <label key={topic}>
+                                        <input type="radio" value={topic} {...register("topic")} defaultChecked={topic === "film"} />
+                                        <span>{t(`contact.topic.${topic}`)}</span>
+                                    </label>
+                                ))}
+                            </fieldset>
                             <div className="contact__form-inner-text">
                                 <input
                                     type="name"
                                     name="name"
                                     id="name"
-                                    {...register("name", { required: "triger message this is notting" })}
-                                    placeholder="Your Name"
+                                    {...register("name", { required: true })}
+                                    placeholder={t("contact.namePh")}
                                 />
-                                <span className="contact__form-inner-text-s-name"> Name </span>
+                                <span className="contact__form-inner-text-s-name">{t("contact.name")}</span>
                             </div>
                             <div className="contact__form-inner-text">
                                 <input
                                     type="email"
                                     name="email"
                                     id="email"
-                                    {...register("email", { required: "triger message this is notting" })}
-                                    placeholder="Email Addres"
+                                    {...register("email", { required: true })}
+                                    placeholder={t("contact.emailPh")}
                                 />
-                                <span className="contact__form-inner-text-s-email"> Email </span>
+                                <span className="contact__form-inner-text-s-email">{t("contact.email")}</span>
                             </div>
                             <div className="contact__form-inner-text">
                                 <TextareaAutosize
@@ -114,21 +133,21 @@ const Contact = () => {
                                     type="text"
                                     name="text"
                                     id="text"
-                                    {...register("text", { required: "triger message this is notting" })}
-                                    placeholder="Tell us something"
+                                    {...register("text", { required: true })}
+                                    placeholder={t("contact.messagePh")}
                                 />
-                                <span> Message </span>
+                                <span>{t("contact.message")}</span>
                             </div>
                             <button type="submit" className="send_button">
-                                {`Send message >`}
+                                {t("contact.send")}
                             </button>
                         </form>
                     ) : (
                         <div className='contact__form'>
                             <div className='contact__sent_msg'>
-                                <div> A Massage has been sent. <span> <SVG_CHECK /> </span></div>
-                                <div> Thank you for sending message! </div>
-                                <div> We will contact you shortly </div>
+                                <div>{t("contact.sent")} <span> <SVG_CHECK /> </span></div>
+                                <div>{t("contact.thanks")}</div>
+                                <div>{t("contact.reply")}</div>
                             </div>
                         </div>
                     )}

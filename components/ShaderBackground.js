@@ -62,11 +62,14 @@ export default function ShaderBackground() {
     if (isMobile) return;
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Skip the backdrop on low-end machines or when the visitor asked to save data
+    if (navigator.connection?.saveData) return;
+    if ((navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4) return;
 
     const mount = ref.current;
     if (!mount) return;
 
-    let renderer, program, mesh, raf, onResize;
+    let renderer, program, mesh, raf, onResize, onVisibility, loop;
     let cancelled = false;
 
     import("ogl").then(({ Renderer, Triangle, Program, Mesh }) => {
@@ -96,18 +99,26 @@ export default function ShaderBackground() {
       window.addEventListener("resize", onResize);
       onResize();
 
-      const loop = (time) => {
+      loop = (time) => {
         program.uniforms.uTime.value = time * 0.001;
         renderer.render({ scene: mesh });
         raf = requestAnimationFrame(loop);
       };
       raf = requestAnimationFrame(loop);
+
+      // No point rendering fog in a background tab
+      onVisibility = () => {
+        cancelAnimationFrame(raf);
+        if (!document.hidden) raf = requestAnimationFrame(loop);
+      };
+      document.addEventListener("visibilitychange", onVisibility);
     });
 
     return () => {
       cancelled = true;
       if (raf) cancelAnimationFrame(raf);
       if (onResize) window.removeEventListener("resize", onResize);
+      if (onVisibility) document.removeEventListener("visibilitychange", onVisibility);
       if (mount) mount.innerHTML = "";
     };
   }, [isMobile]);

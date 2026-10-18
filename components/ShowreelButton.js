@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useT } from '../lib/i18n';
 
 // Persistent morphing FAB: "Play Showreel" that magnetically trails the cursor
 // around its home spot; on open it becomes "Close" and flies to the top-right
@@ -23,6 +24,7 @@ function CloseIcon() {
 }
 
 export default function ShowreelButton({ isOpen, onToggle }) {
+  const { t } = useT();
   const homeX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
   const homeY = typeof window !== 'undefined' ? window.innerHeight * 0.62 : 0;
   const xRaw = useMotionValue(homeX);
@@ -90,10 +92,10 @@ export default function ShowreelButton({ isOpen, onToggle }) {
         type="button"
         className={`showreel-fab__btn ${isOpen ? 'is-close' : ''}`}
         onClick={onToggle}
-        aria-label={isOpen ? 'Close showreel' : 'Play showreel'}
+        aria-label={isOpen ? t('showreel.closeLabel') : t('showreel.play')}
       >
         <span className="showreel-fab__icon">{isOpen ? <CloseIcon /> : <PlayIcon />}</span>
-        <span className="showreel-fab__label">{isOpen ? 'Close' : 'Play Showreel'}</span>
+        <span className="showreel-fab__label">{isOpen ? t('showreel.close') : t('showreel.play')}</span>
       </button>
     </motion.div>
   );

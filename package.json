@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 5000 --webpack",
     "build": "next build --webpack",
+    "build:mock": "NOTION_MOCK=1 next build --webpack",
     "prettier": "prettier --write .",
     "lint": "eslint .",
     "start": "next start"
@@ -24,12 +25,12 @@
     "next": "^16.2.9",
     "nodemailer": "^6.8.0",
     "notion-client": "^7.10.0",
+    "notion-utils": "^7.10.0",
     "ogl": "^1.0.11",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.79.0",
     "react-notion-x": "^7.10.0",
-    "react-responsive": "^10.0.1",
     "react-textarea-autosize": "^8.5.9",
     "sass": "^1.55.0",
     "sharp": "^0.35.1"
