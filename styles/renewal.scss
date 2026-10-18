@@ -582,3 +582,8 @@ $font-sans: var(--font-helvetica-now-display), "Pretendard Variable", "Pretendar
     }
   }
 }
+
+// Keep focused/anchored elements clear of the fixed header (WCAG 2.4.11)
+html {
+  scroll-padding-top: clamp(80px, 8vw, 100px);
+}

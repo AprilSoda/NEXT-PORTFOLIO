@@ -24,6 +24,7 @@ const Layout = ({ children }) => {
                 ))}
                 <link rel="alternate" hrefLang="x-default" href={localeUrl('en', path)} key="alt-default" />
                 <meta property="og:locale" content={locale === 'ko' ? 'ko_KR' : 'en_US'} />
+                <meta property="og:locale:alternate" content={locale === 'ko' ? 'en_US' : 'ko_KR'} />
                 <meta property="og:url" content={localeUrl(locale, path)} />
                 <meta property="og:description" content={t('meta.description')} key="og:description" />
                 <meta name="author" content="Kim Tae Kyun" />

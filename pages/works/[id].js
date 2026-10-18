@@ -318,10 +318,11 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     );
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths = async ({ locales = ["en"] }) => {
     const database = await getDatabase(databaseId);
     return {
-        paths: database.map((page) => ({ params: { id: page.id } })),
+        // Prebuild every locale — without `locale` only the default one is generated
+        paths: database.flatMap((page) => locales.map((locale) => ({ params: { id: page.id }, locale }))),
         fallback: 'blocking',
     };
 };

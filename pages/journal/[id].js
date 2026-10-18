@@ -105,16 +105,14 @@ const Blog = ({ blog_id, prevPost, nextPost }) => {
 
 export default Blog;
 
-export const getStaticPaths = async () => {
+export const getStaticPaths = async ({ locales = ["en"] }) => {
   const databaseId_blog = process.env.NOTION_DATABASE_ID2;
   const blogs = await getDatabase(databaseId_blog);
   const paths = blogs.map((blog) => {
     const title = blog.properties.title.title[0]?.plain_text || '';
     const slug = createSlug(title, blog.id);
-    return {
-      params: { id: slug },
-    };
-  });
+    return locales.map((locale) => ({ params: { id: slug }, locale }));
+  }).flat();
   return { paths, fallback: 'blocking' };
 };
 
@@ -131,8 +129,10 @@ export const getStaticProps = async ({ params }) => {
       title: b.properties.title.title[0]?.plain_text,
       slug: createSlug(b.properties.title.title[0]?.plain_text || '', b.id)
     })));
+    // Revalidate so a 404 for a not-yet-published entry doesn't stick in the cache
     return {
       notFound: true,
+      revalidate: 300,
     };
   }
 
