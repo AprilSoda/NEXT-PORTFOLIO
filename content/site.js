@@ -73,5 +73,29 @@ export const about = {
     { en: "AI pipelines & tools — ComfyUI workflows, Nuke tooling", ko: "AI 파이프라인과 도구 — ComfyUI 워크플로, Nuke 툴" },
     { en: "Teaching — Nuke compositing", ko: "강의 — Nuke 컴포지팅" },
   ],
+  // How I work — three steps that keep the decisions human (draft)
+  approach: [
+    {
+      title: { en: "Direct", ko: "연출" },
+      text: {
+        en: "The story, the frame and every choice that shapes it stay with people. I decide what a shot is for before any tool touches it.",
+        ko: "이야기와 프레임, 그리고 그것을 만드는 모든 선택은 사람에게 남습니다. 어떤 도구를 쓰기 전에 이 장면이 무엇을 위한 것인지 먼저 정합니다.",
+      },
+    },
+    {
+      title: { en: "Build", ko: "구축" },
+      text: {
+        en: "I build the pipeline myself — ComfyUI workflows, Nuke tools, small apps — so generative models serve the shot instead of steering it.",
+        ko: "파이프라인은 직접 만듭니다. ComfyUI 워크플로, Nuke 툴, 작은 앱까지. 생성 모델이 장면을 끌고 가지 않고 장면을 돕도록.",
+      },
+    },
+    {
+      title: { en: "Finish", ko: "완성" },
+      text: {
+        en: "Every frame is composited and checked by hand to theatrical standard, from festival shorts to ScreenX releases.",
+        ko: "모든 장면은 극장 상영 기준에 맞춰 손으로 합성하고 확인합니다. 영화제 단편부터 ScreenX 개봉작까지.",
+      },
+    },
+  ],
   tools: ["Nuke", "ComfyUI", "Python", "Blender", "DaVinci Resolve", "3DEqualizer", "After Effects", "Premiere Pro"],
 }

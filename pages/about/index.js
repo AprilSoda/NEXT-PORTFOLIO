@@ -47,6 +47,19 @@ const About = () => {
                 </motion.section>
 
                 <motion.section className="about-block" {...reveal}>
+                    <h2 className="about-label u-mono">{t("about.approach")}</h2>
+                    <ol className="about-approach">
+                        {about.approach.map((step, i) => (
+                            <li key={i}>
+                                <span className="about-approach__index u-mono">{String(i + 1).padStart(2, "0")}</span>
+                                <h3>{pick(step.title)}</h3>
+                                <p>{pick(step.text)}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </motion.section>
+
+                <motion.section className="about-block" {...reveal}>
                     <h2 className="about-label u-mono">{t("about.practice")}</h2>
                     <ul className="about-practice">
                         {about.practice.map((item, i) => (

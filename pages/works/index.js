@@ -11,6 +11,7 @@ import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
 import HoverPreview from "../../components/HoverPreview";
+import WorkBadges from "../../components/WorkBadges";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
 import { useT } from "../../lib/i18n";
@@ -20,19 +21,6 @@ const pad = (n) => String(n).padStart(2, "0");
 const noop = () => () => {};
 // true after hydration, false on the server — keeps the portal out of SSR markup
 const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
-
-// Small mono badges for a festival selection or a film still in progress
-function Badges({ work }) {
-    const { t } = useT();
-    const status = work.status && work.status !== "Released" ? t(`status.${work.status}`) : null;
-    if (!work.honor && !status) return null;
-    return (
-        <span className="work-badges u-mono">
-            {status && <span className="work-badge work-badge--status">{status}</span>}
-            {work.honor && <span className="work-badge">{work.honor}</span>}
-        </span>
-    );
-}
 
 // Grid view: rows of two cinematic frames; hovering one widens it
 function WorkGrid({ works }) {
@@ -76,7 +64,7 @@ function WorkGrid({ works }) {
                                                 sizes="(max-width: 768px) 100vw, 50vw"
                                             />
                                         </Button>
-                                        <Badges work={work} />
+                                        <WorkBadges work={work} />
                                     </div>
                                     <div className="work-card__meta u-mono">
                                         <span className="work-card__index">{pad(index + 1)}</span>
@@ -124,7 +112,7 @@ function WorkList({ works }) {
                             <span className="work-list__meta u-mono">
                                 {[work.category, work.role, work.year].filter(Boolean).join(" · ")}
                             </span>
-                            <Badges work={work} />
+                            <WorkBadges work={work} />
                         </Link>
                     </li>
                 ))}

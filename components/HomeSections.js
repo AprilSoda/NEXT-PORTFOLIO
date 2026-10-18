@@ -1,8 +1,10 @@
 import Link from "next/link"
-import Image from "next/image"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { identity } from "../content/site"
 import CreditList from "./CreditList"
+import HoverPreview from "./HoverPreview"
+import WorkBadges from "./WorkBadges"
 import { useT } from "../lib/i18n"
 
 const reveal = {
@@ -22,6 +24,7 @@ const formatDate = (iso, locale) =>
 
 export default function HomeSections({ works = [], journal = [] }) {
   const { t, pick, locale } = useT()
+  const [hovered, setHovered] = useState(null)
 
   return (
     <div className="home ds-container">
@@ -43,22 +46,27 @@ export default function HomeSections({ works = [], journal = [] }) {
           </div>
           <div className="home-work__grid">
             {works.map((w, i) => (
-              <Link key={w.id} href={`/works/${w.id}`} className="home-work__card">
+              <Link
+                key={w.id}
+                href={`/works/${w.id}`}
+                className="home-work__card"
+                onMouseEnter={() => setHovered(w.id)}
+                onMouseLeave={() => setHovered(null)}
+              >
                 <div className="home-work__media">
-                  {w.cover && (
-                    <Image
-                      src={w.cover}
-                      alt={w.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      style={{ objectFit: "cover" }}
-                      priority={i < 2}
-                    />
-                  )}
+                  <HoverPreview
+                    cover={w.cover}
+                    preview={w.preview}
+                    alt={w.title}
+                    active={hovered === w.id}
+                    priority={i < 2}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <WorkBadges work={w} />
                 </div>
                 <div className="home-work__meta u-mono">
                   <span>{w.title}</span>
-                  <span>{[w.category, w.year].filter(Boolean).join(" · ")}</span>
+                  <span>{[w.category, w.role, w.year].filter(Boolean).join(" · ")}</span>
                 </div>
               </Link>
             ))}
