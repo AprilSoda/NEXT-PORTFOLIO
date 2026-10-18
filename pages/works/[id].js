@@ -334,7 +334,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     {summary && <p className="work-hero__summary">{summary}</p>}
                     <div className="work-hero__media">
                         {heroVideo ? (
-                            <VideoEmbed url={heroVideo} title={title} />
+                            <VideoEmbed url={heroVideo} title={title} poster={cover} priority />
                         ) : cover ? (
                             <div className="work-hero__cover">
                                 <Image src={cover} alt={title} fill style={{ objectFit: 'cover' }} priority sizes="100vw" />
