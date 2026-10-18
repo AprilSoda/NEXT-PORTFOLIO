@@ -11,6 +11,8 @@ import Footer from "../../components/Footer";
 import BlogNavigation from "../../components/BlogNavigation";
 import Head from "next/head";
 import { useT } from "../../lib/i18n";
+import { toJournalSummary } from "../../lib/summaries";
+import { SITE_URL } from "../../components/Layout";
 
 
 // notion-x 관련 스타일시트
@@ -43,9 +45,9 @@ const notion = new NotionAPI({
 
 
 // Master Index
-const Blog = ({ blog_id, prevPost, nextPost }) => {
+const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
   const router = useRouter();
-  const { t } = useT();
+  const { t, locale } = useT();
 
   // Show loading state when Next.js is generating the page on-demand
   if (router.isFallback) {
@@ -69,9 +71,37 @@ const Blog = ({ blog_id, prevPost, nextPost }) => {
   return (
     <>
       <Head>
-        <title> {blog_id?.title} </title>
+        <title>{`${entry?.title || "Journal"} — ${locale === "ko" ? "김태균" : "Kim Tae Kyun"}`}</title>
+        {entry?.title && <meta property="og:title" content={entry.title} key="og:title" />}
+        <meta property="og:type" content="article" />
+        {entry && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                headline: entry.title,
+                datePublished: entry.date,
+                ...(entry.lastEdited && { dateModified: entry.lastEdited }),
+                author: { "@type": "Person", name: "Kim Tae Kyun", url: SITE_URL },
+                keywords: entry.categories.join(", "),
+                mainEntityOfPage: `${SITE_URL}/journal/${entry.slug}`,
+              }),
+            }}
+          />
+        )}
       </Head>
       <Transition>
+        {entry && (
+          <p className="journal-entry-meta u-mono">
+            {[
+              entry.categories.join(", "),
+              entry.date && new Date(entry.date).toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", { year: "numeric", month: "long", day: "numeric" }),
+              readingMinutes && t("journal.minutes").replace("{n}", readingMinutes),
+            ].filter(Boolean).join(" · ")}
+          </p>
+        )}
         <NotionRenderer
           disableHeader // notion 헤더 안보이도록
           components={{
@@ -143,11 +173,21 @@ export const getStaticProps = async ({ params }) => {
     const prevPost = currentIndex > 0 ? blogs[currentIndex - 1] : null;
     const nextPost = currentIndex < blogs.length - 1 ? blogs[currentIndex + 1] : null;
 
+    // Rough reading time: Hangul by characters, Latin by words
+    const text = Object.values(recordMap.block || {})
+      .map((b) => (b.value?.properties?.title || []).map((seg) => seg[0]).join(""))
+      .join(" ");
+    const hangul = (text.match(/[\uac00-\ud7a3]/g) || []).length;
+    const words = (text.replace(/[\uac00-\ud7a3]/g, " ").match(/[A-Za-z0-9]+/g) || []).length;
+    const readingMinutes = Math.max(1, Math.round(hangul / 500 + words / 230));
+
     return {
       props: {
         blog_id: recordMap,
         prevPost,
         nextPost,
+        entry: { ...toJournalSummary(currentBlog), lastEdited: currentBlog.last_edited_time || null },
+        readingMinutes,
       },
       revalidate: 86400, // images are permanent R2 urls now; blog rarely changes — refresh daily
     };

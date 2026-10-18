@@ -1,0 +1,10 @@
+# Kim Tae Kyun (김태균)
+
+> VFX artist and filmmaker in Seoul. ScreenX releases with CJ 4DPLEX, festival short films, and AI-native VFX pipelines (ComfyUI, Nuke).
+
+- [Work](https://www.kimtaekyun.dev/works): finished films, ScreenX releases and music videos
+- [Journal](https://www.kimtaekyun.dev/journal): notes on filmmaking, VFX and building with AI
+- [About](https://www.kimtaekyun.dev/about): background, approach and credits
+- [Contact](https://www.kimtaekyun.dev/contact): hello@kimtaekyun.dev
+
+Korean versions live under /ko.

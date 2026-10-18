@@ -1001,3 +1001,58 @@ html {
     }
   }
 }
+
+/*========== Journal entry ==========*/
+.journal-entry-meta {
+  max-width: var(--notion-max-width, 720px);
+  margin: calc(var(--sp-12) + 2rem) auto 0;
+  padding-inline: var(--gutter);
+  color: var(--text-faint);
+  position: relative;
+  z-index: 1;
+}
+
+/*========== 404 ==========*/
+.not-found {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-3);
+  font-family: $font-sans;
+  color: var(--text);
+  text-transform: none;
+
+  > .u-mono {
+    color: var(--accent);
+    margin: 0;
+  }
+
+  h1 {
+    font-size: var(--fs-h1);
+    line-height: 1.05;
+    font-weight: 600;
+    margin: 0;
+    max-width: 20ch;
+  }
+
+  &__sub {
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    margin-top: var(--sp-3);
+
+    a {
+      color: var(--text-dim);
+
+      &:hover {
+        color: var(--accent);
+      }
+    }
+  }
+}
