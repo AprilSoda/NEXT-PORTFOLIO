@@ -1,36 +1,172 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
 import { getDatabase } from "../../lib/notion";
+import { toWorkSummary } from "../../lib/summaries";
 import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
+import HoverPreview from "../../components/HoverPreview";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
 import { useT } from "../../lib/i18n";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
-//Create Context
-export const MovieContext = React.createContext();
+const pad = (n) => String(n).padStart(2, "0");
+const noop = () => () => {};
+// true after hydration, false on the server — keeps the portal out of SSR markup
+const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
 
-const yearOf = (post) => {
-    const d = post.properties?.date?.date?.start;
-    return d ? new Date(d).getFullYear() : "";
-};
-
-const Works = ({ posts }) => {
-    const { handleCursorChange } = useContext(MouseContext);
+// Small mono badges for a festival selection or a film still in progress
+function Badges({ work }) {
     const { t } = useT();
+    const status = work.status && work.status !== "Released" ? t(`status.${work.status}`) : null;
+    if (!work.honor && !status) return null;
+    return (
+        <span className="work-badges u-mono">
+            {status && <span className="work-badge work-badge--status">{status}</span>}
+            {work.honor && <span className="work-badge">{work.honor}</span>}
+        </span>
+    );
+}
+
+// Grid view: rows of two cinematic frames; hovering one widens it
+function WorkGrid({ works }) {
+    const { handleCursorChange } = useContext(MouseContext);
+    const [hovered, setHovered] = useState(null);
+    const rows = [];
+    for (let i = 0; i < works.length; i += 2) rows.push(works.slice(i, i + 2));
+
+    const container = {
+        hidden: { opacity: 0 },
+        show: { opacity: 1, transition: { delayChildren: 0.15, staggerChildren: 0.08 } },
+    };
+    const item = {
+        hidden: { opacity: 0, y: 60 },
+        show: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.19, 1, 0.22, 1] } },
+    };
+
+    return (
+        <motion.div className="work-grid" variants={container} initial="hidden" animate="show">
+            {rows.map((row, ri) => (
+                <motion.div className="work-row" variants={container} key={ri}>
+                    {row.map((work, ci) => {
+                        const index = ri * 2 + ci;
+                        return (
+                            <motion.div key={work.id} className="work-card" variants={item}>
+                                <Link
+                                    href={`/works/${work.id}`}
+                                    onMouseEnter={() => { handleCursorChange("hover"); setHovered(work.id); }}
+                                    onMouseLeave={() => { handleCursorChange("off"); setHovered(null); }}
+                                    onFocus={() => setHovered(work.id)}
+                                    onBlur={() => setHovered(null)}
+                                >
+                                    <div className="work-card__media">
+                                        <Button type="pic">
+                                            <HoverPreview
+                                                cover={work.cover || "/placeholder.jpg"}
+                                                preview={work.preview}
+                                                alt={work.title}
+                                                active={hovered === work.id}
+                                                priority={index < 4}
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                            />
+                                        </Button>
+                                        <Badges work={work} />
+                                    </div>
+                                    <div className="work-card__meta u-mono">
+                                        <span className="work-card__index">{pad(index + 1)}</span>
+                                        <span className="work-card__title">{work.title}</span>
+                                        <span className="work-card__cat">{work.category}</span>
+                                        <span className="work-card__year">{work.year}</span>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
+                </motion.div>
+            ))}
+        </motion.div>
+    );
+}
+
+// List view: one row per project; the hovered row's frame follows the cursor
+function WorkList({ works }) {
+    const [active, setActive] = useState(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const sx = useSpring(x, { stiffness: 220, damping: 26, mass: 0.4 });
+    const sy = useSpring(y, { stiffness: 220, damping: 26, mass: 0.4 });
+    const current = works.find((w) => w.id === active);
+    const hydrated = useHydrated();
+
+    return (
+        <div
+            className="work-list"
+            onMouseMove={(e) => { x.set(e.clientX); y.set(e.clientY); }}
+            onMouseLeave={() => setActive(null)}
+        >
+            <ul>
+                {works.map((work, i) => (
+                    <li key={work.id}>
+                        <Link
+                            href={`/works/${work.id}`}
+                            className="work-list__row"
+                            onMouseEnter={() => setActive(work.id)}
+                            onFocus={() => setActive(work.id)}
+                        >
+                            <span className="work-list__index u-mono">{pad(i + 1)}</span>
+                            <span className="work-list__title">{work.title}</span>
+                            <span className="work-list__meta u-mono">
+                                {[work.category, work.role, work.year].filter(Boolean).join(" · ")}
+                            </span>
+                            <Badges work={work} />
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+            {/* Portaled to <body>: transformed ancestors would otherwise offset a fixed element */}
+            {hydrated && createPortal(
+            <AnimatePresence>
+                {current?.cover && (
+                    <motion.div
+                        className="work-list__float"
+                        style={{ x: sx, y: sy }}
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.92 }}
+                        transition={{ duration: 0.25, ease: [0.19, 1, 0.22, 1] }}
+                        aria-hidden="true"
+                    >
+                        <HoverPreview key={current.id} cover={current.cover} preview={current.preview} alt="" active sizes="420px" />
+                    </motion.div>
+                )}
+            </AnimatePresence>,
+            document.body)}
+        </div>
+    );
+}
+
+const Works = ({ works }) => {
+    const { t } = useT();
+    const router = useRouter();
     const isMobile = useIsMobile();
+    const view = router.query.view === "list" && !isMobile ? "list" : "grid";
     const gridRef = useRef(null);
     const headRef = useRef(null);
 
-    // Mouse parallax — the whole works layout drifts toward the cursor (layered:
-    // grid moves more than the heading for depth). Desktop only, reduced-motion safe.
+    // Keep the chosen view in the URL so it survives refresh and back navigation
+    const setView = (next) =>
+        router.replace({ pathname: router.pathname, query: next === "list" ? { view: "list" } : {} }, undefined, { shallow: true, scroll: false });
+
+    // Mouse parallax — the grid drifts toward the cursor (layered: grid moves more
+    // than the heading for depth). Desktop grid only, reduced-motion safe.
     useEffect(() => {
-        if (isMobile) return;
+        if (isMobile || view !== "grid") return;
         if (typeof window === "undefined") return;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const grid = gridRef.current;
@@ -52,30 +188,7 @@ const Works = ({ posts }) => {
             gsap.killTweensOf([grid, head].filter(Boolean));
             gsap.set([grid, head].filter(Boolean), { x: 0, y: 0 });
         };
-    }, [isMobile]);
-
-    // One stream, newest first — no category split
-    const visible = posts;
-    // group into rows of 2 so a hovered card can expand and its pair contract
-    const rows = [];
-    for (let i = 0; i < visible.length; i += 2) rows.push(visible.slice(i, i + 2));
-
-    //Animation
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: { delayChildren: 0.15, staggerChildren: 0.08 },
-        },
-    };
-    const item = {
-        hidden: { opacity: 0, y: 60 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
-        },
-    };
+    }, [isMobile, view]);
 
     return (
         <Transition>
@@ -88,7 +201,7 @@ const Works = ({ posts }) => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1, delay: 0.2 }}
                         >
-                            {t("work.eyebrow")} — {String(posts.length).padStart(2, "0")}
+                            {t("work.eyebrow")} [ {pad(works.length)} ]
                         </motion.span>
                         <h1 className="work-head__title">
                             <motion.span
@@ -116,57 +229,18 @@ const Works = ({ posts }) => {
                         </motion.p>
                     </div>
 
-                    <div className="work-grid-wrap" ref={gridRef}>
-                        <motion.div
-                            
-                            className="work-grid"
-                            variants={container}
-                            initial="hidden"
-                            animate="show"
-                        >
-                            {rows.map((row, ri) => (
-                                <motion.div className="work-row" variants={container} key={ri}>
-                                    {row.map((post, ci) => {
-                                        const index = ri * 2 + ci;
-                                        return (
-                                            <motion.div key={post.id} className="work-card" variants={item}>
-                                                <Link
-                                                    href={`/works/${post.id}`}
-                                                    onMouseEnter={() => handleCursorChange("hover")}
-                                                    onMouseLeave={() => handleCursorChange("off")}
-                                                >
-                                                    <div className="work-card__media">
-                                                        <Button type="pic">
-                                                            <Image
-                                                                src={post.cover?.external?.url || post.cover?.file?.url || "/placeholder.jpg"}
-                                                                alt={post.properties.title.title[0].plain_text}
-                                                                fill
-                                                                style={{ objectFit: "cover" }}
-                                                                priority={index < 4}
-                                                                loading={index < 4 ? "eager" : "lazy"}
-                                                                sizes="(max-width: 768px) 60vw, 50vw"
-                                                            />
-                                                        </Button>
-                                                    </div>
-                                                    <div className="work-card__meta u-mono">
-                                                        <span className="work-card__index">
-                                                            {String(index + 1).padStart(2, "0")}
-                                                        </span>
-                                                        <span className="work-card__title">
-                                                            {post.properties.title.title[0].plain_text}
-                                                        </span>
-                                                        <span className="work-card__cat">
-                                                            {post.properties.format?.select?.name || post.properties.sort?.select?.name}
-                                                        </span>
-                                                        <span className="work-card__year">{yearOf(post)}</span>
-                                                    </div>
-                                                </Link>
-                                            </motion.div>
-                                        );
-                                    })}
-                                </motion.div>
+                    {!isMobile && (
+                        <div className="work-view u-mono" role="group" aria-label={t("work.view")}>
+                            {["grid", "list"].map((v) => (
+                                <button key={v} aria-pressed={view === v} className={view === v ? "active" : undefined} onClick={() => setView(v)}>
+                                    {t(`work.view.${v}`)}
+                                </button>
                             ))}
-                        </motion.div>
+                        </div>
+                    )}
+
+                    <div className="work-grid-wrap" ref={gridRef}>
+                        {view === "list" ? <WorkList works={works} /> : <WorkGrid works={works} />}
                     </div>
                 </div>
             </section>
@@ -179,7 +253,7 @@ export const getStaticProps = async () => {
     const database = await getDatabase(databaseId);
     return {
         props: {
-            posts: database,
+            works: database.map(toWorkSummary),
         },
         revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };

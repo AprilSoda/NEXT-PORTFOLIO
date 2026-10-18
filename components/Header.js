@@ -72,7 +72,7 @@ const Header = ({ workcount }) => {
                     {NAV.map(({ href, key, testId }) => (
                         <li key={href}><Button><Link href={href} data-testid={testId} className={router.pathname.startsWith(href) ? 'active' : undefined} onClick={() => setMobileMenuOpen(false)}>{t(key)}</Link></Button></li>
                     ))}
-                    <li className="lang-switch"><Button><Link href={router.asPath} locale={otherLocale} lang={otherLocale} data-testid="lang-switch" onClick={() => setMobileMenuOpen(false)}>{t('lang.switch')}</Link></Button></li>
+                    <li className="lang-switch"><Button><Link href={router.asPath.split(/[?#]/)[0]} locale={otherLocale} lang={otherLocale} data-testid="lang-switch" onClick={() => setMobileMenuOpen(false)}>{t('lang.switch')}</Link></Button></li>
                 </ul>
             </motion.nav>
         </header>

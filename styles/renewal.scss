@@ -617,3 +617,135 @@ html {
     transition: opacity 0.2s ease, color var(--dur) var(--ease-out-expo);
   }
 }
+
+/*========== Work index: view toggle, badges, list view, hover previews ==========*/
+.work-view {
+  display: flex;
+  gap: var(--sp-1);
+  margin: 0 0 var(--sp-4);
+
+  button {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-dim);
+    padding: 0.4rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: var(--text);
+      border-color: var(--text-dim);
+    }
+  }
+}
+
+.work-badges {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.work-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(6px);
+  color: var(--text);
+  white-space: nowrap;
+
+  &--status {
+    color: var(--accent);
+  }
+}
+
+.hover-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+
+  &.is-playing {
+    opacity: 1;
+  }
+}
+
+.work-list {
+  position: relative;
+  padding-bottom: var(--sp-12);
+  font-family: $font-sans;
+  text-transform: none;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: var(--sp-3);
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+    transition: opacity 0.2s ease, color 0.2s ease;
+
+    .work-badges {
+      position: static;
+      grid-column: 2 / -1;
+    }
+  }
+
+  &__index {
+    color: var(--text-faint);
+  }
+
+  &__title {
+    font-size: var(--fs-h2);
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  &__meta {
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  ul:has(.work-list__row:hover) .work-list__row:not(:hover) {
+    opacity: 0.35;
+  }
+
+  &__row:hover .work-list__title {
+    color: var(--accent);
+  }
+
+  // The frame that follows the cursor
+  &__float {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 420px;
+    aspect-ratio: 1.85;
+    margin: calc(-420px / 1.85 / 2) 0 0 -210px;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--surface);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+}
