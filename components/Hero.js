@@ -123,7 +123,7 @@ export default function Hero() {
                 </h1>
                 <div className="bg-area">
                     {/* Real image under the video: paints instantly and is what the browser measures as LCP */}
-                    <Image src={BG_POSTER} alt="" fill priority sizes="100vw" className="bg-poster" />
+                    <Image src={BG_POSTER} alt="" fill priority sizes="100vw" className="bg-poster" style={{ objectFit: "cover" }} />
                     <div className="video">
                         <video
                             ref={videoRef}

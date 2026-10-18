@@ -69,7 +69,7 @@ const Contact = () => {
                     <div className="about-text">
                         <h1 id='obj2'>{t("contact.title1")}<br />{t("contact.title2")}</h1>
                         <div id='obj3'>
-                            <h6>{t("contact.sub")}</h6>
+                            <p>{t("contact.sub")}</p>
                             <p> Email : <a href="mailto:hello@kimtaekyun.dev">hello@kimtaekyun.dev</a></p>
                         </div>
                     </div>
