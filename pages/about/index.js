@@ -6,6 +6,8 @@ import Footer from "../../components/Footer";
 import CreditList from "../../components/CreditList";
 import { about, identity } from "../../content/site";
 import { useT } from "../../lib/i18n";
+import { getDatabase, WORKS_DB } from "../../lib/notion";
+import { linkCredits } from "../../lib/summaries";
 
 const reveal = {
     initial: { opacity: 0, y: 32 },
@@ -14,7 +16,7 @@ const reveal = {
     transition: { duration: 1, ease: [0.19, 1, 0.22, 1] },
 };
 
-const About = () => {
+const About = ({ creditLinks }) => {
     const { t, pick } = useT();
 
     return (
@@ -70,7 +72,7 @@ const About = () => {
 
                 <motion.section className="about-block" {...reveal}>
                     <h2 className="about-label u-mono">{t("home.credits")}</h2>
-                    <CreditList />
+                    <CreditList links={creditLinks} />
                 </motion.section>
 
                 <motion.section className="about-block" {...reveal}>
@@ -92,5 +94,12 @@ const About = () => {
         </Transition>
     );
 };
+
+// Only to link credits to their work pages; the rest of About is static copy.
+// A Notion failure just leaves the credits unlinked.
+export const getStaticProps = async () => ({
+    props: { creditLinks: linkCredits(await getDatabase(WORKS_DB).catch(() => [])) },
+    revalidate: 86400,
+});
 
 export default About;

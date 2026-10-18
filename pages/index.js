@@ -4,9 +4,9 @@ import Footer from '../components/Footer'
 import Transition from '../components/Transition'
 import Head from 'next/head'
 import { SITE_URL, jsonLd } from '../components/Layout'
-import { credits, identity, social } from '../content/site'
+import { identity, social } from '../content/site'
 import { getDatabase, WORKS_DB, JOURNAL_DB } from '../lib/notion'
-import { toWorkSummary, toJournalSummary, toDevelopingSummary, IN_PROGRESS } from '../lib/summaries'
+import { toWorkSummary, toJournalSummary, toDevelopingSummary, IN_PROGRESS, linkCredits } from '../lib/summaries'
 
 
 // Structured data so search engines know who the site is about
@@ -40,17 +40,6 @@ export default function Home({ works, journal, developing, creditLinks }) {
     </>
   )
 }
-
-// Credit title → published work id, matched on the start of the Notion title
-// ("Last Mankind" ↔ "Last Mankind (종말의 인간)"), ignoring case and punctuation
-const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9\uac00-\ud7a3]/g, '')
-const linkCredits = (works) =>
-  Object.fromEntries(
-    credits.flatMap((c) => {
-      const work = works.find((w) => norm(w.properties.title?.title?.[0]?.plain_text).startsWith(norm(c.title)))
-      return work ? [[c.title, work.id]] : []
-    })
-  )
 
 // During `next build` a Notion outage falls back to empty lists so the deploy
 // still succeeds; during revalidation it throws, so Next keeps serving the last
