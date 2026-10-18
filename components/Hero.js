@@ -175,7 +175,7 @@ export default function Hero() {
                         </a></Button>
                     </div>
                     <div>
-                        copyright <span>{thisYear()}</span> &#169; All right reserved
+                        © {thisYear()} {pick(identity.name)}
                     </div>
                 </motion.div>
             </section>

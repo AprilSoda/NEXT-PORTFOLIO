@@ -956,3 +956,48 @@ html {
     outline-offset: 3px;
   }
 }
+
+/*========== Mobile menu: full screen, large type, language last ==========*/
+@media screen and (max-width: 768px) {
+  .header-comp .sub-menu-area {
+    width: 100%;
+    max-width: none;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 6rem var(--gutter) 3rem;
+    background: rgba(11, 12, 14, 0.98);
+    box-shadow: none;
+
+    li {
+      text-align: left;
+
+      button {
+        justify-content: flex-start;
+      }
+    }
+
+    a {
+      font-family: $font-sans;
+      font-size: clamp(2.2rem, 11vw, 3.2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      padding: 0.35rem 0;
+      color: var(--text);
+    }
+
+    .lang-switch {
+      margin-top: var(--sp-4);
+
+      a {
+        font-family: var(--font-mono), ui-monospace, monospace;
+        font-size: var(--fs-small);
+        font-weight: 400;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+      }
+    }
+  }
+}
