@@ -10,6 +10,7 @@ import { getDatabase, getPage, getBlocks } from "../../lib/notion";
 import styles from "./post.module.css";
 import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
+import CompareSlider from "../../components/CompareSlider";
 import { parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { toWorkSummary } from "../../lib/summaries";
@@ -234,6 +235,8 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const format = props.format?.select?.name || props.sort?.select?.name || null;
     const summary = plain(locale === "ko" ? props.summary_ko : props.summary_en) || plain(props.summary_en);
     const making = props.making?.url || null;
+    const before = props.before?.url || null;
+    const after = props.after?.url || null;
     const aiUsage = props.ai_usage?.select?.name || null;
     const client = props.client?.select?.name;
     const meta = [
@@ -345,10 +348,11 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                                 </dl>
                             </section>
                         )}
-                        {making && (
+                        {(making || (before && after)) && (
                             <details className="work-making">
                                 <summary className="u-mono">{t("work.making")}</summary>
-                                <VideoEmbed url={making} title={`${title} — making of`} />
+                                {before && after && <CompareSlider before={before} after={after} />}
+                                {making && <VideoEmbed url={making} title={`${title} — making of`} />}
                             </details>
                         )}
                         <Link className="go_back u-mono" href="/works">
