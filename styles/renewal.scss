@@ -1528,6 +1528,8 @@ html {
 .work-madewith__note a {
   color: var(--text);
   white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /*========== /ai — How I use AI ==========*/
@@ -1563,6 +1565,6 @@ html {
     margin: var(--sp-4) 0 var(--sp-8);
     color: var(--text-faint);
 
-    a { color: var(--text-dim); }
+    a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 0.2em; }
   }
 }

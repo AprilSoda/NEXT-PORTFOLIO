@@ -16,7 +16,7 @@ export default function AiPage() {
                 <header className="ai-page__head">
                     <p className="u-mono reveal">{t("ai.page.eyebrow")}</p>
                     <h1 className="reveal reveal--slide" style={{ "--d": "0.1s" }}>{t("ai.page.title")}</h1>
-                    <p className="ai-page__intro reveal" style={{ "--d": "0.2s" }}>{pick(intro)}</p>
+                    <p className="ai-page__intro reveal reveal--slide" style={{ "--d": "0.2s" }}>{pick(intro)}</p>
                 </header>
 
                 {[uses, limits].map((group) => (
