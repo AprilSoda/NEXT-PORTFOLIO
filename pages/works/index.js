@@ -37,7 +37,8 @@ function WorkGrid({ works }) {
                     {row.map((work, ci) => {
                         const index = ri * 2 + ci;
                         return (
-                            <div key={work.id} className="work-card reveal" style={{ '--d': `${0.25 + index * 0.08}s`, '--reveal-y': '48px' }}>
+                            // First row slides without fading, so the likely LCP image paints at once
+                            <div key={work.id} className={`work-card reveal${index < 2 ? " reveal--slide" : ""}`} style={{ '--d': `${0.25 + index * 0.08}s`, '--reveal-y': '48px' }}>
                                 <Link
                                     href={`/works/${work.id}`}
                                     onMouseEnter={() => { handleCursorChange("hover"); setHovered(work.id); }}
