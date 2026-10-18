@@ -16,7 +16,7 @@ const NavigationButton = ({ post, direction }) => {
         {direction === 'prev' && 'Previous'}
         {direction === 'next' && 'Next'}
       </p>
-      <Link href={`/blogs/${createSlug(post.properties.title.title[0]?.plain_text || '', post.id)}`} scroll={false}>
+      <Link href={`/journal/${createSlug(post.properties.title.title[0]?.plain_text || '', post.id)}`} scroll={false}>
         <div className={`nav-button ${direction}`}>
           <div className="nav-button-cover-wrapper">
             {coverImage ? (

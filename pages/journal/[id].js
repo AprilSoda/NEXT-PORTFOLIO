@@ -10,6 +10,7 @@ import Transition from "../../components/Transition";
 import Footer from "../../components/Footer";
 import BlogNavigation from "../../components/BlogNavigation";
 import Head from "next/head";
+import { useT } from "../../lib/i18n";
 
 
 // notion-x 관련 스타일시트
@@ -44,6 +45,7 @@ const notion = new NotionAPI({
 // Master Index
 const Blog = ({ blog_id, prevPost, nextPost }) => {
   const router = useRouter();
+  const { t } = useT();
 
   // Show loading state when Next.js is generating the page on-demand
   if (router.isFallback) {
@@ -91,7 +93,7 @@ const Blog = ({ blog_id, prevPost, nextPost }) => {
         <section className="blog-scroller">
           <div className="blog-selection">
             <BlogNavigation prevPost={prevPost} nextPost={nextPost} />
-            <a className="go_back" onClick={() => router.push("/blogs")}> ← All blogs </a>
+            <Link className="go_back" href="/journal">{t("journal.back")}</Link>
           </div>
         </section>
 

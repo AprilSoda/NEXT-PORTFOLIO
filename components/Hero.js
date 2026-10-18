@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Button from './Button'
 import ShowreelButton from './ShowreelButton'
+import { identity, heroLines } from '../content/site'
+import { useT } from '../lib/i18n'
 
 // Client-only + lazy: the media-chrome player (web components) must not run on
 // the server, and there's no need to ship it until the showreel is opened.
@@ -16,13 +18,11 @@ const BG_VIDEO_SRC =
   'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/hero-bg.mp4'
 
 
-// count for timing
-const HeroTitle = [
-    { count: 1, h1s: ['VFX', 'GENERALIST'] },
-    { count: 3, h1s: ['KIM', 'TAE', 'KYUN,', 'SOUTH', 'KOREA'] },
-    { count: 8, h1s: ['TAKING', 'ON', 'NEW', 'PROJECTS'] },
-    { count: 11, h1s: ['FEEL', 'FREE', 'TO', 'CONTACT'] },
-]
+// Running word offset per line, so the stagger continues across lines
+const HeroTitle = heroLines.map((h1s, i) => ({
+    count: heroLines.slice(0, i).reduce((n, line) => n + line.length, 0) + 1,
+    h1s,
+}))
 
 
 export default function Hero() {
@@ -30,6 +30,9 @@ export default function Hero() {
     const [align, setAlign] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [reelReady, setReelReady] = useState(false);
+    const [heroInView, setHeroInView] = useState(true);
+    const heroRef = useRef(null)
+    const { pick } = useT();
 
     const thisYear = () => {
         const year = new Date().getFullYear()
@@ -42,10 +45,20 @@ export default function Hero() {
         }
     }, [videoRef])
 
+    // The floating reel button belongs to the hero — hide it once the
+    // visitor scrolls on to the sections below
+    useEffect(() => {
+        const el = heroRef.current
+        if (!el || typeof IntersectionObserver === 'undefined') return undefined
+        const io = new IntersectionObserver(([entry]) => setHeroInView(entry.intersectionRatio > 0.4), { threshold: [0, 0.4, 1] })
+        io.observe(el)
+        return () => io.disconnect()
+    }, [])
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setAlign('right');
-        }, 5000);
+        }, 3200);
         return () => clearTimeout(timer);
     }, []);
 
@@ -53,40 +66,28 @@ export default function Hero() {
     // sliding right (align → 'right' at 5s, then its 2s CSS transition settles).
     useEffect(() => {
         if (align !== 'right') return undefined;
-        const t = setTimeout(() => setReelReady(true), 2000);
+        const t = setTimeout(() => setReelReady(true), 1200);
         return () => clearTimeout(t);
     }, [align]);
-
-    const videoOptions = {
-        playerVars: {
-            autoplay: 1,
-            controls: 0,
-            rel: 0,
-            showinfo: 0,
-            mute: 1,
-            loop: 1,
-            playsinline: 1
-        }
-    };
 
     return (
         <>
             <ModalShowreel isOpen={isOpen} onClose={() => setIsOpen(false)} />
-            {reelReady && (
+            {reelReady && (heroInView || isOpen) && (
                 <ShowreelButton isOpen={isOpen} onToggle={() => setIsOpen((v) => !v)} />
             )}
-            <section className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
+            <section ref={heroRef} className={`hero-comp ${isOpen ? 'blur-effect' : ''}`}>
                 <motion.div
                     className="hero-meta u-mono"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 2.5 }}
+                    transition={{ duration: 1, delay: 1.5 }}
                 >
-                    <span className="hero-meta__role">VFX Generalist</span>
+                    <span className="hero-meta__role">{pick(identity.role)}</span>
                     <span className="hero-meta__status">
-                        <i /> Available for work
+                        <i /> {pick(identity.status)}
                     </span>
-                    <span className="hero-meta__loc">Seoul, KR — {thisYear()}</span>
+                    <span className="hero-meta__loc">{pick(identity.location)} — {thisYear()}</span>
                 </motion.div>
                 <div className={'centering ' + align}>
                     {HeroTitle.map((HeroTitle, i) => {
@@ -97,27 +98,14 @@ export default function Hero() {
                                     {HeroTitle.h1s.map((v, i) => {
                                         var indexing = i + indexs
                                         return (
-                                            v === "M83" || v === "STUDIO" ? (
-                                                <a key={indexing} href="https://m83.co.kr/" target="_blank" rel="noopener noreferrer">
-                                                    <motion.h1
-                                                        key={indexing}
-                                                        initial={{ opacity: 0, translateY: -30 }}
-                                                        animate={{ opacity: 1, translateY: 0 }}
-                                                        transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 1 + indexing * 0.1 } }}
-                                                    >
-                                                        {v}
-                                                    </motion.h1>
-                                                </a>
-                                            ) : (
-                                                <motion.h1
-                                                    key={indexing}
-                                                    initial={{ opacity: 0, translateY: -30 }}
-                                                    animate={{ opacity: 1, translateY: 0 }}
-                                                    transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 1 + indexing * 0.1 } }}
-                                                >
-                                                    {v}
-                                                </motion.h1>
-                                            )
+                                            <motion.h1
+                                                key={indexing}
+                                                initial={{ opacity: 0, translateY: -30 }}
+                                                animate={{ opacity: 1, translateY: 0 }}
+                                                transition={{ default: { duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.6 + indexing * 0.08 } }}
+                                            >
+                                                {v}
+                                            </motion.h1>
                                         )
                                     })}
                                 </div>
@@ -130,7 +118,7 @@ export default function Hero() {
                         className="video"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ default: { duration: 3, delay: 2 } }}
+                        transition={{ default: { duration: 2.4, delay: 1 } }}
                     >
                         <video
                             ref={videoRef}

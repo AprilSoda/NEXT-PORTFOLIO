@@ -5,11 +5,13 @@ import PageAside from "../../components/PageAside";
 import PageCard from "../../components/PageCard";
 import gsap from "gsap";
 import Footer from "../../components/Footer";
+import { useT } from "../../lib/i18n";
 
 
 const databaseId_blog = process.env.NOTION_DATABASE_ID2;
 
-const Blogs = ({ blogs }) => {
+const Journal = ({ blogs }) => {
+  const { t } = useT();
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
 
@@ -37,10 +39,10 @@ const Blogs = ({ blogs }) => {
         >
           <div className="title">
             <div>
-              <h1 ref={title}> VFX DEV LOG </h1>
+              <h1 ref={title}>{t("journal.title")}</h1>
             </div>
             <div>
-              <h6 ref={sub}> My research blog Filmmaking & VFX </h6>
+              <h6 ref={sub}>{t("journal.sub")}</h6>
             </div>
           </div>
         </div>
@@ -66,7 +68,7 @@ const Blogs = ({ blogs }) => {
   );
 };
 
-export default Blogs;
+export default Journal;
 
 export const getStaticProps = async () => {
   const blogs = await getDatabase(databaseId_blog);

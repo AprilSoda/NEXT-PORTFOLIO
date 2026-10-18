@@ -2,6 +2,18 @@
 const path = require('path')
 const nextConfig = {
   reactStrictMode: true,
+  // English at /, Korean at /ko
+  i18n: {
+    locales: ['en', 'ko'],
+    defaultLocale: 'en',
+  },
+  // The blog was renamed to Journal — keep old links working
+  async redirects() {
+    return [
+      { source: '/blogs', destination: '/journal', permanent: true },
+      { source: '/blogs/:slug', destination: '/journal/:slug', permanent: true },
+    ]
+  },
   images: {
     // Host-native next/image optimization (Netlify on prod). No third-party CDN.
     // Allow any HTTPS host: blog/works covers are pasted from arbitrary sources

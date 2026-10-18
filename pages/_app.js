@@ -51,11 +51,11 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 const PAGE_TITLES = {
-  '/': 'Kim Tae Kyun — VFX Generalist',
-  '/works': 'Works — Kim Tae Kyun',
-  '/blogs': 'Blog — Kim Tae Kyun',
-  '/about': 'About — Kim Tae Kyun',
-  '/contact': 'Contact — Kim Tae Kyun',
+  '/': { en: 'Kim Tae Kyun — VFX Artist & Filmmaker', ko: '김태균 — VFX 아티스트 · 영화 만드는 사람' },
+  '/works': { en: 'Work — Kim Tae Kyun', ko: '작업 — 김태균' },
+  '/journal': { en: 'Journal — Kim Tae Kyun', ko: '저널 — 김태균' },
+  '/about': { en: 'About — Kim Tae Kyun', ko: '소개 — 김태균' },
+  '/contact': { en: 'Contact — Kim Tae Kyun', ko: '연락 — 김태균' },
 }
 
 function MyApp({ Component, pageProps, router }) {
@@ -120,7 +120,8 @@ function MyApp({ Component, pageProps, router }) {
     };
   }, [nextRouter.events]);
 
-  const pageTitle = PAGE_TITLES[nextRouter.pathname] || 'Kim Tae Kyun — VFX Generalist'
+  const locale = nextRouter.locale === 'ko' ? 'ko' : 'en'
+  const pageTitle = (PAGE_TITLES[nextRouter.pathname] || PAGE_TITLES['/'])[locale]
   return (
     <>
       <Head>

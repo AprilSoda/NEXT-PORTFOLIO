@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -9,6 +9,7 @@ import Footer from "../../components/Footer";
 import Button from "../../components/Button";
 import useIsMobile from "../../components/useIsMobile";
 import { MouseContext } from "../../components/MouseContext";
+import { useT } from "../../lib/i18n";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 //Create Context
@@ -21,7 +22,7 @@ const yearOf = (post) => {
 
 const Works = ({ posts }) => {
     const { handleCursorChange } = useContext(MouseContext);
-    const [selectedfilter, setSelectedfilter] = useState("ALL");
+    const { t } = useT();
     const isMobile = useIsMobile();
     const gridRef = useRef(null);
     const headRef = useRef(null);
@@ -53,10 +54,8 @@ const Works = ({ posts }) => {
         };
     }, [isMobile]);
 
-    const filters = ["ALL", ...new Set(posts.map((post) => post.properties.sort.select.name))];
-    const visible = posts.filter(
-        (post) => selectedfilter === "ALL" || post.properties.sort.select.name === selectedfilter
-    );
+    // One stream, newest first — no category split
+    const visible = posts;
     // group into rows of 2 so a hovered card can expand and its pair contract
     const rows = [];
     for (let i = 0; i < visible.length; i += 2) rows.push(visible.slice(i, i + 2));
@@ -89,7 +88,7 @@ const Works = ({ posts }) => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1, delay: 0.2 }}
                         >
-                            Selected Works — {String(posts.length).padStart(2, "0")}
+                            {t("work.eyebrow")} — {String(posts.length).padStart(2, "0")}
                         </motion.span>
                         <h1 className="work-head__title">
                             <motion.span
@@ -104,7 +103,7 @@ const Works = ({ posts }) => {
                                 animate={{ opacity: 1, y: "0%" }}
                                 transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.38 }}
                             >
-                                WORKS
+                                WORK
                             </motion.span>
                         </h1>
                         <motion.p
@@ -113,26 +112,13 @@ const Works = ({ posts }) => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1, delay: 0.5 }}
                         >
-                            A selection of my favourite projects — some made while freelancing,
-                            others for studios I&apos;ve worked with.
+                            {t("work.intro")}
                         </motion.p>
-                    </div>
-
-                    <div className="work-sort u-mono">
-                        {filters.map((filter, index) => (
-                            <button
-                                className={filter === selectedfilter ? "filter_item active" : "filter_item"}
-                                key={index}
-                                onClick={() => setSelectedfilter(filter)}
-                            >
-                                {filter}
-                            </button>
-                        ))}
                     </div>
 
                     <div className="work-grid-wrap" ref={gridRef}>
                         <motion.div
-                            key={selectedfilter}
+                            
                             className="work-grid"
                             variants={container}
                             initial="hidden"
@@ -143,9 +129,9 @@ const Works = ({ posts }) => {
                                     {row.map((post, ci) => {
                                         const index = ri * 2 + ci;
                                         return (
-                                            <motion.div key={selectedfilter + post.id} className="work-card" variants={item}>
+                                            <motion.div key={post.id} className="work-card" variants={item}>
                                                 <Link
-                                                    href={`works/${post.id}`}
+                                                    href={`/works/${post.id}`}
                                                     onMouseEnter={() => handleCursorChange("hover")}
                                                     onMouseLeave={() => handleCursorChange("off")}
                                                 >

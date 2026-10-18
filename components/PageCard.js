@@ -62,7 +62,7 @@ export default function PageCard({ blogs, selectedCategory, setSelectedCategory 
                 <div className="card-inner">
                   <Link
                     className="thumnail"
-                    href={`/blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}
+                    href={`/journal/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}
                     onMouseEnter={() => handleCursorChange("hover")}
                     onMouseLeave={() => handleCursorChange("off")}
                   >
@@ -77,7 +77,7 @@ export default function PageCard({ blogs, selectedCategory, setSelectedCategory 
                     />
                   </Link>
                   <div className="title-subtitle-date">
-                    <div className="title"><Link href={`/blogs/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}>{blog.properties.title.title[0].plain_text}</Link></div>
+                    <div className="title"><Link href={`/journal/${createSlug(blog.properties.title.title[0]?.plain_text || '', blog.id)}`}>{blog.properties.title.title[0].plain_text}</Link></div>
                     {/* <div className="subtitle"><span>수원대학교 졸업작품 오하꼬의 조명감독의 입장에서 적은 블로그입니다.</span></div> */}
                     <div className="date">
                       <span> {PageTime(blog.created_time)} </span>
