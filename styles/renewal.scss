@@ -1137,3 +1137,25 @@ html {
 .hero-comp .copy-mark {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
+
+/*========== Back-to-top: quieter, right side, out of the reading line ==========*/
+.arrow-btn {
+  left: auto;
+  right: var(--gutter);
+  bottom: 1.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background-color: rgba(11, 12, 14, 0.7);
+  backdrop-filter: blur(8px);
+  transition: transform 0.5s cubic-bezier(0.43, 0.195, 0.02, 1), border-color 0.2s ease;
+
+  span svg {
+    fill: var(--text);
+  }
+
+  &:hover {
+    border-color: var(--text-dim);
+  }
+}
