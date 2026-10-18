@@ -135,7 +135,7 @@ export const aiPolicy = {
     title: { en: "How each work is labelled", ko: "작업마다 표시하는 방법" },
     body: {
       en: "Every project shows three lines — Script, Visuals, Performance — each marked Human, Assisted or Generated. These are the same three questions film festivals now ask. Realistic generated imagery is always labelled.",
-      ko: "모든 작업에 각본 · 영상 · 연기 세 줄을 두고, 각각 사람 · 보조 사용 · 생성으로 표시합니다. 영화제들이 요즘 묻는 세 가지 질문과 같습니다. 실제처럼 보이는 생성 이미지는 항상 표시합니다.",
+      ko: "모든 작업에 각본 · 영상 · 연기 세 줄을 두고, 각각 사람 · AI 보조 · AI 생성으로 표시합니다. 영화제들이 요즘 묻는 세 가지 질문과 같습니다. 실제처럼 보이는 생성 이미지는 항상 표시합니다.",
     },
   },
 }
