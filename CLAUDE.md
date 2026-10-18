@@ -95,6 +95,7 @@ The disclosure links to `/ai` (copy in `content/site.js` → `aiPolicy`, dated).
   (styles/renewal.scss), not Framer Motion, so they don't wait for hydration
 - Never start the largest visible element at `opacity: 0`
 - Hero: poster `<Image priority>` under the loop; the loop plays only in view
+- `VideoEmbed`: YouTube/Vimeo render a poster + play button; the iframe loads on click
 - Shader backdrop skips low-end / Save-Data / reduced-motion, pauses in background tabs
 - Lenis runs on the GSAP ticker (one frame loop)
 - Fonts: Helvetica Now (4 weights, not preloaded), Canyon, ProFont, JetBrains Mono
