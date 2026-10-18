@@ -6,6 +6,7 @@ import {
   MediaTimeRange,
   MediaPlayButton,
   MediaFullscreenButton,
+  MediaMuteButton,
 } from 'media-chrome/react';
 
 // ┌──────────────────────────────────────────────────────────────────────┐
@@ -16,7 +17,8 @@ import {
 const SHOWREEL_SRC =
   process.env.NEXT_PUBLIC_SHOWREEL_URL ||
   'https://pub-c3b8ef19e7734097bf89d561c8f76ca8.r2.dev/video/showreel-2026.mp4';
-const SHOWREEL_POSTER = process.env.NEXT_PUBLIC_SHOWREEL_POSTER || '';
+// Title card from the reel (public/showreel-poster.webp) — shows while it buffers
+const SHOWREEL_POSTER = process.env.NEXT_PUBLIC_SHOWREEL_POSTER || '/showreel-poster.webp';
 
 export default function ModalShowreel({ isOpen, onClose }) {
   const videoRef = useRef(null);
@@ -55,6 +57,9 @@ export default function ModalShowreel({ isOpen, onClose }) {
         >
           <motion.div
             className="modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Showreel"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
@@ -71,10 +76,11 @@ export default function ModalShowreel({ isOpen, onClose }) {
                 autoPlay
                 playsInline
               />
-              {/* Minimal controls: play/pause, scrubber, time, fullscreen only. */}
+              {/* Minimal controls: play/pause, scrubber, mute, fullscreen. */}
               <MediaControlBar>
                 <MediaPlayButton />
                 <MediaTimeRange />
+                <MediaMuteButton />
                 <MediaFullscreenButton />
               </MediaControlBar>
             </MediaController>
