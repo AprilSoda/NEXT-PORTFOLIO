@@ -482,3 +482,98 @@
     gap: var(--sp-1);
   }
 }
+
+/*========== Accessibility ==========*/
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10000;
+  padding: 0.6rem 1rem;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 8px;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+// The custom cursor hides the pointer, so keyboard focus must be obvious
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#main:focus {
+  outline: none;
+}
+
+// Korean: break between words, not inside them
+:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/*========== Next project teaser ==========*/
+.next-work {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 40%);
+  grid-template-rows: auto 1fr;
+  gap: var(--sp-2) var(--sp-6);
+  align-items: end;
+  padding-top: var(--sp-8);
+  padding-bottom: var(--sp-12);
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  text-transform: none;
+
+  &__label {
+    grid-column: 1;
+    color: var(--text-faint);
+  }
+
+  &__title {
+    grid-column: 1;
+    font-size: var(--fs-h1);
+    line-height: 1.02;
+    font-weight: 600;
+    transition: color var(--dur) var(--ease-out-expo);
+  }
+
+  &__media {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: relative;
+    aspect-ratio: 1.85;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+
+    img {
+      transition: transform 1.2s var(--ease-out-expo);
+    }
+  }
+
+  &:hover &__title {
+    color: var(--accent);
+  }
+
+  &:hover &__media img {
+    transform: scale(1.04);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .next-work {
+    grid-template-columns: 1fr;
+
+    &__media {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+}

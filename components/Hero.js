@@ -39,11 +39,20 @@ export default function Hero() {
         return year
     }
 
+    // The background loop only plays while it can be seen, and never for
+    // visitors who prefer reduced motion
     useEffect(() => {
-        if (videoRef && videoRef.current) {
-            videoRef.current.play()
+        const video = videoRef.current
+        if (!video) return undefined
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+        const sync = () => {
+            if (heroInView && !isOpen && !document.hidden) video.play().catch(() => {})
+            else video.pause()
         }
-    }, [videoRef])
+        sync()
+        document.addEventListener('visibilitychange', sync)
+        return () => document.removeEventListener('visibilitychange', sync)
+    }, [heroInView, isOpen])
 
     // The floating reel button belongs to the hero — hide it once the
     // visitor scrolls on to the sections below
@@ -124,11 +133,10 @@ export default function Hero() {
                             ref={videoRef}
                             className="bg-video"
                             src={BG_VIDEO_SRC}
-                            autoPlay
                             muted
                             loop
                             playsInline
-                            preload="auto"
+                            preload="metadata"
                         />
                     </motion.div>
                 </div>

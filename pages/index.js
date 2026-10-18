@@ -2,13 +2,36 @@ import Hero from '../components/Hero'
 import HomeSections from '../components/HomeSections'
 import Footer from '../components/Footer'
 import Transition from '../components/Transition'
+import Head from 'next/head'
+import { SITE_URL } from '../components/Layout'
+import { identity, social } from '../content/site'
 import { getDatabase } from '../lib/notion'
 import { toWorkSummary, toJournalSummary } from '../lib/summaries'
 
 
+// Structured data so search engines know who the site is about
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: identity.name.en,
+  alternateName: identity.name.ko,
+  jobTitle: identity.role.en,
+  url: SITE_URL,
+  email: 'mailto:hello@kimtaekyun.dev',
+  address: { '@type': 'PostalAddress', addressLocality: 'Seoul', addressCountry: 'KR' },
+  worksFor: { '@type': 'Organization', name: 'CJ OliveNetworks' },
+  sameAs: social.map((s) => s.href),
+}
+
 export default function Home({ works, journal }) {
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+      </Head>
       <Transition>
         <Hero />
         <HomeSections works={works} journal={journal} />

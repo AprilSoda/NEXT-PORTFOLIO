@@ -12,6 +12,7 @@ import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
 import { parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
+import { toWorkSummary } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
     if (!text) {
@@ -210,7 +211,7 @@ const renderBlock = (block) => {
 const plain = (prop) => (prop?.rich_text || []).map((t) => t.plain_text).join("").trim();
 
 //Master index
-export default function Post({ page, blocks, heroVideo }) {
+export default function Post({ page, blocks, heroVideo, nextWork }) {
     const router = useRouter();
     const { t, locale } = useT();
 
@@ -250,8 +251,10 @@ export default function Post({ page, blocks, heroVideo }) {
             <Transition>
                 <Head>
                     <title>{`${title} — ${locale === "ko" ? "김태균" : "Kim Tae Kyun"}`}</title>
-                    {summary && <meta name="description" content={summary} />}
-                    {cover && <meta property="og:image" content={cover} />}
+                    {summary && <meta name="description" content={summary} key="description" />}
+                    {summary && <meta property="og:description" content={summary} key="og:description" />}
+                    <meta property="og:title" content={title} key="og:title" />
+                    {cover && <meta property="og:image" content={cover} key="og:image" />}
                 </Head>
 
                 <section className="work-hero ds-container">
@@ -299,6 +302,17 @@ export default function Post({ page, blocks, heroVideo }) {
                         </Link>
                     </div>
                 </article>
+                {nextWork && (
+                    <Link href={`/works/${nextWork.id}`} className="next-work ds-container">
+                        <span className="next-work__label u-mono">{t("work.next")}</span>
+                        <span className="next-work__title">{nextWork.title}</span>
+                        {nextWork.cover && (
+                            <span className="next-work__media">
+                                <Image src={nextWork.cover} alt="" fill sizes="(max-width: 768px) 100vw, 40vw" style={{ objectFit: "cover" }} />
+                            </span>
+                        )}
+                    </Link>
+                )}
                 <Footer />
             </Transition>
     );
@@ -353,11 +367,17 @@ export const getStaticProps = async (context) => {
             bodyBlocks = blocksWithChildren.filter((block) => block.id !== first.id);
         }
     }
+    // Next project in the list order (wraps around), for the footer teaser
+    const all = await getDatabase(databaseId).catch(() => []);
+    const index = all.findIndex((p) => p.id === page.id);
+    const nextWork = index >= 0 && all.length > 1 ? toWorkSummary(all[(index + 1) % all.length]) : null;
+
     return {
         props: {
             page,
             blocks: bodyBlocks,
             heroVideo,
+            nextWork,
         },
         revalidate: 86400, // R2 urls are permanent; portfolio rarely changes — refresh daily
     };
