@@ -3,12 +3,17 @@
   Uses the design-system tokens only.
 ================================================================*/
 
+// Helvetica Now for Latin, Pretendard (loaded in _document) for Hangul.
+// A Sass variable, not a :root custom property — the next/font variable it
+// references only exists below the app wrapper, not on :root.
+$font-sans: var(--font-helvetica-now-display), "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+
 .lang-switch a {
   color: var(--text-dim);
 }
 
 .home {
-  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: $font-sans;
   display: flex;
   flex-direction: column;
   gap: var(--sp-12);
@@ -213,7 +218,7 @@
 
 /*========== Work detail: title, film, meta ==========*/
 .work-hero {
-  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: $font-sans;
   padding-top: calc(var(--sp-12) + 2rem);
   padding-bottom: var(--sp-6);
   color: var(--text);
@@ -294,7 +299,7 @@
 
 /*========== About ==========*/
 .about-page {
-  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: $font-sans;
   color: var(--text);
   text-transform: none;
   padding-top: calc(var(--sp-12) + 2rem);
@@ -415,7 +420,7 @@
 
 /*========== Journal list ==========*/
 .journal-page {
-  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: $font-sans;
   color: var(--text);
   text-transform: none;
   padding-top: calc(var(--sp-12) + 2rem);
@@ -528,7 +533,7 @@
   padding-bottom: var(--sp-12);
   border-top: 1px solid var(--line);
   color: var(--text);
-  font-family: var(--font-helvetica-now-display), "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: $font-sans;
   text-transform: none;
 
   &__label {

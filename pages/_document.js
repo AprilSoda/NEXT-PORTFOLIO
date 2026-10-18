@@ -9,7 +9,14 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang={this.props.locale || "en"}>
-        <Head />
+        <Head>
+          {/* Pretendard for Hangul — dynamic subset, so only the glyph ranges a page uses are downloaded */}
+          <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />

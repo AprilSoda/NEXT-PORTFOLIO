@@ -156,7 +156,7 @@ const Works = ({ posts }) => {
                                                             {post.properties.title.title[0].plain_text}
                                                         </span>
                                                         <span className="work-card__cat">
-                                                            {post.properties.sort.select.name}
+                                                            {post.properties.format?.select?.name || post.properties.sort?.select?.name}
                                                         </span>
                                                         <span className="work-card__year">{yearOf(post)}</span>
                                                     </div>
