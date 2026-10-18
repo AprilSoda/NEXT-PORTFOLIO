@@ -1318,3 +1318,93 @@ html {
   pointer-events: none;
   &:focus-visible { opacity: 1; pointer-events: auto; }
 }
+
+/*========== ScreenX format explainer (work pages) ==========*/
+.screenx {
+  margin: var(--sp-8) 0 0;
+}
+
+.screenx__stage {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  perspective: 1600px;
+  perspective-origin: 50% 50%;
+  aspect-ratio: 4 / 1.1;
+  margin: var(--sp-4) 0;
+}
+
+.screenx__screen,
+.screenx__wall {
+  background-color: hsl(210 10% 12%);
+  background-size: cover;
+  background-position: center;
+  background-image: linear-gradient(hsl(0 0% 100% / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(0 0% 100% / 0.06) 1px, transparent 1px);
+  border: 1px solid var(--line);
+}
+
+.screenx__screen {
+  position: relative;
+  z-index: 1;
+  border-radius: 2px;
+  box-shadow: 0 0 60px hsl(0 0% 100% / 0.06);
+}
+
+// Walls fold toward the viewer from the screen edges; the image on them is
+// the same frame, softened, standing in for the extended picture
+.screenx__wall {
+  opacity: 0.55;
+  filter: blur(2px) saturate(0.8);
+  transition: transform 1.2s var(--ease-out-expo, cubic-bezier(0.19, 1, 0.22, 1)), opacity 1.2s ease;
+
+  &--left {
+    transform-origin: right center;
+    transform: rotateY(48deg);
+    background-position: left center;
+  }
+
+  &--right {
+    transform-origin: left center;
+    transform: rotateY(-48deg);
+    background-position: right center;
+  }
+}
+
+.screenx:hover .screenx__wall {
+  opacity: 0.8;
+}
+
+.screenx__labels {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  margin-top: var(--sp-2);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.screenx__caption {
+  display: grid;
+  gap: var(--sp-1);
+  max-width: 60ch;
+  margin: var(--sp-4) auto 0;
+  text-align: center;
+
+  .u-mono {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  p {
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+}
+
+:lang(ko) .screenx__labels {
+  letter-spacing: 0.02em;
+}

@@ -12,6 +12,7 @@ import { databaseId } from "./index.js";
 import VideoEmbed from "../../components/VideoEmbed";
 import CompareSlider from "../../components/CompareSlider";
 import HoverPreview from "../../components/HoverPreview";
+import ScreenXStage from "../../components/ScreenXStage";
 import { embedSrc, parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { yearOf } from "../../lib/dates";
@@ -336,6 +337,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                             ))}
                         </dl>
                     )}
+                    {/screenx/i.test(format || "") && <ScreenXStage image={cover} />}
                 </section>
 
                 <article className="container">
