@@ -1,5 +1,14 @@
 import nodemailer from "nodemailer"
 
+// Visitor input goes into the email HTML, so escape it to keep markup/links out
+const escapeHtml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+
 const handler = async (req, res) => {
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -48,13 +57,13 @@ const handler = async (req, res) => {
       to: "hello@kimtaekyun.dev",
       subject: "Kim Tae Kyun Website - Contact Call",
       html: `
-        <div className="email" style="max-width:1080px; width:100%;">
+        <div class="email" style="max-width:1080px; width:100%;">
           <p style="margin-bottom: 16px"><strong>VFX DEV LOG CONTACT CALL</strong></p>
           <p> SentTime : ${new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'medium' })} </p>
-          <p> Email : ${email} </p>
-          <p> Name : ${name} </p>
+          <p> Email : ${escapeHtml(email)} </p>
+          <p> Name : ${escapeHtml(name)} </p>
           <p> Description : </p>
-          <p> ${text} </p>
+          <p style="white-space: pre-wrap"> ${escapeHtml(text)} </p>
         </div>
         `
     })
