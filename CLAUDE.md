@@ -47,6 +47,10 @@ Besides `title`, `date`, `pub`, `sort`, `client`, the works database has:
 (Human / Assisted / Generated — the festival AI-disclosure axes; when set they
 replace the single `ai_usage` line). All are optional — pages render without them.
 The disclosure links to `/ai` (copy in `content/site.js` → `aiPolicy`, dated).
+- No cover + a YouTube `video` → the trailer's thumbnail is the cover (`posterFor()` in `lib/video.js`)
+- Legacy uppercase `sort` values are read as `format` names (`workFormat()` in `lib/summaries.js`)
+- `status` In development / In production → home "In the works" slate (summary as logline)
+- Home credits (`content/site.js` → `credits`) link to a published work whose title starts with the credit title
 `lib/summaries.js` trims rows to what list views need.
 
 #### Routing
