@@ -15,7 +15,7 @@ import HoverPreview from "../../components/HoverPreview";
 import { parseVideoUrl } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { yearOf } from "../../lib/dates";
-import { jsonLd } from "../../components/Layout";
+import { jsonLd, ogCard } from "../../components/Layout";
 import { toWorkSummary } from "../../lib/summaries";
 
 export const Text = ({ text }) => {
@@ -217,7 +217,7 @@ const plain = (prop) => (prop?.rich_text || []).map((t) => t.plain_text).join(""
 //Master index
 export default function Post({ page, blocks, heroVideo, nextWork }) {
     const router = useRouter();
-    const { t, locale } = useT();
+    const { t, fmt, locale } = useT();
 
     // Show loading state when Next.js is generating the page on-demand
     if (router.isFallback) {
@@ -246,7 +246,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         ["work.role", plain(props.role)],
         // "PERSONAL PROJECT" in the client column just means there was no client
         ["work.client", client && client !== "PERSONAL PROJECT" ? client : null],
-        ["work.format", format],
+        ["work.format", fmt(format)],
         ["work.year", year],
         ["work.honor", plain(props.honor)],
         ["work.ai", aiUsage ? t(`ai.${aiUsage}`, aiUsage) : null],
@@ -254,7 +254,8 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
     const cover = page.cover?.external?.url || page.cover?.file?.url || null;
     // Covers uploaded to Notion are signed URLs that expire within hours, so
     // only external (R2) covers are used where crawlers keep the URL
-    const shareImage = page.cover?.external?.url || null;
+    const shareImage = /^https?:\/\//.test(page.cover?.external?.url || "") ? page.cover.external.url : null;
+    const cardImage = shareImage || ogCard({ title, kicker: fmt(format) || "", meta: [plain(props.role), year].filter(Boolean).join(" · ") });
     const status = props.status?.select?.name;
     const tools = (props.tools?.multi_select || []).map((o) => o.name);
     const models = (props.models?.multi_select || []).map((o) => o.name);
@@ -292,14 +293,14 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
                     {summary && <meta name="description" content={summary} key="description" />}
                     {summary && <meta property="og:description" content={summary} key="og:description" />}
                     <meta property="og:title" content={title} key="og:title" />
-                    {shareImage && <meta property="og:image" content={shareImage} key="og:image" />}
-                    {shareImage && <meta name="twitter:image" content={shareImage} key="twitter:image" />}
+                    <meta property="og:image" content={cardImage} key="og:image" />
+                    <meta name="twitter:image" content={cardImage} key="twitter:image" />
                     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
                 </Head>
 
                 <section className="work-hero ds-container">
                     <p className="work-hero__eyebrow u-mono">
-                        {[format, year].filter(Boolean).join(" · ")}
+                        {[fmt(format), year].filter(Boolean).join(" · ")}
                         {status && status !== "Released" && <span className="work-badge work-badge--status">{t(`status.${status}`, status)}</span>}
                     </p>
                     <h1 className="work-hero__title">{title}</h1>

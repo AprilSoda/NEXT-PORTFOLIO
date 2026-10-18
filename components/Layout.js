@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
                 <meta name="twitter:image" content="https://www.kimtaekyun.dev/og.jpg" key="twitter:image" />
                 <meta property="og:site_name" content="Kim Tae Kyun" />
                 <meta property="og:title" content="Kim Tae Kyun" key="og:title" />
-                <meta property="og:type" content="website" />
+                <meta property="og:type" content="website" key="og:type" />
                 <meta property="og:image" content="https://www.kimtaekyun.dev/og.jpg" key="og:image" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
@@ -64,3 +64,7 @@ export default Layout
 // JSON-LD for a <script> tag: escaping "<" keeps Notion text like "</script>"
 // from closing the tag early
 export const jsonLd = (data) => JSON.stringify(data).replace(/</g, '\\u003c')
+
+// Generated share card (pages/api/og.js) for pages without a permanent cover
+export const ogCard = ({ title, kicker = '', meta = '' }) =>
+    `${SITE_URL}/api/og?${new URLSearchParams({ title, kicker, meta })}`

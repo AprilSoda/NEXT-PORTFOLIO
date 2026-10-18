@@ -24,6 +24,7 @@ const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
 
 // Grid view: rows of two cinematic frames; hovering one widens it
 function WorkGrid({ works }) {
+    const { fmt } = useT();
     const { handleCursorChange } = useContext(MouseContext);
     const [hovered, setHovered] = useState(null);
     const rows = [];
@@ -60,7 +61,7 @@ function WorkGrid({ works }) {
                                     <div className="work-card__meta u-mono">
                                         <span className="work-card__index">{pad(index + 1)}</span>
                                         <span className="work-card__title">{work.title}</span>
-                                        <span className="work-card__cat">{work.category}</span>
+                                        <span className="work-card__cat">{fmt(work.category)}</span>
                                         <span className="work-card__year">{work.year}</span>
                                     </div>
                                 </Link>
@@ -75,6 +76,7 @@ function WorkGrid({ works }) {
 
 // List view: one row per project; the hovered row's frame follows the cursor
 function WorkList({ works }) {
+    const { fmt } = useT();
     const [active, setActive] = useState(null);
     // The frame follows the pointer, so it only appears once there is one —
     // keyboard focus alone leaves it hidden instead of parked at (0, 0)
@@ -108,7 +110,7 @@ function WorkList({ works }) {
                             <span className="work-list__index u-mono">{pad(i + 1)}</span>
                             <span className="work-list__title">{work.title}</span>
                             <span className="work-list__meta u-mono">
-                                {[work.category, work.role, work.year].filter(Boolean).join(" · ")}
+                                {[fmt(work.category), work.role, work.year].filter(Boolean).join(" · ")}
                             </span>
                             <WorkBadges work={work} />
                         </Link>
@@ -137,17 +139,37 @@ function WorkList({ works }) {
     );
 }
 
+// Filters narrow the one stream instead of splitting it into sections:
+// one per format that has work, plus "AI" for anything made with generative AI
+const AI_FILTER = "ai";
+function filtersFor(works) {
+    const counts = new Map();
+    for (const w of works) if (w.category) counts.set(w.category, (counts.get(w.category) || 0) + 1);
+    const filters = [...counts].sort((a, b) => b[1] - a[1]).map(([value, count]) => ({ value, count }));
+    const ai = works.filter((w) => w.ai).length;
+    if (ai) filters.push({ value: AI_FILTER, count: ai });
+    return filters;
+}
+const matches = (work, filter) => !filter || (filter === AI_FILTER ? work.ai : work.category === filter);
+
 const Works = ({ works }) => {
-    const { t } = useT();
+    const { t, fmt } = useT();
     const router = useRouter();
     const isMobile = useIsMobile();
     const view = router.query.view === "list" && !isMobile ? "list" : "grid";
+    const filters = filtersFor(works);
+    const filter = filters.some((f) => f.value === router.query.type) ? router.query.type : null;
+    const shown = works.filter((w) => matches(w, filter));
     const gridRef = useRef(null);
     const headRef = useRef(null);
 
-    // Keep the chosen view in the URL so it survives refresh and back navigation
-    const setView = (next) =>
-        router.replace({ pathname: router.pathname, query: next === "list" ? { view: "list" } : {} }, undefined, { shallow: true, scroll: false });
+    // Keep the chosen view and filter in the URL so they survive refresh and back navigation
+    const setQuery = (patch) => {
+        const query = { ...(view === "list" && { view }), ...(filter && { type: filter }), ...patch };
+        Object.keys(query).forEach((k) => query[k] == null && delete query[k]);
+        router.replace({ pathname: router.pathname, query }, undefined, { shallow: true, scroll: false });
+    };
+    const setView = (next) => setQuery({ view: next === "list" ? "list" : null });
 
     // Mouse parallax — the grid drifts toward the cursor (layered: grid moves more
     // than the heading for depth). Desktop grid only, reduced-motion safe.
@@ -193,18 +215,35 @@ const Works = ({ works }) => {
                         </p>
                     </div>
 
-                    {!isMobile && (
-                        <div className="work-view u-mono" role="group" aria-label={t("work.view")}>
-                            {["grid", "list"].map((v) => (
-                                <button key={v} aria-pressed={view === v} className={view === v ? "active" : undefined} onClick={() => setView(v)}>
-                                    {t(`work.view.${v}`)}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                    <div className="work-controls u-mono">
+                        {filters.length > 1 && (
+                            <div className="work-filter" role="group" aria-label={t("work.filter")}>
+                                {[{ value: null, count: works.length }, ...filters].map((f) => (
+                                    <button
+                                        key={f.value || "all"}
+                                        aria-pressed={filter === f.value}
+                                        className={filter === f.value ? "active" : undefined}
+                                        onClick={() => setQuery({ type: f.value })}
+                                    >
+                                        {f.value === null ? t("work.filter.all") : f.value === AI_FILTER ? t("work.filter.ai") : fmt(f.value)}
+                                        <sup>{pad(f.count)}</sup>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {!isMobile && (
+                            <div className="work-view" role="group" aria-label={t("work.view")}>
+                                {["grid", "list"].map((v) => (
+                                    <button key={v} aria-pressed={view === v} className={view === v ? "active" : undefined} onClick={() => setView(v)}>
+                                        {t(`work.view.${v}`)}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                     <div className="work-grid-wrap" ref={gridRef}>
-                        {view === "list" ? <WorkList works={works} /> : <WorkGrid works={works} />}
+                        {view === "list" ? <WorkList works={shown} /> : <WorkGrid works={shown} />}
                     </div>
                 </div>
             </section>

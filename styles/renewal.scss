@@ -619,10 +619,48 @@ html {
 }
 
 /*========== Work index: view toggle, badges, list view, hover previews ==========*/
+.work-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-4);
+}
+
+.work-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+
+  button {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-dim);
+    padding: 0.4rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: var(--text);
+      border-color: var(--text-dim);
+    }
+  }
+
+  sup {
+    margin-left: 0.3em;
+    font-size: 0.7em;
+    color: var(--text-faint);
+  }
+}
+
 .work-view {
   display: flex;
   gap: var(--sp-1);
-  margin: 0 0 var(--sp-4);
+  margin-left: auto;
 
   button {
     background: none;

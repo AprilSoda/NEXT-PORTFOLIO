@@ -18,7 +18,7 @@ const reveal = {
 const formatMonth = (iso, locale) => formatDate(iso, locale, { year: "numeric", month: "short" })
 
 export default function HomeSections({ works = [], journal = [] }) {
-  const { t, pick, locale } = useT()
+  const { t, pick, fmt, locale } = useT()
   const [hovered, setHovered] = useState(null)
 
   return (
@@ -61,7 +61,7 @@ export default function HomeSections({ works = [], journal = [] }) {
                 </div>
                 <div className="home-work__meta u-mono">
                   <span>{w.title}</span>
-                  <span>{[w.category, w.role, w.year].filter(Boolean).join(" · ")}</span>
+                  <span>{[fmt(w.category), w.role, w.year].filter(Boolean).join(" · ")}</span>
                 </div>
               </Link>
             ))}

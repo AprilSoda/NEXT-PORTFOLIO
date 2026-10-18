@@ -13,7 +13,7 @@ import Head from "next/head";
 import { useT } from "../../lib/i18n";
 import { formatDate } from "../../lib/dates";
 import { toJournalSummary } from "../../lib/summaries";
-import { SITE_URL, jsonLd } from "../../components/Layout";
+import { SITE_URL, jsonLd, ogCard } from "../../components/Layout";
 
 
 // notion-x 관련 스타일시트
@@ -67,6 +67,8 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
 
   const showTableOfContents = !!isBlogPost
   const minTableOfContentsItems = 3
+  const longDate = formatDate(entry?.date, locale, { year: "numeric", month: "long", day: "numeric" })
+  const card = entry?.title ? ogCard({ title: entry.title, kicker: t("journal.title"), meta: longDate }) : null
 
 
   return (
@@ -74,7 +76,9 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
       <Head>
         <title>{`${entry?.title || "Journal"} — ${locale === "ko" ? "김태균" : "Kim Tae Kyun"}`}</title>
         {entry?.title && <meta property="og:title" content={entry.title} key="og:title" />}
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="article" key="og:type" />
+        {card && <meta property="og:image" content={card} key="og:image" />}
+        {card && <meta name="twitter:image" content={card} key="twitter:image" />}
         {entry && (
           <script
             type="application/ld+json"
@@ -98,7 +102,7 @@ const Blog = ({ blog_id, prevPost, nextPost, entry, readingMinutes }) => {
           <p className="journal-entry-meta u-mono">
             {[
               entry.categories.join(", "),
-              formatDate(entry.date, locale, { year: "numeric", month: "long", day: "numeric" }),
+              longDate,
               readingMinutes && t("journal.minutes").replace("{n}", readingMinutes),
             ].filter(Boolean).join(" · ")}
           </p>
