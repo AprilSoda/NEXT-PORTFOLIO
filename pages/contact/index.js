@@ -10,6 +10,8 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
 import { useT } from '../../lib/i18n';
 
+const TOPICS = ['film', 'screenx', 'mv', 'other'];
+
 const Contact = () => {
     const { register, handleSubmit, formState: { errors }, clearErrors, setValue } = useForm();
     const { t } = useT();
@@ -96,6 +98,15 @@ const Contact = () => {
                                     </div>
                                     : null}
                             </div>
+                            <fieldset className="contact__topic">
+                                <legend className="u-mono">{t("contact.topic")}</legend>
+                                {TOPICS.map((topic) => (
+                                    <label key={topic}>
+                                        <input type="radio" value={topic} {...register("topic")} defaultChecked={topic === "film"} />
+                                        <span>{t(`contact.topic.${topic}`)}</span>
+                                    </label>
+                                ))}
+                            </fieldset>
                             <div className="contact__form-inner-text">
                                 <input
                                     type="name"

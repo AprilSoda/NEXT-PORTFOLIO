@@ -9,6 +9,14 @@ const escapeHtml = (value) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;")
 
+// Enquiry type picked on the form → subject line, so mail can be sorted at a glance
+const TOPIC_LABELS = {
+  film: "Film / Collaboration",
+  screenx: "ScreenX / Immersive",
+  mv: "Music Video / Brand",
+  other: "Other",
+}
+
 const handler = async (req, res) => {
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -17,7 +25,7 @@ const handler = async (req, res) => {
 
   try {
     // req.body is already parsed by Next.js
-    const { name, email, text, website, renderedAt } = req.body
+    const { name, email, text, topic, website, renderedAt } = req.body
 
     // Spam guards — respond 200 "ok" but DON'T send, so bots think they
     // succeeded and don't adapt/retry:
@@ -55,11 +63,12 @@ const handler = async (req, res) => {
       from: process.env.MAIL_USER, // must be the authenticated mailbox or hiworks rejects the send
       replyTo: email, // replies go to the visitor who submitted the form
       to: "hello@kimtaekyun.dev",
-      subject: "Kim Tae Kyun Website - Contact Call",
+      subject: `Kim Tae Kyun Website - ${TOPIC_LABELS[topic] || "Contact"}`,
       html: `
         <div class="email" style="max-width:1080px; width:100%;">
           <p style="margin-bottom: 16px"><strong>VFX DEV LOG CONTACT CALL</strong></p>
           <p> SentTime : ${new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'medium' })} </p>
+          <p> Topic : ${escapeHtml(TOPIC_LABELS[topic] || "Other")} </p>
           <p> Email : ${escapeHtml(email)} </p>
           <p> Name : ${escapeHtml(name)} </p>
           <p> Description : </p>
