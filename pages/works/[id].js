@@ -13,7 +13,7 @@ import VideoEmbed from "../../components/VideoEmbed";
 import CompareSlider from "../../components/CompareSlider";
 import HoverPreview from "../../components/HoverPreview";
 import ScreenXStage from "../../components/ScreenXStage";
-import { embedSrc, parseVideoUrl } from "../../lib/video";
+import { embedSrc, parseVideoUrl, posterFor } from "../../lib/video";
 import { useT } from "../../lib/i18n";
 import { yearOf } from "../../lib/dates";
 import { SITE_URL, jsonLd, ogCard } from "../../components/Layout";
@@ -261,7 +261,7 @@ export default function Post({ page, blocks, heroVideo, nextWork }) {
         ["work.honor", plain(props.honor)],
         ["work.ai", aiUsage ? t(`ai.${aiUsage}`, aiUsage) : null],
     ].filter(([, value]) => value);
-    const cover = page.cover?.external?.url || page.cover?.file?.url || null;
+    const cover = page.cover?.external?.url || page.cover?.file?.url || posterFor(props.video?.url) || null;
     // Covers uploaded to Notion are signed URLs that expire within hours, so
     // only external (R2) covers are used where crawlers keep the URL
     const shareImage = /^https?:\/\//.test(page.cover?.external?.url || "") ? page.cover.external.url : null;
